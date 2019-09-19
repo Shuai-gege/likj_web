@@ -9,6 +9,9 @@ import jssDi from '../views/jssDi.vue'
 import jssCary from '../views/jssCary.vue'
 import jssMy from '../views/jssMy.vue'
 import jssHot from '../views/jssHot.vue'
+import jssInfo from '../views/jssInfo.vue'
+import jssBench from '../views/jssBench.vue'
+import jssHead from '../views/jssHead.vue'
 //import jssLogin from '../views/jssLogin.vue'
 import {
   List
@@ -26,7 +29,12 @@ const router = new Router({
       component: jssIndex,
       children: [{
           path: '/jsszhongjian',
-          component: jssZhongjian
+          redirect: '/jsshead',
+          component: jssZhongjian,
+          children: [{
+            path: '/jsshead',
+            component: jssHead
+          }, ]
         },
         {
           path: '/jssdi',
@@ -43,6 +51,10 @@ const router = new Router({
         {
           path: '/jsshot',
           component: jssHot
+        },
+        {
+          path: '/jssbench',
+          component: jssBench
         }
       ]
     },
@@ -61,6 +73,10 @@ const router = new Router({
     {
       path: '/jssreg',
       component: jssReg
+    },
+    {
+      path: '/jssinfo',
+      component: jssInfo
     }
   ]
 })

@@ -27,13 +27,13 @@
         />
       </form>
     </div>
-    <p>我是热卖商品</p>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import { Popup, Image, Divider, Cell, CellGroup } from "vant";
-Vue.use(Image)
+Vue.use(Popup)
+  .use(Image)
   .use(Cell)
   .use(CellGroup)
   .use(Divider);

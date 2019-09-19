@@ -1,16 +1,7 @@
 <template>
   <div class="box">
-    <van-popup v-model="show" position="top" :style="{ height: '20%' }" />
     <!-- 搜索框 -->
-    <form action="/" class="SouSuo">
-      <van-search
-        v-model="value"
-        placeholder="请输入搜索关键词"
-        show-action
-        background="#90d7ec"
-        shape="round"
-      />
-    </form>
+    <router-view></router-view>
     <div class="Center">
       <!-- 下拉刷新 -->
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -124,6 +115,9 @@ export default {
 
 .Center {
   margin-bottom: 50px;
+}
+
+.van-search__content van-search__content--round {
 }
 
 .Zi {

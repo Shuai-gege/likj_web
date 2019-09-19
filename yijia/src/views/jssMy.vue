@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <van-icon name="arrow-left" @click="out" />
+      <van-icon name="arrow-left" @click="out" class="out" />
       <van-icon name="setting" />
       <van-icon name="chat" />
     </div>
@@ -17,16 +17,16 @@
 
     <van-row class="user-links">
       <van-col span="6">
-        <van-icon name="pending-payment" @click="tap" />待付款
+        <van-icon name="pending-payment" color="#f00" @click="tap" />待付款
       </van-col>
       <van-col span="6">
-        <van-icon name="records" />待发货
+        <van-icon name="records" color="#7777DD" />待发货
       </van-col>
       <van-col span="6">
-        <van-icon name="tosend" :info="info" @click="to()" />待收货
+        <van-icon name="tosend" color="#FFBB66" :info="info" @click="to()" />待收货
       </van-col>
       <van-col span="6">
-        <van-icon name="logistics" />已发货
+        <van-icon name="logistics" color="#44CCCC" />已发货
       </van-col>
     </van-row>
 
@@ -82,6 +82,14 @@ export default {
 .van-icon-arrow-left:before {
   margin-right: 212px;
 }
+.van-icon-setting,
+.van-icon-chat {
+  margin-right: 10px;
+}
+.out {
+  position: absolute;
+  left: 1rem;
+}
 .top {
   height: 40px;
   display: flex;
@@ -109,7 +117,6 @@ export default {
   display: block;
   font-size: 24px;
   line-height: 40px;
-  margin-right: 10px;
 }
 .head {
   height: 230px;
@@ -133,5 +140,20 @@ export default {
 }
 .centers {
   margin-bottom: 100px;
+}
+.van-icon-paid:before {
+  color: #0ff;
+}
+.van-icon-records:before {
+  color: bisque;
+}
+.van-icon-points:before {
+  color: blueviolet;
+}
+.van-icon-gold-coin-o:before {
+  color: coral;
+}
+.van-icon-gift-o:before {
+  color: goldenrod;
 }
 </style>
