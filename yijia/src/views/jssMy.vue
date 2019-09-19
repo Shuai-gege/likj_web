@@ -1,63 +1,137 @@
 <template>
-  <div class="box">
-    <div class="Login">
-      <!-- 头部 -->
-      <van-nav-bar title="标题" left-text="返回" left-arrow @click-left="onClickLeft" />
-      <!-- 头像 -->
-      <div class="Tou">
-        <van-image round width="100" height="100px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-      </div>
-      <!-- 按钮 -->
-      <div class="login">
-        <van-button type="primary" to="/jssLogin">登录</van-button>
-      </div>
+  <div>
+    <div class="top">
+      <van-icon name="arrow-left" @click="out" />
+      <van-icon name="setting" />
+      <van-icon name="chat" />
     </div>
-    <van-divider />
-    <van-swipe-cell>
-      <van-cell :border="false" title="单元格" value="内容" />
-      <van-cell :border="false" title="单元格" value="内容" />
-      <van-cell :border="false" title="单元格" value="内容" />
-      <van-cell :border="false" title="单元格" value="内容" />
-      <van-cell :border="false" title="单元格" value="内容" />
-    </van-swipe-cell>
-    <p>我是我的页面</p>
+    <div class="head">
+      <van-uploader :after-read="read" :max-count="1">
+        <img src="https://img.yzcdn.cn/vant/cat.jpeg" alt class="img" />
+      </van-uploader>
+      <h3>
+        <van-button text="登录" @click="login()" style="border: none;background: none;color: #fff;"></van-button>
+        {{name}}
+      </h3>
+    </div>
+
+    <van-row class="user-links">
+      <van-col span="6">
+        <van-icon name="pending-payment" @click="tap" />待付款
+      </van-col>
+      <van-col span="6">
+        <van-icon name="records" />待发货
+      </van-col>
+      <van-col span="6">
+        <van-icon name="tosend" :info="info" @click="to()" />待收货
+      </van-col>
+      <van-col span="6">
+        <van-icon name="logistics" />已发货
+      </van-col>
+    </van-row>
+
+    <van-cell-group class="user-group">
+      <van-cell icon="paid" :title="'我的余额: ' + 0 + '元'" />
+      <van-cell icon="records" title="历史订单" is-link to="/history" />
+    </van-cell-group>
+
+    <van-cell-group class="centers">
+      <van-cell icon="points" title="充值中心" is-link @click="pay" />
+      <van-cell icon="gold-coin-o" title="我的优惠券" is-link @click="youhui()" />
+      <van-cell icon="gift-o" title="我收到的礼物" is-link @click="tap" />
+    </van-cell-group>
   </div>
 </template>
 <script>
 import Vue from "vue";
-import { SwipeCell, Cell } from "vant";
-
-Vue.use(SwipeCell).use(Cell);
+import axios from "axios";
+import { Row, Col, Icon, Cell, CellGroup } from "vant";
+Vue.use(CellGroup)
+  .use(Row)
+  .use(Col)
+  .use(Icon)
+  .use(Cell);
 export default {
+  components: {
+    [Row.name]: Row,
+    [Col.name]: Col,
+    [Icon.name]: Icon,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup
+  },
   data() {
-    return {};
+    return {
+      name: "CJQ",
+      info: this.$store.state.num,
+      huafei: this.$store.state.huafei,
+      id: null,
+      showLogin: false
+    };
   },
   methods: {
-    onClickLeft() {
+    out() {
       this.$router.go(-1);
     },
-    onClickRight() {
-      Toast("按钮");
+    login() {
+      this.$router.push("/jsslogin");
     }
   }
 };
 </script>
-<style lang="stylus" scoped>
-.Tou {
+<style scoped="">
+.van-icon-arrow-left:before {
+  margin-right: 212px;
+}
+.top {
+  height: 40px;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0;
+  background: #fff;
+  width: 100%;
+}
+.user-poster {
+  width: 100%;
+  height: 53vw;
+  display: block;
+}
+.user-group {
+  margin-bottom: 15px;
+}
+.user-links {
+  padding: 15px 0;
+  font-size: 12px;
   text-align: center;
+  background-color: #fff;
 }
-
-.login {
-  text-align: center;
+.van-icon {
+  display: block;
+  font-size: 24px;
+  line-height: 40px;
+  margin-right: 10px;
 }
-
-.Login {
-  background-image: url('../image/login.gif');
+.head {
+  height: 230px;
+  background: url("https://s2.ax1x.com/2019/09/19/nbDbRO.gif") no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
 }
-
-.van-button--primary {
-  background: rgba(0, 0, 0, 0);
-  border: 1px solid rgba(0, 0, 0, 0);
-  color: white;
+.head img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.head h3 {
+  color: #fff;
+}
+.van-info {
+  right: 30px;
+}
+.centers {
+  margin-bottom: 100px;
 }
 </style>

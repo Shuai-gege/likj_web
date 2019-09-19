@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+    <van-popup v-model="show" position="top" :style="{ height: '20%' }" />
     <!-- 搜索框 -->
     <form action="/" class="SouSuo">
       <van-search
@@ -76,6 +77,9 @@
   </div>
 </template>
 <script>
+import Vue from "vue";
+import { Popup } from "vant";
+Vue.use(Popup);
 export default {
   name: "Zhongjian",
   data() {
@@ -116,12 +120,6 @@ export default {
   margin: 0 auto;
   margin-top: 58px;
   width: 300px;
-}
-
-.Di {
-  position: fixed;
-  z-index: 100;
-  width: 100%;
 }
 
 .Center {

@@ -24,6 +24,7 @@
 <script>
 import Vue from "vue";
 import {
+  Popup,
   Button,
   Swipe,
   SwipeItem,
@@ -54,7 +55,8 @@ Vue.use(Button)
   .use(List)
   .use(Tab)
   .use(Tabs)
-  .use(Card);
+  .use(Card)
+  .use(Popup);
 export default {
   name: "Index",
   data() {
