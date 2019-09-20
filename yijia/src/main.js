@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
+import './assets/font/iconfont.css'
 Vue.use(VueLazyLoad, {
   error: './static/error.png',
   loading: './static/loading.png'

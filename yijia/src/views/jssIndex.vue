@@ -13,11 +13,11 @@
     <router-view></router-view>
     <!-- 底部tap -->
     <van-tabbar v-model="active" active-color="#FF9988">
-      <van-tabbar-item name="home" icon="send-gift" to="/jsszhongjian">首页</van-tabbar-item>
-      <van-tabbar-item name="bench" icon="graphic" to="/jssbench">工作台</van-tabbar-item>
-      <van-tabbar-item name="cluster" icon="hot" to="jssHot">热卖商品</van-tabbar-item>
-      <van-tabbar-item name="friends" icon="shopping-cart" to="jssCary">购物车</van-tabbar-item>
-      <van-tabbar-item name="setting" icon="smile" to="jssMy">我的</van-tabbar-item>
+      <van-tabbar-item name="home" icon="send-gift" to="/jsszhongjian" @click="tap()">首页</van-tabbar-item>
+      <van-tabbar-item name="bench" icon="graphic" to="/jssbench" @click="tap1()">工作台</van-tabbar-item>
+      <van-tabbar-item name="cluster" icon="hot" to="jssHot" @click="tap2()">热卖商品</van-tabbar-item>
+      <van-tabbar-item name="friends" icon="shopping-cart" to="jssCary" @click="tap3()">购物车</van-tabbar-item>
+      <van-tabbar-item name="setting" icon="smile" to="jssMy" @click="tap4()">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
@@ -84,6 +84,46 @@ export default {
           this.finished = true;
         }
       }, 500);
+    },
+    tap() {
+      var Home = document.getElementsByClassName("van-tabbar-item__icon");
+      Home[0].style.fontSize = 25 + "px";
+      Home[1].style.fontSize = 18 + "px";
+      Home[2].style.fontSize = 18 + "px";
+      Home[3].style.fontSize = 18 + "px";
+      Home[4].style.fontSize = 18 + "px";
+    },
+    tap1() {
+      var Home = document.getElementsByClassName("van-tabbar-item__icon");
+      Home[1].style.fontSize = 25 + "px";
+      Home[0].style.fontSize = 18 + "px";
+      Home[2].style.fontSize = 18 + "px";
+      Home[3].style.fontSize = 18 + "px";
+      Home[4].style.fontSize = 18 + "px";
+    },
+    tap2() {
+      var Home = document.getElementsByClassName("van-tabbar-item__icon");
+      Home[2].style.fontSize = 25 + "px";
+      Home[1].style.fontSize = 18 + "px";
+      Home[0].style.fontSize = 18 + "px";
+      Home[3].style.fontSize = 18 + "px";
+      Home[4].style.fontSize = 18 + "px";
+    },
+    tap3() {
+      var Home = document.getElementsByClassName("van-tabbar-item__icon");
+      Home[3].style.fontSize = 25 + "px";
+      Home[1].style.fontSize = 18 + "px";
+      Home[2].style.fontSize = 18 + "px";
+      Home[0].style.fontSize = 18 + "px";
+      Home[4].style.fontSize = 18 + "px";
+    },
+    tap4() {
+      var Home = document.getElementsByClassName("van-tabbar-item__icon");
+      Home[4].style.fontSize = 25 + "px";
+      Home[1].style.fontSize = 18 + "px";
+      Home[2].style.fontSize = 18 + "px";
+      Home[3].style.fontSize = 18 + "px";
+      Home[0].style.fontSize = 18 + "px";
     }
   }
 };

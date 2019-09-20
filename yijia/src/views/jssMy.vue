@@ -2,18 +2,26 @@
   <div>
     <div class="top">
       <van-icon name="arrow-left" @click="out" class="out" />
-      <van-icon name="setting" />
-      <van-icon name="chat" />
+      <van-icon name="setting" class="setting" />
+      <van-icon name="chat" class="chat" />
     </div>
-    <div class="head">
-      <van-uploader :after-read="read" :max-count="1">
-        <img src="https://img.yzcdn.cn/vant/cat.jpeg" alt class="img" />
-      </van-uploader>
-      <h3>
-        <van-button text="登录" @click="login()" style="border: none;background: none;color: #fff;"></van-button>
-        {{name}}
-      </h3>
-    </div>
+    <van-row>
+      <van-col span="24">
+        <div class="head">
+          <van-uploader :after-read="read" :max-count="1">
+            <img src="https://img.yzcdn.cn/vant/cat.jpeg" alt class="img" />
+          </van-uploader>
+          <h3>
+            <van-button
+              text="登录"
+              @click="login()"
+              style="border: none;background: none;color: #fff;"
+            ></van-button>
+            {{name}}
+          </h3>
+        </div>
+      </van-col>
+    </van-row>
 
     <van-row class="user-links">
       <van-col span="6">
@@ -78,7 +86,10 @@ export default {
   }
 };
 </script>
-<style scoped="">
+<style scoped>
+* {
+  margin: 0;
+}
 .van-icon-arrow-left:before {
   margin-right: 212px;
 }
@@ -89,6 +100,13 @@ export default {
 .out {
   position: absolute;
   left: 1rem;
+  line-height: 40px;
+}
+.setting {
+  line-height: 40px;
+}
+.chat {
+  line-height: 40px;
 }
 .top {
   height: 40px;
@@ -116,7 +134,6 @@ export default {
 .van-icon {
   display: block;
   font-size: 24px;
-  line-height: 40px;
 }
 .head {
   height: 230px;
@@ -142,18 +159,21 @@ export default {
   margin-bottom: 100px;
 }
 .van-icon-paid:before {
-  color: #0ff;
+  color: #bf3eff;
 }
 .van-icon-records:before {
-  color: bisque;
+  color: #cd3700;
 }
 .van-icon-points:before {
-  color: blueviolet;
+  color: #008b00;
 }
 .van-icon-gold-coin-o:before {
   color: coral;
 }
 .van-icon-gift-o:before {
   color: goldenrod;
+}
+.van-cell {
+  font-size: 0.75rem;
 }
 </style>

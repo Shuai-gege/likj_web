@@ -1,8 +1,23 @@
 <template>
   <div class="box">
     <div>
+      <van-row>
+        <van-col span="3">
+          <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
+        </van-col>
+        <van-col span="21">
+          <form action="/" class="SouSuo">
+            <van-search
+              v-model="value"
+              placeholder="请输入搜索关键词"
+              show-action
+              background="#90d7ec"
+              shape="round"
+            />
+          </form>
+        </van-col>
+      </van-row>
       <!-- 遮罩层 -->
-      <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
       <van-popup v-model="show" position="top" :style="{ height: '100%' ,width:'50%'}">
         <!-- 头像 -->
         <div class="logo">
@@ -17,15 +32,6 @@
         <!-- 信息，购物车 -->
       </van-popup>
       <!-- 搜索框 -->
-      <form action="/" class="SouSuo">
-        <van-search
-          v-model="value"
-          placeholder="请输入搜索关键词"
-          show-action
-          background="#90d7ec"
-          shape="round"
-        />
-      </form>
     </div>
     <p>我是热卖商品</p>
   </div>
@@ -52,19 +58,8 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.SouSuo {
-  width: 271px;
-  float: right;
-}
-
 .geren {
   height: 54px;
-}
-
-.van-icon-manager, .van-icon-setting, .van-icon-cart {
-  display: block;
-  margin-top: 15px;
-  margin-left: 15px;
 }
 
 .txt {

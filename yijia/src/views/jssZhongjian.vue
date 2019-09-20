@@ -6,18 +6,22 @@
       <!-- 下拉刷新 -->
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <!-- 轮播图 -->
-        <van-swipe
-          :autoplay="3000"
-          indicator-color="white"
-          height="150"
-          class="Lunbo"
-          style="border-radius:15px"
-        >
-          <van-swipe-item class="lun">1</van-swipe-item>
-          <van-swipe-item class="lun">2</van-swipe-item>
-          <van-swipe-item class="lun">3</van-swipe-item>
-          <van-swipe-item class="lun">4</van-swipe-item>
-        </van-swipe>
+        <van-row>
+          <van-col span="22" offset="1">
+            <van-swipe
+              :autoplay="3000"
+              indicator-color="white"
+              height="200"
+              class="Lunbo"
+              style="border-radius:15px"
+            >
+              <van-swipe-item class="lun">1</van-swipe-item>
+              <van-swipe-item class="lun">2</van-swipe-item>
+              <van-swipe-item class="lun">3</van-swipe-item>
+              <van-swipe-item class="lun">4</van-swipe-item>
+            </van-swipe>
+          </van-col>
+        </van-row>
         <!-- 分割线 -->
         <van-divider>往下看</van-divider>
         <!-- 分类 -->
@@ -108,9 +112,12 @@ export default {
 }
 
 .Lunbo {
-  margin: 0 auto;
   margin-top: 58px;
-  width: 300px;
+  width: 100%;
+}
+
+.swipe {
+  margin: 0 auto;
 }
 
 .Center {
@@ -118,6 +125,10 @@ export default {
 }
 
 .van-search__content van-search__content--round {
+}
+
+.van-col--offset-1 {
+  margin-top: -2.625rem;
 }
 
 .Zi {
