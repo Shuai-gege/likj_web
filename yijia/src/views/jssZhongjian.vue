@@ -121,6 +121,7 @@ export default {
 }
 
 .Center {
+  padding-top: 55px;
   margin-bottom: 50px;
 }
 

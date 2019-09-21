@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div>
-      <van-row>
+      <van-row class="Tou">
         <van-col span="3">
           <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
         </van-col>
@@ -57,6 +57,12 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+.Tou {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+}
+
 .geren {
   height: 54px;
 }

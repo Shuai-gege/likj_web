@@ -12,6 +12,7 @@ import jssHot from '../views/jssHot.vue'
 import jssInfo from '../views/jssInfo.vue'
 import jssBench from '../views/jssBench.vue'
 import jssHead from '../views/jssHead.vue'
+import jssTishi from '../views/jssTishi.vue'
 //import jssLogin from '../views/jssLogin.vue'
 import {
   List
@@ -22,6 +23,10 @@ const router = new Router({
   routes: [{
       path: '/',
       redirect: '/jsslogin'
+    },
+    {
+      path: '/jsstishi',
+      component: jssTishi
     },
     {
       path: '/jssindex',

@@ -32,12 +32,16 @@
     <!-- 分割线 -->
     <van-divider>其他登录方式</van-divider>
     <div class="QQWX">
-      <a href="#" class="QQ">
-        <img src="../image/QQ.png" alt />
-      </a>
       <a href="#" class="WX">
         <img src="../image/WX.png" alt />
       </a>
+    </div>
+    <div class="agreement">
+      <p>
+        登录注册即便是您同意乐匠
+        <a href="../views/jssTishi.vue">用户协议</a>和
+        <a href="../views/jssTishi.vue">隐私政策</a>
+      </p>
     </div>
   </div>
 </template>
@@ -87,5 +91,11 @@ export default {
   width: 20px;
   height: 20px;
   margin: 10px;
+}
+
+.agreement {
+  font-size: 12px;
+  text-align: center;
+  color: #B2B3B8;
 }
 </style>
