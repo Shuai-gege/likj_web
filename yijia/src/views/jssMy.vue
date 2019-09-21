@@ -2,7 +2,7 @@
   <div>
     <div class="top">
       <van-icon name="arrow-left" @click="out" class="out" />
-      <van-icon name="setting" class="setting" />
+      <van-icon name="setting" class="setting" @click="set" />
       <van-icon name="chat" class="chat" />
     </div>
     <van-row>
@@ -31,7 +31,7 @@
         <van-icon name="records" color="#7777DD" />待发货
       </van-col>
       <van-col span="6">
-        <van-icon name="tosend" color="#FFBB66" :info="info" @click="to()" />待收货
+        <van-icon name="tosend" color="#FFBB66" :info="info" @click="Dai" />待收货
       </van-col>
       <van-col span="6">
         <van-icon name="logistics" color="#44CCCC" />已发货
@@ -82,6 +82,12 @@ export default {
     },
     login() {
       this.$router.push("/jsslogin");
+    },
+    set() {
+      this.$router.push("./jssSite");
+    },
+    Dai() {
+      this.$router.push("/jsspending");
     }
   }
 };

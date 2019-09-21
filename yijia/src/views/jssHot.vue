@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div>
-      <van-row>
+      <van-row class="Tou">
         <van-col span="3">
           <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
         </van-col>
@@ -29,24 +29,52 @@
         <van-cell title="我的" icon="manager-o" to="/jssmy" />
         <van-cell title="信息" icon="chat-o" to="/jssinfo" />
         <van-cell title="购物车" icon="cart-o" to="/jsscary" />
+        <van-cell title="机器人客服" icon="smile-comment-o" to="/jssservice" />
         <!-- 信息，购物车 -->
       </van-popup>
       <!-- 搜索框 -->
     </div>
-    <p>我是热卖商品</p>
+    <!-- 侧边栏 -->
+    <van-tabs v-model="active" class="Center">
+      <van-tab title="标签 1"></van-tab>
+      <van-tab title="标签 2">内容 2</van-tab>
+      <van-tab title="标签 3">内容 3</van-tab>
+      <van-tab title="标签 4">内容 4</van-tab>
+      <van-tab title="标签 2">内容 2</van-tab>
+      <van-tab title="标签 3">内容 3</van-tab>
+      <van-tab title="标签 4">内容 4</van-tab>
+      <van-tab title="标签 2">内容 2</van-tab>
+      <van-tab title="标签 3">内容 3</van-tab>
+      <van-tab title="标签 4">内容 4</van-tab>
+    </van-tabs>
   </div>
 </template>
 <script>
 import Vue from "vue";
-import { Popup, Image, Divider, Cell, CellGroup } from "vant";
+import {
+  Popup,
+  Image,
+  Grid,
+  GridItem,
+  Divider,
+  Cell,
+  CellGroup,
+  Tab,
+  Tabs
+} from "vant";
 Vue.use(Image)
+  .use(Grid)
+  .use(GridItem)
   .use(Cell)
+  .use(Tab)
+  .use(Tabs)
   .use(CellGroup)
   .use(Divider);
 export default {
   data() {
     return {
-      show: false
+      show: false,
+      active: 0
     };
   },
 
@@ -60,6 +88,16 @@ export default {
 <style lang="stylus" scoped>
 .geren {
   height: 54px;
+}
+
+.Tou {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+}
+
+.Center {
+  padding-top: 3.4375rem;
 }
 
 .txt {

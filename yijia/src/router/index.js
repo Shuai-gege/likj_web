@@ -13,6 +13,9 @@ import jssInfo from '../views/jssInfo.vue'
 import jssBench from '../views/jssBench.vue'
 import jssHead from '../views/jssHead.vue'
 import jssTishi from '../views/jssTishi.vue'
+import jssSite from '../views/jssSite.vue'
+import jssService from '../views/jssService.vue'
+import jssPending from '../views/jssPending.vue'
 //import jssLogin from '../views/jssLogin.vue'
 import {
   List
@@ -64,6 +67,14 @@ const router = new Router({
       ]
     },
     {
+      path: '/jsssite',
+      component: jssSite
+    },
+    {
+      path: '/jssservice',
+      component: jssService
+    },
+    {
       path: '/jsshome',
       component: jssHome
     },
@@ -82,6 +93,9 @@ const router = new Router({
     {
       path: '/jssinfo',
       component: jssInfo
+    }, {
+      path: '/jsspending',
+      component: jssPending
     }
   ]
 })

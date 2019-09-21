@@ -9,7 +9,7 @@
         clearable
         label="用户名"
         right-icon="question-o"
-        placeholder="请输入用户名"
+        placeholder="请输入用户名/手机号"
         @click-right-icon="$toast('请输入正确的手机号')"
       />
 

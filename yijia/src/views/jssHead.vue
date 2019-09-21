@@ -29,6 +29,7 @@
         <van-cell title="我的" icon="manager-o" to="/jssmy" />
         <van-cell title="信息" icon="chat-o" to="/jssinfo" />
         <van-cell title="购物车" icon="cart-o" to="/jsscary" />
+        <van-cell title="机器人客服" icon="smile-comment-o" to="/jssservice" />
         <!-- 信息，购物车 -->
       </van-popup>
       <!-- 搜索框 -->
