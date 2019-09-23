@@ -16,6 +16,7 @@ import jssTishi from '../views/jssTishi.vue'
 import jssSite from '../views/jssSite.vue'
 import jssService from '../views/jssService.vue'
 import jssPending from '../views/jssPending.vue'
+import jssDetail from '../views/jssDetail.vue'
 //import jssLogin from '../views/jssLogin.vue'
 import {
   List
@@ -96,6 +97,10 @@ const router = new Router({
     }, {
       path: '/jsspending',
       component: jssPending
+    },
+    {
+      path: '/jssdetail',
+      component: jssDetail
     }
   ]
 })

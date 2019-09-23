@@ -26,7 +26,7 @@
         <van-divider>往下看</van-divider>
         <!-- 分类 -->
         <van-grid :gutter="10" style="border-radius:15px">
-          <van-grid-item v-for="value in 8" :key="value" icon="photo-o" text="这是啥" />
+          <van-grid-item v-for="value in 8" :key="value" icon="photo-o" text="这是啥" @click="detail" />
         </van-grid>&nbsp;
         <!-- tap商品 -->
         <van-tabs v-model="active" animated>
@@ -88,6 +88,9 @@ export default {
         this.$toast("好看吗？");
         this.isLoading = false;
       }, 500);
+    },
+    detail() {
+      this.$router.push("/jssdetail");
     }
   }
 };
