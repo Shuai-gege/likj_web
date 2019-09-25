@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
 import './assets/font/iconfont.css'
+// import Vant from 'vant';
+// import 'vant/lib/index.css';
+// Vue.use(Vant);
 Vue.use(VueLazyLoad, {
   error: './static/error.png',
   loading: './static/loading.png'

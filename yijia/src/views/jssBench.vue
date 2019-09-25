@@ -3,9 +3,9 @@
     <van-nav-bar title="工作台" left-text="返回" left-arrow @click-left="onClickLeft" fixed="true" />
     <div class="GongzuoTai">
       <!-- 头像 -->
-      <van-row>
+      <van-row class="flex">
         <van-col span="20" offset="1" class="Logo">
-          <div class="Logo">
+          <div class="Logo flex_l">
             <van-image round width="5rem" height="5rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
             <p>
               喵大爷
@@ -174,6 +174,7 @@ export default {
 
 .van-image {
   float: left;
+  margin-right: 10px;
 }
 
 .van-col--8 {
@@ -197,7 +198,7 @@ export default {
 }
 
 .GongzuoTai {
-  margin-top: 53px;
+  margin-top: 45px;
   margin-bottom: 55px;
   background: url('https://s2.ax1x.com/2019/09/21/nxppIf.jpg') no-repeat;
 }
@@ -207,13 +208,10 @@ export default {
 }
 
 .one {
-  margin: 0 auto;
-  margin-top: 10px;
+  margin: 10px;
+  padding: 10px 15px 15px;
   background: #EDEDED;
-  padding-top: 12px;
   border-radius: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
 .team {

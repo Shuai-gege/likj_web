@@ -26,7 +26,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [{
       path: '/',
-      redirect: '/jsslogin'
+      redirect: '/jssZhongjian'
     },
     {
       path: '/jsstishi',

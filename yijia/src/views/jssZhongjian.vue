@@ -73,6 +73,7 @@
 </template>
 <script>
 import Vue from "vue";
+import axios from "axios";
 import { Popup } from "vant";
 Vue.use(Popup);
 export default {
@@ -92,6 +93,14 @@ export default {
     detail() {
       this.$router.push("/jssdetail");
     }
+  },
+  mounted() {
+    axios({
+      method: "GET",
+      url: "http://lj.tieqiao.shop/api/index/index"
+    }).then(data => {
+      console.log(data.data);
+    });
   }
 };
 </script>

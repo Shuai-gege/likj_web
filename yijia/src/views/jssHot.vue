@@ -1,55 +1,57 @@
 <template>
-  <div class="box">
-    <div>
-      <van-row class="Tou">
-        <van-col span="3">
-          <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
-        </van-col>
-        <van-col span="21">
-          <form action="/" class="SouSuo">
-            <van-search
-              v-model="value"
-              placeholder="请输入搜索关键词"
-              show-action
-              background="#90d7ec"
-              shape="round"
-            />
-          </form>
-        </van-col>
-      </van-row>
-      <!-- 遮罩层 -->
-      <van-popup v-model="show" position="top" :style="{ height: '100%' ,width:'50%'}">
-        <!-- 头像 -->
-        <div class="logo">
-          <van-image round width="5rem" height="5rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-          <p>我是大哥大</p>
+  <div class="category">
+    <!-- 头部 -->
+    <head1></head1>
+    <!-- tab切换 -->
+    <div class="list flex">
+      <div class="left">
+        <div class="item flex active" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+        <div class="item flex" @click="clickTab">一级分类</div>
+      </div>
+      <div class="right flex">
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
         </div>
-        <van-divider />
-        <!-- 设置 -->
-        <van-cell title="我的" icon="manager-o" to="/jssmy" />
-        <van-cell title="信息" icon="chat-o" to="/jssinfo" />
-        <van-cell title="购物车" icon="cart-o" to="/jsscary" />
-        <van-cell title="机器人客服" icon="smile-comment-o" to="/jssservice" />
-        <!-- 信息，购物车 -->
-      </van-popup>
-      <!-- 搜索框 -->
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
+        </div>
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
+        </div>
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
+        </div>
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
+        </div>
+        <div class="item flex">
+          <img src="../image/login.gif" alt />
+          <div>二级分类</div>
+        </div>
+      </div>
     </div>
-    <!-- 侧边栏 -->
-    <van-tabs v-model="active" class="Center">
-      <van-tab title="标签 1"></van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
-    </van-tabs>
   </div>
 </template>
 <script>
+import head1 from "./jssHead";
 import Vue from "vue";
 import {
   Popup,
@@ -72,53 +74,77 @@ Vue.use(Image)
   .use(Divider);
 export default {
   data() {
-    return {
-      show: false,
-      active: 0
-    };
+    return {};
   },
-
+  components: {
+    head1
+  },
   methods: {
-    showPopup() {
-      this.show = true;
-    }
+    clickTab() {}
   }
 };
 </script>
-<style lang="stylus" scoped>
-.geren {
-  height: 54px;
-}
+<style lang="less" scoped>
+.category {
+  height: 100vh;
+  padding: 54px 0 50px;
+  .list {
+    // border-top: 1px solid #f5f5f5;
+    align-items: flex-start;
+    // height: 80%;
+    // padding-top: 10px;
 
-.Tou {
-  position: fixed;
-  z-index: 100;
-  width: 100%;
-}
+    .left {
+      width: 84px;
+      background: rgba(245, 245, 245, 1);
+      height: 84.5vh;
+      overflow: auto;
 
-.Center {
-  padding-top: 3.4375rem;
-}
+      .item {
+        width: 100%;
+        height: 60px;
+        justify-content: space-around;
+        position: relative;
 
-.txt {
-  font-size: 12px;
-}
+        &.active {
+          background-color: #fff;
+          color: #fc5e62;
 
-.logo {
-  text-align: center;
-  margin-top: 1rem;
-}
+          &:before {
+            content: "";
+            width: 6px;
+            height: 40px;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin-top: -20px;
+            background-color: #fc5e62;
+          }
+        }
+      }
+    }
 
-.logo p {
-  font-size: 12px;
-}
+    .right {
+      flex: 1;
+      margin-top: 10px;
+      max-height: 82.5vh;
+      overflow: auto;
+      font-size: 24px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding: 0 10px;
+      .item {
+        flex-direction: column;
+        width: 30%;
+        margin-bottom: 20px;
 
-.bian {
-  border-bottom: 1px solid #ccc;
-}
-
-.van-button--primary {
-  background: #90d7ec;
-  border: 1px solid #90d7ec;
+        img {
+          width: 90px;
+          height: 90px;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
 }
 </style>

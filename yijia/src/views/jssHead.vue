@@ -1,24 +1,15 @@
 <template>
   <div class="box">
     <div>
-      <van-row class="Tou">
-        <van-col span="3">
-          <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
-        </van-col>
-        <van-col span="21">
-          <form action="/" class="SouSuo">
-            <van-search
-              v-model="value"
-              placeholder="请输入搜索关键词"
-              show-action
-              background="#90d7ec"
-              shape="round"
-            />
-          </form>
-        </van-col>
-      </van-row>
-      <!-- 遮罩层 -->
-      <van-popup v-model="show" position="top" :style="{ height: '100%' ,width:'50%'}">
+      <div class="head flex">
+        <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
+        <div class="search">
+          <input class="sear" placeholder="请输入搜索关键字" />
+          <van-icon name="search" />
+        </div>
+        <div class="text">取消</div>
+      </div>
+      <van-popup v-model="show" position="left" :style="{ height: '100%' ,width:'50%'}">
         <!-- 头像 -->
         <div class="logo">
           <van-image round width="5rem" height="5rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
@@ -57,7 +48,7 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped>
+<style lang="less" scoped>
 .Tou {
   position: fixed;
   z-index: 100;
@@ -88,5 +79,34 @@ export default {
 .van-button--primary {
   background: #90d7ec;
   border: 1px solid #90d7ec;
+}
+.head {
+  background-color: #90d7ec;
+  padding: 0 20px 0 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+.search {
+  flex: 1;
+  margin: 0 15px;
+  background-color: #fff;
+  border-radius: 20px;
+  height: 30px;
+  position: relative;
+  .sear {
+    border: none;
+    width: 85%;
+    height: 100%;
+    border-radius: 20px;
+    padding-left: 15%;
+  }
+  i {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+  }
 }
 </style>

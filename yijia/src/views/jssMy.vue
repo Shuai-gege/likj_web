@@ -182,4 +182,10 @@ export default {
 .van-cell {
   font-size: 0.75rem;
 }
+span {
+  margin-left: 0.625rem;
+}
+.van-icon-arrow {
+  font-size: 1.25rem;
+}
 </style>
