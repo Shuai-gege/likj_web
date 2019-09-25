@@ -1,12 +1,17 @@
 <template>
-  <div class="box">
-    <van-nav-bar title="工作台" left-text="返回" left-arrow @click-left="onClickLeft" fixed="true" />
+  <div class="order">
+    <navbar :if_left_arrow="true" title="工作台"></navbar>
     <div class="GongzuoTai">
       <!-- 头像 -->
       <van-row class="flex">
         <van-col span="20" offset="1" class="Logo">
           <div class="Logo flex_l">
-            <van-image round width="5rem" height="5rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+            <van-image
+              round
+              width="2.5rem"
+              height="2.5rem"
+              src="https://img.yzcdn.cn/vant/cat.jpeg"
+            />
             <p>
               喵大爷
               <br />全国总代理
@@ -19,7 +24,7 @@
           </p>
         </van-col>
       </van-row>
-      <van-row class="one">
+      <van-row class="one solo">
         <van-col span="8">
           <span class="DaiFaHuo">0</span>
           <p>代发货订单</p>
@@ -148,26 +153,29 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import { NavBar, Row, Col, Icon, Image } from "vant";
-Vue.use(NavBar)
-  .use(Icon)
-  .use(Row)
-  .use(Col)
-  .use(Image);
+import navbar from "@/components/navbar";
 export default {
   data() {
     return {};
   },
-
+  components: {
+    navbar
+  },
   methods: {
     onClickLeft() {
       this.$router.go(-1);
     }
+  },
+  mounted() {
+    this.axios
+      .get("/api/user/login", { account: 16638143447, password: "1111" })
+      .then(data => {
+        console.log(data);
+      });
   }
 };
 </script>
-<style lang="stylus" scoped>
+<style lang="less" scoped>
 .box p {
   color: #797979;
 }
@@ -182,78 +190,96 @@ export default {
 }
 
 .Logo {
-  margin-top: 1rem;
+  margin: 20px 10px 5px;
+  font-size: 15px;
 }
 
 .DaiFaHuo {
-  color: #8AADD7;
+  color: #8aadd7;
 }
 
 .ShouYi {
-  color: #CA4131;
+  color: #ca4131;
 }
 
-.icon-sucai, .icon-shouhuodizhi, .icon-techreport-, .icon-shouxufei {
-  color: #EF5358;
+.icon-sucai,
+.icon-shouhuodizhi,
+.icon-techreport-,
+.icon-shouxufei {
+  color: #ef5358;
 }
 
 .GongzuoTai {
-  margin-top: 45px;
+  margin-top: 28px;
   margin-bottom: 55px;
-  background: url('https://s2.ax1x.com/2019/09/21/nxppIf.jpg') no-repeat;
+  background: url("https://s2.ax1x.com/2019/09/21/nxppIf.jpg") no-repeat;
 }
 
-.icon-qianbao, .icon-jiangjinyouhuizhengce, .icon-daichuli {
-  color: #5595EF;
+.icon-qianbao,
+.icon-jiangjinyouhuizhengce,
+.icon-daichuli {
+  color: #5595ef;
 }
 
 .one {
   margin: 10px;
   padding: 10px 15px 15px;
-  background: #EDEDED;
+  background: #fff;
   border-radius: 20px;
+  box-shadow: 0px 2px 6px 0px rgba(202, 20, 0, 0.1);
+  h5 {
+    margin-bottom: 15px;
+  }
+  &.solo {
+    font-size: 20px;
+  }
 }
 
 .team {
   margin: 5px 0;
-  color: #DD9E58;
+  color: #dd9e58;
 }
 
 .else {
   margin: 5px 0;
-  color: #EF5358;
+  color: #ef5358;
 }
 
-.icon-tuandui, .icon-daili, .icon-tuijian {
-  color: #DD9E58;
+.icon-tuandui,
+.icon-daili,
+.icon-tuijian {
+  color: #dd9e58;
 }
 
 .wallet {
-  color: #5595EF;
+  color: #5595ef;
   margin: 5px 0;
 }
 
 .indent {
-  color: #BF5D53;
+  color: #bf5d53;
   margin: 5px 0;
 }
 
 .indent span {
-  color: #BF5D53;
+  color: #bf5d53;
 }
 
-.icon-dingdan, .icon-gouwuche, .icon-daifahuo, .icon-urbantubiao- {
-  color: #BF5D53;
+.icon-dingdan,
+.icon-gouwuche,
+.icon-daifahuo,
+.icon-urbantubiao- {
+  color: #bf5d53;
 }
 
 .authorization {
-  color: #868CF9;
+  color: #868cf9;
   margin: 5px 0;
 }
 
 .sqdl {
   border-radius: 40%;
-  background: #868CF9;
+  background: #868cf9;
 }
 
 .one p {
@@ -261,30 +287,32 @@ export default {
 }
 
 .iconfont {
-  font-size: 1.5625rem;
+  font-size: 20px;
 }
 
 .icon-dinghuo {
-  color: #F57968;
+  color: #f57968;
 }
 
 .icon-woshou {
-  color: #868CF9;
+  color: #868cf9;
 }
 
 .icon-shangcheng {
-  color: #F4A14F;
+  color: #f4a14f;
 }
 
 .icon-1121212 {
-  color: #49C54E;
+  color: #49c54e;
 }
 
 .van-col--6 {
   text-align: center;
 }
 
-.icon-shenhe, .icon-shengji, .icon-zhengshu {
-  color: #868CF9;
+.icon-shenhe,
+.icon-shengji,
+.icon-zhengshu {
+  color: #868cf9;
 }
 </style>

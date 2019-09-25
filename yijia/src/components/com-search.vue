@@ -1,30 +1,28 @@
 <template>
   <div class="box">
-    <div>
-      <div class="head flex">
-        <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
-        <div class="search">
-          <input class="sear" placeholder="请输入搜索关键字" />
-          <van-icon name="search" />
-        </div>
-        <div class="text">取消</div>
+    <div class="head flex">
+      <van-button type="primary" @click="showPopup" icon="bars" class="geren"></van-button>
+      <div class="search">
+        <input class="sear" placeholder="请输入搜索关键字" />
+        <van-icon name="search" />
       </div>
-      <van-popup v-model="show" position="left" :style="{ height: '100%' ,width:'50%'}">
-        <!-- 头像 -->
-        <div class="logo">
-          <van-image round width="5rem" height="5rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-          <p>我是大哥大</p>
-        </div>
-        <van-divider />
-        <!-- 设置 -->
-        <van-cell title="我的" icon="manager-o" to="/jssmy" />
-        <van-cell title="信息" icon="chat-o" to="/jssinfo" />
-        <van-cell title="购物车" icon="cart-o" to="/jsscary" />
-        <van-cell title="机器人客服" icon="smile-comment-o" to="/jssservice" />
-        <!-- 信息，购物车 -->
-      </van-popup>
-      <!-- 搜索框 -->
+      <div class="text">取消</div>
     </div>
+    <van-popup v-model="show" position="left" :style="{ height: '100%' ,width:'50%'}">
+      <!-- 头像 -->
+      <div class="logo center">
+        <van-image round width="3rem" height="3rem" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <p>我是大哥大</p>
+      </div>
+      <van-divider />
+      <!-- 设置 -->
+      <van-cell title="我的" icon="manager-o" to="/jssmy" />
+      <van-cell title="信息" icon="chat-o" to="/jssinfo" />
+      <van-cell title="购物车" icon="cart-o" to="/jsscary" />
+      <van-cell title="机器人客服" icon="smile-comment-o" to="/jssservice" />
+      <!-- 信息，购物车 -->
+    </van-popup>
+    <!-- 搜索框 -->
   </div>
 </template>
 <script>
@@ -40,7 +38,7 @@ export default {
       show: false
     };
   },
-
+  mounted() {},
   methods: {
     showPopup() {
       this.show = true;
@@ -66,10 +64,15 @@ export default {
 .logo {
   text-align: center;
   margin-top: 1rem;
+  flex-direction: column;
 }
-
+.van-image--round {
+  width: 100px;
+  height: 100px;
+}
 .logo p {
   font-size: 12px;
+  margin-top: 10px;
 }
 
 .bian {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <van-icon name="arrow-left" @click="out" class="out" />
+      <van-icon name="arrow-left" @click="out" style="font-size:20px;color:#333;" class="out" />
       <van-icon name="setting" class="setting" @click="set" />
       <van-icon name="chat" class="chat" />
     </div>
@@ -22,7 +22,6 @@
         </div>
       </van-col>
     </van-row>
-
     <van-row class="user-links">
       <van-col span="6">
         <van-icon name="pending-payment" color="#f00" @click="tap" />待付款
@@ -51,25 +50,10 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import axios from "axios";
-import { Row, Col, Icon, Cell, CellGroup } from "vant";
-Vue.use(CellGroup)
-  .use(Row)
-  .use(Col)
-  .use(Icon)
-  .use(Cell);
 export default {
-  components: {
-    [Row.name]: Row,
-    [Col.name]: Col,
-    [Icon.name]: Icon,
-    [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup
-  },
+  components: {},
   data() {
     return {
-      name: "CJQ",
       info: this.$store.state.num,
       huafei: this.$store.state.huafei,
       id: null,
@@ -105,7 +89,7 @@ export default {
 }
 .out {
   position: absolute;
-  left: 1rem;
+  left: 6px;
   line-height: 40px;
 }
 .setting {
@@ -166,26 +150,33 @@ export default {
 }
 .van-icon-paid:before {
   color: #bf3eff;
+  margin-top: 4px;
 }
 .van-icon-records:before {
   color: #cd3700;
+  margin-top: 4px;
 }
 .van-icon-points:before {
   color: #008b00;
+  margin-top: 4px;
 }
 .van-icon-gold-coin-o:before {
   color: coral;
+  margin-top: 4px;
 }
 .van-icon-gift-o:before {
   color: goldenrod;
+  margin-top: 4px;
 }
 .van-cell {
   font-size: 0.75rem;
 }
 span {
   margin-left: 0.625rem;
+  font-size: 14px;
+  line-height: 30px;
 }
 .van-icon-arrow {
-  font-size: 1.25rem;
+  font-size: 20px;
 }
 </style>

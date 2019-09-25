@@ -27,6 +27,8 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      '@images': resolve('src/common/images'),//图片链接地址  @images/***/***.png
+      'components':path.resolve(__dirname,'../src/components'),//添加components  页面可路径可直接写 @components/
     }
   },
   module: {

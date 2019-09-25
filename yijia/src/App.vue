@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <router-view />
+    <footbar v-if="$route.meta.ifShow_Footbar" />
   </div>
 </template>
 
 <script>
-import "./common/css/common.css";
+import footbar from "@/components/footbar";
+import "@/common/css/common.css";
 export default {
-  name: "App"
+  name: "App",
+  components: {
+    footbar
+  }
 };
 </script>
 

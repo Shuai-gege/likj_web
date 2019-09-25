@@ -1,15 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="cn">
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>yijia</title>
+  <meta id="viewport" name="viewport"
+    content="width=device-width,height=device-height,user-scalable=no, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0">
+  <title>奇途社区</title>
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_1256834_avxl1yo4qi4.css">
 </head>
 
 <body>
   <div id="app"></div>
-  <!-- built files will be auto injected -->
+  <!--    <script>
+        var mkeyTime = 0;
+        window.history.pushState(null, null, location.href);
+        window.addEventListener("popstate", function(e) {
+            //				alert(vms.$route.path);
+            if (vms.$route.path == "/" || vms.$route.path == "/login") {
+                if (window.back == false) {
+                    window.back = true;
+                    window.history.pushState(null, null, "#");
+                } else {
+                    window.history.pushState(null, null, "#");
+                    if ((new Date().getTime() - mkeyTime) > 2000) {
+                        vms.$toast("再按一次退出程序");
+                        mkeyTime = new Date().getTime();
+                    } else {
+                        vms.$webDemo.exit();
+                    }
+                }
+            }
+            return false;
+        })
+    </script> -->
 </body>
 
 </html>
