@@ -16,14 +16,13 @@
     <p style="margin:10px 0 10px 20px;">更多</p>
     <!-- 收款账号、利润 -->
     <div class="lirun">
-      <van-cell title="我的收款账户" is-link @click="shoukuan(2)" />
-      <van-cell title="收款账号设置" is-link to="/myshoukuan" />
+      <!-- <van-cell title="收款账号设置" is-link to="/myshoukuan" /> -->
       <van-cell title="充值记录" is-link @click="chongzhi" />
       <van-cell title="提现记录" is-link @click="tixian" />
       <!-- <van-cell title="利润明细" is-link @click="tap(4)" /> -->
     </div>
     <!-- 按钮 -->
-    <van-button
+    <!-- <van-button
       type="primary"
       size="large"
       color="#fc4c4c"
@@ -37,7 +36,7 @@
       color="#F19553"
       to="/tixian"
       style="margin-bottom:30px;"
-    >提现</van-button>
+    >提现</van-button>-->
   </div>
 </template>
 <script>
@@ -70,14 +69,7 @@ export default {
         }
       });
     },
-    shoukuan(type1) {
-      this.$router.push({
-        path: "/myshoukuanxinxi",
-        query: {
-          type1
-        }
-      });
-    },
+
     chongzhi() {
       this.$router.push({
         path: "/chongzhilist"
@@ -98,8 +90,8 @@ export default {
   padding-top: 45px;
   .zonge {
     margin-top: -1px;
-    color: #fff;
-    background: #fc4c4c;
+    color: #fdc083;
+    background: #182128;
     padding: 20px;
   }
   .tixian {

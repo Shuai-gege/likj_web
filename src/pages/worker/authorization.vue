@@ -1,5 +1,6 @@
 <template>
   <div class="auditcontent">
+    <navbar title="审核授权" v-if="!$route.query.sign_id"></navbar>
     <div class="content">
       <div class="top">
         <van-cell title="当前状态" is-link :value="audit" />
@@ -18,7 +19,7 @@
       </div>
       <p style="padding:5px 15px;">基本信息</p>
       <van-cell-group>
-        <van-cell title="成为代理的条件" :label="infodata.level_condition" />
+        <van-cell title="成为代理的条件" :label="'首次充值'+infodata.money" />
         <van-cell title="真实姓名" :value="infodata.truename" />
         <van-cell title="手机号码" :value="infodata.tel" />
         <van-cell title="身份证号" :value="infodata.idcard" />
@@ -26,11 +27,23 @@
         <van-cell title="详细地址" value="康桥玥棠" />-->
         <div class="flex" style="padding:10px 30px;">
           <div>
-            <van-image width="4rem" height="2.5rem" fit="cover" :src="infodata.front_card_image" />
+            <van-image
+              width="4rem"
+              height="2.5rem"
+              fit="cover"
+              :src="infodata.front_card_image"
+              @click="getImg1()"
+            />
             <p style="font-size:12px;text-align:center;">身份证正面</p>
           </div>
           <div>
-            <van-image width="4rem" height="2.5rem" fit="cover" :src="infodata.back_card_image" />
+            <van-image
+              width="4rem"
+              height="2.5rem"
+              fit="cover"
+              :src="infodata.back_card_image"
+              @click="getImg2()"
+            />
             <p style="font-size:12px;text-align:center;">身份证正面</p>
           </div>
         </div>
@@ -45,6 +58,7 @@
             fit="cover"
             :src="item"
             :key="index"
+            @click="getImg3(index)"
           />
         </div>
       </div>
@@ -63,20 +77,28 @@
         </van-cell-group>
       </div>
     </div>
-    <div class="flex btn">
+    <div class="flex btn" v-if="infodata.man_check_status==1">
       <div style="width:150px;margin-right:30px;" @click="shenhe(2)">
-        <van-button type="primary" size="large" color="#E44B46">拒绝</van-button>
+        <van-button
+          type="primary"
+          size="large"
+          color="linear-gradient(to right, #fc4c4c, #6149f6)"
+        >拒绝</van-button>
       </div>
       <div style="width:150px;" @click="shenhe(1)">
-        <van-button type="primary" size="large">通过</van-button>
+        <van-button
+          type="primary"
+          size="large"
+          color="linear-gradient(to right, #4bb0ff, #6149f6)"
+        >通过</van-button>
       </div>
     </div>
     <!-- 同意弹窗 -->
-    <van-action-sheet v-model="show" title="确认通知后，充值金额将从您的货款中扣除">
+    <van-action-sheet v-model="show1" title="确认通知后，充值金额将从您的余额中扣除">
       <!-- 单元格 -->
       <van-cell-group>
-        <van-cell title="初始乐币" value="1000" />
-        <van-cell title="我的账户余额" value="476" />
+        <van-cell title="首次充值" :value="infodata.money" />
+        <van-cell title="我的账户余额" :value="yue" />
       </van-cell-group>
       <!-- 输入框 -->
       <!-- <van-cell-group>
@@ -91,21 +113,57 @@
           show-word-limit
         />
       </van-cell-group>-->
-      <van-button type="primary" size="large" style="height:50px;border-radius:10px;">确认</van-button>
+
+      <van-button
+        type="primary"
+        size="large"
+        style="border-radius:10px;"
+        color="#fc4c4c"
+        @click="agree"
+      >确认</van-button>
     </van-action-sheet>
+    <!-- 拒绝 -->
+    <van-overlay :show="show2" style="z-index:99">
+      <div class="box">
+        <van-cell-group style="margin:10px;">
+          <van-field
+            v-model="message"
+            rows="2"
+            autosize
+            label="拒绝理由"
+            type="textarea"
+            maxlength="75"
+            placeholder="请输入拒绝理由"
+            show-word-limit
+          />
+        </van-cell-group>
+        <van-button
+          type="danger"
+          size="small"
+          @click="refuse"
+          style="margin:30px auto;display:block;"
+          color="blue"
+        >确定</van-button>
+      </div>
+    </van-overlay>
   </div>
 </template>
 <script>
 import navbar from "@/components/navbar";
+import Vue from "vue";
+import { ImagePreview } from "vant";
+Vue.use(ImagePreview);
 export default {
   data() {
     return {
       id: "",
       infodata: {},
+      yue: "", //上级余额
       audit: "", //审核状态
       pay: "", //分割支付凭证图片
-      show: false, //弹出框
-      message: "" //输入框
+      show1: false, //同意弹窗
+      show2: false, //拒绝弹窗
+      message: "" //拒绝理由
     };
   },
   components: {
@@ -169,21 +227,76 @@ export default {
             this.audit = "审核失败";
           }
           this.pay = data.pay_proof_images.split(",");
-          // this.pay = data.pay_proof_images;
         });
+      // 获取用户余额
+      this.axios.post("/api/user/index").then(data => {
+        this.yue = data.money;
+      });
     },
     shenhe(type) {
-      this.$toast("您拒绝了他的申请");
-      this.show = true;
-      this.axios
-        .post("/api/agent/inviteCheck", { id: this.id, status: type })
-        .then(data => {
-          if (type == 1) {
+      if (type == 1) {
+        this.show1 = true;
+      } else {
+        this.show2 = true;
+      }
+    },
+    agree() {
+      if (parseFloat(this.infodata.money) > parseFloat(this.yue)) {
+        this.$toast("余额不足");
+      } else {
+        this.axios
+          .post("/api/agent/inviteCheck", { id: this.id, status: 1 })
+          .then(data => {
             this.$toast("审核通过");
-          } else {
+            this.show1 = false;
+            setTimeout(() => {
+              this.init();
+            }, 1000);
+          });
+      }
+    },
+    refuse() {
+      if (!this.message.trim()) {
+        this.$toast("请输入拒绝理由");
+      } else {
+        this.axios
+          .post("/api/agent/inviteCheck", {
+            id: this.id,
+            status: 2,
+            failure_cause: this.message
+          })
+          .then(data => {
             this.$toast("审核失败");
-          }
-        });
+            this.show2 = false;
+            setTimeout(() => {
+              this.init();
+            }, 1000);
+          });
+      }
+    },
+    getImg1() {
+      ImagePreview({
+        images: [this.infodata.front_card_image],
+        showIndex: true,
+        loop: true,
+        startPosition: 0
+      });
+    },
+    getImg2() {
+      ImagePreview({
+        images: [this.infodata.back_card_image],
+        showIndex: true,
+        loop: true,
+        startPosition: 0
+      });
+    },
+    getImg3(i) {
+      ImagePreview({
+        images: this.pay,
+        showIndex: true,
+        loop: true,
+        startPosition: i
+      });
     }
   }
 };
@@ -193,7 +306,7 @@ export default {
   background: #f5f5f5;
   font-size: 15px;
   .van-action-sheet__header {
-    color: #b7b7b7;
+    color: #999;
     font-size: 14px;
     background: #ededed;
   }
@@ -231,7 +344,7 @@ export default {
     bottom: 0;
     background: white;
     .van-button--primary {
-      height: 30px;
+      height: 40px;
       width: 120px;
       line-height: 30px;
       font-size: 14px;
@@ -239,6 +352,16 @@ export default {
   }
   .van-image {
     margin: 0 5px;
+  }
+  .box {
+    position: absolute;
+    background-color: #fff;
+    width: 80%;
+    height: 45%;
+    margin: 50% 10%;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
   }
 }
 </style>

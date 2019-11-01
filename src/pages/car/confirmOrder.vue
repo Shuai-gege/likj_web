@@ -189,7 +189,7 @@ export default {
         this.$router.push({
           path: "/orderDetail",
           query: {
-            order_id: this.order_id
+            id: this.order_id
           }
         });
         // this.showpay = true;

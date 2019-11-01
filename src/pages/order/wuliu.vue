@@ -4,33 +4,37 @@
     <div class="con">
       <div class="goods">
         <div class="top flex_l">
-          <van-image
-            width="2.5rem"
-            height="2.5rem"
-            fit="contain"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
-          />
+          <van-image width="2.5rem" height="2.5rem" fit="cover" :src="initdata.cover_Image" />
           <div class="pro">
-            <div class="name erhang">商品名字商品名字商品</div>
+            <div class="name erhang">{{initdata.name}}</div>
             <div class="price">
-              <i>￥</i>88.00
+              <i>￥</i>
+              {{initdata.goods_money}}
             </div>
           </div>
         </div>
       </div>
-
+      <div class="compony">
+        <p>
+          物流公司：
+          <i>{{initdata.company}}</i>
+        </p>
+        <p>
+          物流单号：
+          <i>{{initdata.express_no}}</i>
+        </p>
+        <!-- 2=在途中,3=签收,4=问题件 -->
+        <p>
+          物流状态：
+          <i v-if="initdata.state==2">在途中</i>
+          <i v-if="initdata.state==3">已签收</i>
+          <i v-if="initdata.state==4">处理问题中</i>
+        </p>
+      </div>
       <van-steps direction="vertical" :active="0" active-color="#fc4c4c">
-        <van-step>
-          <h3>【城市】物流状态1</h3>
-          <p>2016-07-12 12:40</p>
-        </van-step>
-        <van-step>
-          <h3>【城市】物流状态2</h3>
-          <p>2016-07-11 10:00</p>
-        </van-step>
-        <van-step>
-          <h3>快件已发货</h3>
-          <p>2016-07-10 09:30</p>
+        <van-step v-for="(item,i) in wuliu" :key="i">
+          <h3>{{item.AcceptStation}}</h3>
+          <p>{{item.AcceptTime}}</p>
         </van-step>
       </van-steps>
     </div>
@@ -43,10 +47,32 @@ export default {
     tabbar
   },
   data() {
-    return {};
+    return {
+      order_id: "",
+      initdata: {},
+      wuliu: []
+    };
   },
-  mounted() {},
-  methods: {}
+  mounted() {
+    this.order_id = this.$route.query.order_id;
+    console.log(this.order_id);
+
+    this.init();
+  },
+  methods: {
+    init() {
+      this.axios
+        .post("/api/goods_order/getExpressInfo", {
+          order_id: this.order_id
+        })
+        .then(data => {
+          console.log(data);
+
+          this.initdata = data;
+          this.wuliu = data.traces;
+        });
+    }
+  }
 };
 </script>
 <style lang="less">
@@ -80,6 +106,14 @@ export default {
       .foot {
         margin-top: 5px;
         text-align: right;
+      }
+    }
+    .compony {
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+      i {
+        color: #999;
       }
     }
     .van-step__title {

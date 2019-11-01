@@ -2,21 +2,24 @@
   <div class="detail">
     <navbar title="推荐奖金"></navbar>
     <div class="box">
-      <van-tabs v-model="active" @click="onClick">
+      <van-tabs v-model="active" @click="onClick" :sticky="true" :offset-top="44">
         <van-tab title="平推奖">
           <div class="null" v-if="list.length==0">暂无平推记录</div>
           <div class="flex minxi" v-for="(item,i) in list" :key="i">
             <div>
-              <p style="font-size:13px;margin-bottom:10px;color:black;">{{item.msg}}</p>
-              <p style="font-size:13px;color:#CDC9C9;">
-                <span>{{item.createtime}}</span>
+              <p style="font-size:13px;margin-bottom:10px;color:black;text-align:left;">
+                {{item.msg}}
+                <i>￥{{item.bonus_money}}</i>
+              </p>
+              <p style="font-size:13px;color:#CDC9C9;text-align:left;">
+                <span>创建时间：{{item.createtime}}</span>
               </p>
             </div>
             <div style="font-size:14px;color:#fc4c4c">
               <p style="font-size:13px;" v-if="item.audit_status==1">待审核</p>
               <p style="font-size:13px;" v-if="item.audit_status==2">审核通过</p>
               <p style="font-size:13px;" v-if="item.audit_status==3">审核失败</p>
-              <p>{{item.bonus_money}}</p>
+              <span style="font-size:13px;color:#CDC9C9;">{{item.cleartime}}</span>
             </div>
           </div>
         </van-tab>
@@ -24,16 +27,19 @@
           <div class="null" v-if="list.length==0">暂无跨级推荐记录</div>
           <div class="flex minxi" v-for="(item,i) in list" :key="i">
             <div>
-              <p style="font-size:13px;margin-bottom:10px;color:black;">{{item.msg}}</p>
-              <p style="font-size:13px;color:#CDC9C9;">
-                <span>{{item.createtime}}</span>
+              <p style="font-size:13px;margin-bottom:10px;color:black;text-align:left;">
+                {{item.msg}}
+                <i>￥{{item.bonus_money}}</i>
+              </p>
+              <p style="font-size:13px;color:#CDC9C9;text-align:left;">
+                <span>创建时间：{{item.createtime}}</span>
               </p>
             </div>
             <div style="font-size:14px;color:#fc4c4c">
               <p style="font-size:13px;" v-if="item.audit_status==1">待审核</p>
               <p style="font-size:13px;" v-if="item.audit_status==2">审核通过</p>
               <p style="font-size:13px;" v-if="item.audit_status==3">审核失败</p>
-              <p>{{item.bonus_money}}</p>
+              <span style="font-size:13px;color:#CDC9C9;">{{item.cleartime}}</span>
             </div>
           </div>
         </van-tab>
@@ -41,16 +47,19 @@
           <div class="null" v-if="list.length==0">暂无发展奖</div>
           <div class="flex minxi" v-for="(item,i) in list" :key="i">
             <div>
-              <p style="font-size:13px;margin-bottom:10px;color:black;">{{item.msg}}</p>
-              <p style="font-size:13px;color:#CDC9C9;">
-                <span>{{item.createtime}}</span>
+              <p style="font-size:13px;margin-bottom:10px;color:black;text-align:left;">
+                {{item.msg}}
+                <i>￥{{item.bonus_money}}</i>
+              </p>
+              <p style="font-size:13px;color:#CDC9C9;text-align:left;">
+                <span>创建时间：{{item.createtime}}</span>
               </p>
             </div>
             <div style="font-size:14px;color:#fc4c4c">
               <p style="font-size:13px;" v-if="item.audit_status==1">待审核</p>
               <p style="font-size:13px;" v-if="item.audit_status==2">审核通过</p>
               <p style="font-size:13px;" v-if="item.audit_status==3">审核失败</p>
-              <p>{{item.bonus_money}}</p>
+              <span style="font-size:13px;color:#CDC9C9;">{{item.cleartime}}</span>
             </div>
           </div>
         </van-tab>
@@ -111,6 +120,10 @@ export default {
       padding: 10px 20px;
       background: #fff;
       margin-bottom: 1px;
+      text-align: right;
+      i {
+        color: #fc4c4c;
+      }
     }
   }
 }

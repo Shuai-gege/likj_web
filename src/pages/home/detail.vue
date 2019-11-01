@@ -5,25 +5,19 @@
     <!-- 中间部分 -->
     <van-row>
       <van-col span="24" v-if="initdata.lunbo">
-        <van-swipe @change="onChange" :height="251" :autoplay="3000">
+        <van-swipe @change="onChange" :height="270" :autoplay="3000">
           <van-swipe-item class="Show1" v-for="(item ,i) in initdata.lunbo" :key="i">
-            <van-image width="100%" height="251" fit="cover" :src="item" />
+            <van-image width="100%" height="270" fit="cover" :src="item" />
           </van-swipe-item>
           <div class="custom-indicator" slot="indicator">{{ current + 1 }}/{{initdata.lunbo.length}}</div>
         </van-swipe>
       </van-col>
       <van-col span="22" offset="1">
-        <div class="article">
-          {{initdata.name}}
-          <van-tag mark type="warning">{{initdata.label}}</van-tag>
-        </div>
-        <!-- <p>剩余：{{initdata.number}}</p> -->
-      </van-col>
-      <van-col span="22" offset="1">
         <div class="flex_l">
-          <span class="price" style="font-size:18px;color:#f00" v-if="sizes[0]">
-            <i>￥</i>
-            {{sizes[0].price}}
+          <span class="price flex_l" style="font-size:20px;color:#f00" v-if="sizes[0]">
+            <img src="../../image/图标/jinbi.png" alt />
+            {{sizes[0].self_price}}
+            <s>￥{{sizes[0].price}}</s>
           </span>
           <!-- <van-tag round type="warning">标签</van-tag> -->
           <!-- <p>
@@ -31,6 +25,14 @@
             <s>￥16</s>
           </p>-->
         </div>
+      </van-col>
+      <van-col span="22" offset="1">
+        <div class="article">
+          {{initdata.name}}
+          <!-- <van-tag mark type="warning">{{initdata.label}}</van-tag> -->
+        </div>
+        <!-- 小标签 -->
+        <!-- <p>剩余：{{initdata.number}}</p> -->
       </van-col>
     </van-row>
     <!-- <div class="DHL flex">
@@ -40,7 +42,7 @@
     <van-divider />
     <!-- 商品详情展示 -->
     <div class="datail">
-      <p style="margin-bottom:15px;">商品详情</p>
+      <p class="title">商品详情</p>
       <div v-html="detail"></div>
     </div>
 
@@ -51,14 +53,14 @@
         <div class="Font">
           <p class="price">
             ￥
-            <b>{{goodsMsg.price}}</b>
+            <b>{{goodsMsg.self_price}}</b>
           </p>
           <!-- 最低提货量 -->
           <p style="color:#666;font-size:14px;">
             最低提货
             <i style="color:#F04C46;">{{goodsMsg.self_pick}}</i>
           </p>
-          <div class="number flex" style="color:#666,;font-size:13px;width:200px;">
+          <div class="number flex" style="color:#666,;font-size:13px;width:200px;margin-top:15px;">
             <p>库存：{{goodsMsg.stock}}</p>
             <p>销量：{{goodsMsg.sales}}</p>
           </div>
@@ -81,7 +83,12 @@
       <!-- 步进器 -->
       <div class="flex num">
         <p>购买数量</p>
-        <van-stepper v-model="value" :max="goodsMsg.stock" :disabled="goodsMsg.stock==0" />
+        <van-stepper
+          v-model="value"
+          :min="goodsMsg.self_pick"
+          :max="goodsMsg.stock"
+          :disabled="goodsMsg.stock==0"
+        />
       </div>
       <!-- 按钮 -->
       <van-button type="primary" color="#f04c46" size="large" @click="gopay">确定</van-button>
@@ -136,9 +143,12 @@ export default {
         .then(data => {
           this.$set(data, "lunbo", data.carousel_images.split(","));
           this.initdata = data;
-          this.detail = data.details
-            .replace(/width=*[0-9]*/g, 'width="375"')
-            .replace(/height=*[0-9]*/g, 'height="auto"');
+          // console.log("jiu详情", data.details);
+          this.detail = data.details.replace(/<img/g, '<img width="100%"');
+          // this.detail = data.details
+          //   .replace(/width="*[0-9]*"/g, 'width="100%"')
+          //   .replace(/height="*[0-9]*"/g, 'height="auto"');
+          // console.log("xin详情", this.detail);
 
           this.sizes = data.size;
           data.size.forEach(item => {
@@ -148,6 +158,7 @@ export default {
             data.size.forEach((item, i) => {
               if (item.goods_size_id == this.size_id) {
                 this.goodsMsg = data.size[i];
+                this.value = this.goodsMsg.self_pick;
                 this.active = i;
               }
             });
@@ -161,7 +172,7 @@ export default {
     getSize(i) {
       this.active = i;
       this.goodsMsg = this.sizes[i]; //商品弹窗信息
-      this.value = 1;
+      this.value = this.goodsMsg.self_pick;
       console.log(this.sizeArr);
       this.size_id = this.goodsMsg.goods_size_id;
     },
@@ -257,20 +268,32 @@ export default {
 }
 
 .article {
-  font-size: 18px;
+  font-size: 14px;
   color: #333;
   margin: 10px 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 .price {
   font-size: 20px;
   font-weight: 700;
   margin-right: 15px;
-  i {
-    font-size: 14px;
-    font-weight: normal;
-    margin-right: -5px;
+  margin-top: 15px;
+  img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
   }
+  s {
+    font-size: 12px;
+    color: #999;
+    margin-left: 15px;
+    font-weight: 400;
+  }
+  // i {
+  //   font-size: 18px;
+  //   font-weight: normal;
+  //   margin-right: -5px;
+  // }
 }
 .yard {
   margin: 1.25rem;
@@ -287,7 +310,7 @@ export default {
 }
 
 .datail {
-  p {
+  .title {
     font-size: 16px;
     color: #333;
     margin-top: 15px;
@@ -295,6 +318,13 @@ export default {
     height: 18px;
     line-height: 18px;
     padding-left: 10px;
+    margin: 0 0 15px 10px;
+  }
+  p {
+    img {
+      width: 100% !important;
+      height: auto;
+    }
   }
 }
 
@@ -315,7 +345,7 @@ export default {
     .price {
       font-size: 20px;
       color: #f00;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
 
       b {
         font-size: 28px;

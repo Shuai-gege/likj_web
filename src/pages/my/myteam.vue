@@ -57,7 +57,7 @@ export default {
     navbar
   },
   mounted() {
-    this.type = this.$route.query.type;
+    this.active = this.$route.query.type;
     this.init();
   },
   methods: {

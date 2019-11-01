@@ -55,7 +55,7 @@
         <!-- 已取消 -->
         <van-button v-if="order_status==-1" size="small" type="default">订单已取消</van-button>
         <!-- 代付款 -->
-        <van-button v-if="order_status==0" size="small" type="default">取消订单</van-button>
+        <van-button v-if="order_status==0" size="small" type="default" @click="cancel">取消订单</van-button>
         <van-button v-if="order_status==0" size="small" type="danger" @click="gopay">立即付款</van-button>
         <!-- 待发货 -->
         <van-button v-if="order_status==1" size="small" type="default" @click="backMoney">申请退款</van-button>
@@ -106,7 +106,7 @@ export default {
     };
   },
   mounted() {
-    this.order_id = this.$route.query.order_id;
+    this.order_id = this.$route.query.id;
     this.init();
   },
   methods: {
@@ -161,6 +161,16 @@ export default {
       //   }
       // });
     },
+    // 取消订单
+    cancel() {
+      this.axios
+        .post("/api/goods_order/cancelOrder", {
+          order_id: this.order_id
+        })
+        .then(data => {
+          this.$toast("取消成功");
+        });
+    },
     // 申请退款
     backMoney() {
       this.$router.push({
@@ -177,12 +187,20 @@ export default {
       this.$router.push({
         path: "/wuliu",
         query: {
-          order_id: 1
+          order_id: this.order_id
         }
       });
     },
     // 确认收货
-    confirm() {},
+    confirm() {
+      this.axios
+        .post("/api/goods_order/confirmTakeOver", {
+          order_id: this.order_id
+        })
+        .then(data => {
+          this.$toast("收货成功");
+        });
+    },
     // 删除订单
     delOrder() {},
     // 查看退款详情

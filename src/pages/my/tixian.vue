@@ -1,6 +1,6 @@
 <template>
   <div class="tixian">
-    <navbar title="提现"></navbar>
+    <navbar title="提现" navbar_right_name="记录" navbar_right_link="/tixianlist"></navbar>
     <!-- 选择提现到哪里 -->
     <div class="xuanze">
       <!-- 提现账户 -->

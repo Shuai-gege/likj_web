@@ -5,8 +5,8 @@
     <div class="con">
       <van-cell-group>
         <van-field v-model="name" clearable label="活动名称" placeholder="请选择活动名称" />
-        <van-field v-model="starttime" clearable label="开始时间" placeholder="请输入开始时间" @focus="start" />
-        <van-field v-model="endtime" clearable label="结束时间" placeholder="请输入结束时间" @focus="end" />
+        <van-field v-model="starttime" disabled label="开始时间" placeholder="请输入开始时间" @click="start" />
+        <van-field v-model="endtime" disabled label="结束时间" placeholder="请输入结束时间" @click="end" />
       </van-cell-group>
       <van-cell-group>
         <van-field

@@ -9,7 +9,7 @@
           <div class="item" v-else>
             <van-cell title="收款账户类型" value="微信" size="large" />
             <van-cell title="收款人" :value="info.wx_account_name" size="large" />
-            <van-cell title="微信号" value="12345675452" size="large" />
+            <van-cell title="微信号" :value="info.wx_account" size="large" />
             <van-image
               style="margin:30px auto;display:block;"
               width="200"
@@ -23,7 +23,7 @@
           <div class="item" v-else>
             <van-cell title="收款账户类型" value="支付宝" size="large" />
             <van-cell title="收款人" :value="info.zfb_account_name" size="large" />
-            <van-cell title="账号" value="12345565452" size="large" />
+            <van-cell title="账号" :value="info.zfb_account" size="large" />
             <van-image
               style="margin:30px auto;display:block;"
               width="200"

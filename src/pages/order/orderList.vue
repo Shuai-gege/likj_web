@@ -35,7 +35,7 @@
                 <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
               </div>
               <div slot="footer">
-                <van-button size="small">取消订单</van-button>
+                <van-button size="small" @click="cancalOrder(item.shop_order_id)">取消订单</van-button>
                 <van-button size="small" type="danger" @click="orderDetail(item.shop_order_id)">付款</van-button>
               </div>
             </van-panel>
@@ -108,8 +108,8 @@
               </div>
               <div slot="footer">
                 <van-button size="small" @click="backMoney">申请退款</van-button>
-                <van-button size="small" @click="toWuliu">查看物流</van-button>
-                <van-button size="small" type="danger">确认收货</van-button>
+                <van-button size="small" @click="toWuliu(item.shop_order_id)">查看物流</van-button>
+                <van-button size="small" type="danger" @click="confirm(item.shop_order_id)">确认收货</van-button>
               </div>
             </van-panel>
           </div>
@@ -147,7 +147,12 @@
                 <!-- 已取消 -->
                 <van-button v-if="item.order_status==-1" size="small" type="default">订单已取消</van-button>
                 <!-- 代付款 -->
-                <van-button v-if="item.order_status==0" size="small" type="default">取消订单</van-button>
+                <van-button
+                  v-if="item.order_status==0"
+                  size="small"
+                  type="default"
+                  @click="cancalOrder(item.shop_order_id)"
+                >取消订单</van-button>
                 <van-button
                   v-if="item.order_status==0"
                   size="small"
@@ -178,13 +183,13 @@
                   v-if="item.order_status==2"
                   size="small"
                   type="default"
-                  @click="toWuliu"
+                  @click="toWuliu(item.shop_order_id)"
                 >查看物流</van-button>
                 <van-button
                   v-if="item.order_status==2"
                   size="small"
                   type="danger"
-                  @click="confirm"
+                  @click="confirm(item.shop_order_id)"
                 >确认收货</van-button>
                 <!-- 已完成 -->
                 <van-button
@@ -218,7 +223,7 @@ export default {
   },
   data() {
     return {
-      tab: 0, //tab切换高亮
+      tab: 1, //tab切换高亮
       orderType: 0, //订单类型  1 商城订单  2 云仓  3 提货
       order_state: 0, //订单状态
       list: [], //订单列表
@@ -228,7 +233,9 @@ export default {
   },
   mounted() {
     this.orderType = this.$route.query.orderType;
-    this.tab = this.$route.query.tab;
+    if (this.$route.query.tab) {
+      this.tab = this.$route.query.tab;
+    }
     this.init(Number(this.tab) + 1);
   },
   methods: {
@@ -303,7 +310,7 @@ export default {
       this.$router.push({
         path: "/orderDetail",
         query: {
-          order_id: id
+          id: id
         }
       });
     },
@@ -320,6 +327,15 @@ export default {
       //   }
       // });
     },
+    // 取消定单
+    cancalOrder(id) {
+      this.$router.push({
+        path: "/orderDetail",
+        query: {
+          id: id
+        }
+      });
+    },
     // 申请退款
     backMoney() {
       this.$router.push({
@@ -329,19 +345,27 @@ export default {
         }
       });
     },
+
     // 提醒发货
     warn() {},
     // 查看物流
-    toWuliu() {
+    toWuliu(id) {
       this.$router.push({
         path: "/wuliu",
         query: {
-          order_id: 1
+          order_id: id
         }
       });
     },
     // 确认收货
-    confirm() {},
+    confirm(id) {
+      this.$router.push({
+        path: "/orderDetail",
+        query: {
+          id: id
+        }
+      });
+    },
     // 删除订单
     delOrder() {},
     // 查看退款详情

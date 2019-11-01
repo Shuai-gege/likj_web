@@ -86,11 +86,6 @@ export default {
     afterRead(file) {
       console.log(file.content);
       console.log(dataURLtoFile(file.content));
-      // this.axios
-      //   .post("/api/common/upload", { file: dataURLtoFile(file.content) })
-      //   .then(data => {
-      //     consoe.log(data);
-      //   });
     }
   }
 };

@@ -20,25 +20,30 @@ export function dataURLtoFile(dataurl, filename) {
 // ajax上传图片——文件流方式
 export function upload(base64, name) {
   return new Promise((resolve, reject) => {
-    let file = dataURLtoFile(base64, name);
-    // 实例化FormData
-    var formdata = new FormData();
-    // 将文件信息存入formdata，键名为file
-    // formdata会将文件信息序列化为ajax可识别的数据类型
-    formdata.append("file", file);
-    $.ajax({
-      type: "post",
-      url: `${localStorage.getItem(
-        "baseURL"
-      )}/api/common/upload?token=${localStorage.getItem(
-        "token" + localStorage.getItem("sign_id")
-      )}&sign_id=${localStorage.getItem("sign_id")}`,
-      data: formdata, // formdata直接赋值给data
-      processData: false, //formdata已将数据序列化，无需在处理
-      contentType: false, //formdata无需设置请求头
-      success: function(res) {
-        resolve(res.data);
-      }
+    lrz(base64, { quality: 1 }).then(function(rst) {
+      // 处理成功会执行
+      // console.log("压缩：", rst);
+      let file = dataURLtoFile(rst.origin, name);
+      // 实例化FormData;
+      var formdata = new FormData();
+      //  将文件信息存入formdata，键名为file
+      //  formdata会将文件信息序列化为ajax可识别的数据类型
+      formdata.append("file", file);
+
+      $.ajax({
+        type: "post",
+        url: `${localStorage.getItem(
+          "baseURL"
+        )}/api/common/uploadali?token=${localStorage.getItem(
+          "token" + localStorage.getItem("sign_id")
+        )}&sign_id=${localStorage.getItem("sign_id")}`,
+        data: formdata, // formdata直接赋值给data
+        processData: false, //formdata已将数据序列化，无需在处理
+        contentType: false, //formdata无需设置请求头
+        success: function(res) {
+          resolve(res.data);
+        }
+      });
     });
   });
 }

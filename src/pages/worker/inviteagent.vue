@@ -14,7 +14,7 @@
         </span>
         <span v-if="!level_id">邀请你加入{{init.app_name}}</span>
         <img :src="init.file_path" alt class="erweima" />
-        <div class="time">{{init.effective_time}}</div>
+        <!-- <div class="time">{{init.effective_time}}</div> -->
         <!-- <div class="save">
           长按
           <br />分享
@@ -115,7 +115,7 @@ export default {
       height: 180px;
       position: absolute;
       left: 50%;
-      bottom: 35%;
+      bottom: 30%;
       margin-left: -90px;
       margin-bottom: -100px;
     }

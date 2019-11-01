@@ -1,8 +1,8 @@
 <template>
   <div class="recordinfo">
     <!-- 头部公共搜索框 -->
-    <tabbar title="充值明细详情"></tabbar>
-    <div class="con">
+    <tabbar title="充值明细详情" v-if="!$route.query.sign_id"></tabbar>
+    <div :class="{con:true,hastab:!$route.query.sign_id}">
       <div style="padding:15px" class="flex_l">
         <van-image
           width="2rem"
@@ -100,44 +100,40 @@ export default {
   },
   mounted() {
     this.id = this.$route.query.id;
-    this.init();
-    // alert(location.href);
-    // alert(location.protocol + "//" + location.hostname);
-    if (this.$route.query.app_id) {
-      localStorage.setItem("app_id", this.$route.query.app_id);
+    if (this.$route.query.sign_id) {
+      // alert(111);
+      localStorage.setItem("sign_id", this.$route.query.sign_id);
       localStorage.setItem(
         "baseURL",
         location.protocol + "//" + location.hostname
       );
     }
-
     if (
-      !localStorage.getItem("token" + localStorage.getItem("app_id")) &&
+      !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       !this.$route.query.token
     ) {
       // alert(33333333);
-      // alert(
-      //   localStorage.getItem("baseURL") +
-      //     "/api/user/wxlogin?app_id=" +
-      //     localStorage.getItem("app_id")
-      // );
+      // alert(localStorage.getItem("baseURL"));
 
       location.href =
         localStorage.getItem("baseURL") +
-        "/api/user/wxlogin?app_id=" +
-        localStorage.getItem("app_id");
+        "/api/user/wxlogin?sign_id=" +
+        localStorage.getItem("sign_id");
     } else if (
-      !localStorage.getItem("token" + localStorage.getItem("app_id")) &&
+      !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       this.$route.query.token
     ) {
       // alert(11111111111);
       // alert(this.$route.query.token);
       localStorage.setItem(
-        "token" + localStorage.getItem("app_id"),
+        "token" + localStorage.getItem("sign_id"),
         this.$route.query.token
       );
-      this.init();
-    } else if (localStorage.getItem("token" + localStorage.getItem("app_id"))) {
+      // this.init();
+    } else if (
+      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+    ) {
+      // alert(666);
       this.init();
     }
   },
@@ -220,9 +216,10 @@ export default {
 
 <style lang="less" scoped>
 .recordinfo {
-  padding-top: 44px;
   .con {
-    margin-top: -1px;
+    &.hastab {
+      margin-top: 44px;
+    }
     .image {
       padding: 20px;
       p {

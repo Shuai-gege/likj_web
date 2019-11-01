@@ -6,6 +6,7 @@
         <input class="sear" placeholder="请输入搜索关键字" @focus="tosearch" />
         <van-icon name="search" />
       </div>
+      <img class="rightImg" src="../image/消息/xiaoxi.png" alt />
     </div>
     <van-popup v-model="show" position="left" :style="{ height: '100%' ,width:'50%'}">
       <!-- 头像 -->
@@ -35,7 +36,14 @@ export default {
     };
   },
   props: ["url"],
-  mounted() {},
+  mounted() {
+    let a = "red";
+    let b = "yellow";
+    $(".head").css(
+      "background-image",
+      "linear-gradient(to bottom right, " + a + "," + b + ")"
+    );
+  },
   methods: {
     tosearch() {
       this.$router.push(this.url);
@@ -54,69 +62,66 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.Tou {
-  position: fixed;
-  z-index: 100;
-  width: 100%;
-}
+.box {
+  height: 50px;
+  .head {
+    // background-color: #fc4c4c;
+    // background-image: linear-gradient(to bottom right, red, yellow);
+    padding: 0 15px 0 0;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    .geren {
+      height: 44px;
+    }
+    .van-button--primary {
+      background: transparent;
+      border: 1px solid transparent;
+    }
+    .logo {
+      text-align: center;
+      margin-top: 1rem;
+      flex-direction: column;
+    }
+    .van-image--round {
+      width: 100px;
+      height: 100px;
+    }
+    .logo p {
+      font-size: 12px;
+      margin-top: 10px;
+    }
 
-.geren {
-  height: 54px;
-}
-
-.txt {
-  font-size: 12px;
-}
-
-.logo {
-  text-align: center;
-  margin-top: 1rem;
-  flex-direction: column;
-}
-.van-image--round {
-  width: 100px;
-  height: 100px;
-}
-.logo p {
-  font-size: 12px;
-  margin-top: 10px;
-}
-
-.bian {
-  border-bottom: 1px solid #ccc;
-}
-
-.van-button--primary {
-  background: #fc4c4c;
-  border: 1px solid #fc4c4c;
-}
-.head {
-  background-color: #fc4c4c;
-  padding: 0 20px 0 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
-.search {
-  flex: 1;
-  margin: 0 15px;
-  background-color: #fff;
-  border-radius: 20px;
-  height: 30px;
-  position: relative;
-  .sear {
-    border: none;
-    width: 85%;
-    height: 100%;
-    border-radius: 20px;
-    padding-left: 15%;
+    .search {
+      flex: 1;
+      margin: 0 10px 0 0;
+      background-color: #fff;
+      border-radius: 20px;
+      height: 30px;
+      position: relative;
+      .sear {
+        border: none;
+        width: 85%;
+        height: 100%;
+        border-radius: 20px;
+        padding-left: 15%;
+      }
+      i {
+        position: absolute;
+        left: 15px;
+        top: 10px;
+      }
+    }
+    .rightImg {
+      width: 22px;
+      height: 22px;
+    }
   }
-  i {
-    position: absolute;
-    left: 15px;
-    top: 10px;
+  .notice {
+    padding: 5px 10px;
   }
 }
 </style>

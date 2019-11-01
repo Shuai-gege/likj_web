@@ -6,7 +6,7 @@
       <div class="txt">
         <p style="color:#333;">
           {{info.team_name}}
-          <span>（{{info.synopsis}}）</span>
+          <span v-if="info.synopsis">（{{info.synopsis}}）</span>
         </p>
         <p>口号：{{info.slogan}}</p>
       </div>
@@ -19,13 +19,13 @@
     <div class="my">
       <van-cell v-if="id" title="我的上级" is-link icon="manager-o" @click="mytop" />
       <van-cell title="我的下级" is-link icon="user-o" @click="$router.push('/myteam')" />
-      <van-cell title="下级充值记录" is-link icon="after-sale" @click="$router.push('/topuplist')" />
+      <!-- <van-cell title="下级充值记录" is-link icon="after-sale" @click="$router.push('/topuplist')" />
       <van-cell
         title="下级提现记录"
         is-link
         icon="cash-back-record"
         @click="$router.push('/xiajitixianlist')"
-      />
+      />-->
     </div>
     <!-- 团队活动 -->
     <div class="hot">

@@ -2,8 +2,10 @@
   <!-- 头部公共搜索框 -->
   <div class="storeTabbar">
     <div class="cont flex">
-      <div class="leftimg" @click="goBack">
-        <van-icon name="arrow-left" />
+      <div class="leftimg flex" @click="goBack">
+        <!-- <van-icon name="arrow-left" /> -->
+        <img src="../image/cat.png" alt />
+        <span>分类</span>
       </div>
       <input type="search" @keyup.13="searchGoods" placeholder="请输入关键词" v-model="searchValue" />
       <p @click="searchGoods">搜索</p>
@@ -19,9 +21,9 @@ export default {
   },
   mounted() {},
   methods: {
-    // 点击返回按钮
+    //
     goBack() {
-      this.$router.go(-1);
+      this.$emit("cat");
     },
     searchGoods() {
       this.$emit("gosearch", this.searchValue);
@@ -45,8 +47,15 @@ export default {
     padding: 0 12px;
     height: 44px;
     .leftimg {
-      width: 10px;
-      height: 20px;
+      // width: 30px;
+      // height: 20px;
+      flex-direction: column;
+      font-size: 10px;
+      color: #333;
+      img {
+        width: 28px;
+        height: 22px;
+      }
       i {
         font-size: 20px;
       }

@@ -13,11 +13,17 @@
       <div class="head1 flex_l">
         <img :src="initdata.up_user_avatar" alt />
         <div>
-          <p>{{initdata.up_user_name}}（{{initdata.up_user_agent_name}}）</p>
+          <p>
+            {{initdata.up_user_name}}
+            <i
+              v-if="initdata.up_user_agent_name"
+            >（{{initdata.up_user_agent_name}}）</i>
+            <i v-else>（品牌方）</i>
+          </p>
           <!-- <span>邀请你成为“{{initdata.level_name}}”</span> -->
         </div>
       </div>
-      <div class="title">上级团队</div>
+      <div class="title">团队信息</div>
       <div class="head1 flex_l">
         <img :src="initdata.team_avatar" alt />
         <div>
@@ -33,13 +39,19 @@
         <div class="head1 flex_l">
           <img :src="initdata.new_up_user_avatar	" alt />
           <div>
-            <p>{{initdata.new_up_user_name}}（{{initdata.new_up_user_agent_name}}）</p>
+            <p>
+              {{initdata.new_up_user_name}}
+              <i
+                v-if="initdata.new_up_user_agent_name"
+              >（{{initdata.new_up_user_agent_name}}）</i>
+              <i v-else>（品牌方）</i>
+            </p>
             <!-- <span>邀请你成为“{{initdata.level_name}}”</span> -->
           </div>
         </div>
         <div class="title">
           升级为
-          <i style="color:#fc4c4c">{{name}}</i> 后上级团队
+          <i style="color:#fc4c4c">{{name}}</i> 后团队
         </div>
         <div class="head1 flex_l">
           <img :src="initdata.new_team_avatar" alt />

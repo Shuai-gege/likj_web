@@ -12,8 +12,16 @@
             </p>
           </div>
           <div>
-            <p style="font-size:14px;color:#fc4c4c" v-if="item.fluctuate_type == 1">+{{item.amount}}</p>
-            <p style="font-size:14px;color:#fc4c4c" v-if="item.fluctuate_type == 2">-{{item.amount}}</p>
+            <p style="font-size:14px;color:#04BE02" v-if="item.fluctuate_type == 1" class="flex_r">
+              +
+              <img src="../../image/图标/jinbi.png" alt class="money" />
+              {{item.amount}}
+            </p>
+            <p style="font-size:14px;color:#fc4c4c" v-if="item.fluctuate_type == 2" class="flex_r">
+              -
+              <img src="../../image/图标/jinbi.png" alt class="money" />
+              {{item.amount}}
+            </p>
           </div>
         </div>
       </div>
@@ -94,6 +102,12 @@ export default {
 .detail {
   font-size: 14px;
   background: #f5f5f5;
+  /deep/.mescroll-upwarp {
+    background: #f5f5f5 !important;
+  }
+  .null {
+    background: #f5f5f5;
+  }
   .mescroll {
     position: fixed;
     top: 0px;
@@ -107,10 +121,21 @@ export default {
   }
   .box {
     margin-top: 44px;
+    background: #f5f5f5;
+    min-height: 100vh;
+    padding-bottom: 5px;
     .minxi {
       padding: 10px 20px;
       background: #fff;
-      margin-bottom: 1px;
+      width: 94%;
+      margin: 0 auto;
+      margin-top: 10px;
+      border-radius: 5px;
+      .money {
+        margin-right: 8px;
+        width: 15px;
+        height: 15px;
+      }
     }
   }
 }

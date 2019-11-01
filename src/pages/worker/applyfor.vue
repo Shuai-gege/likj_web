@@ -12,7 +12,6 @@
       <img :src="initdata.up_agent_wx_avatar" alt />
       <div>
         <p>{{initdata.up_agent_wx_nickname}}（{{initdata.up_agent_agent_name}}）</p>
-        <!-- <span>邀请你成为“{{initdata.level_name}}”</span> -->
       </div>
     </div>
     <div class="title" v-if="initdata.up_agent_team_name">上级团队</div>
@@ -29,56 +28,87 @@
         <van-icon name="arrow" />
       </span>
     </div>
-    <div class="head1">{{initdata.level_condition}}</div>
+    <div class="head1">首次充值{{initdata.money}}元</div>
     <div class="title">基本信息</div>
     <van-cell-group>
       <van-field v-model="username" clearable label="真实姓名" placeholder="请输入姓名" />
       <van-field v-model="tel" clearable label="手机号码" placeholder="请输入手机号" />
-      <!-- <van-field v-model="area" clearable label="地区" placeholder="请选择地区" @click="showArea=true" />
-      <van-field v-model="address" clearable label="详细地址" placeholder="街道门牌信息" />-->
     </van-cell-group>
     <div class="title">身份信息</div>
     <van-cell-group>
       <van-field v-model="IDcard" clearable label="身份证号" placeholder="请输入身份证号" />
       <div class="title">上传身份证正反面</div>
-      <div class="upload flex">
-        <div class="item flex">
-          <van-uploader v-model="fan" :after-read="afterRead1" :max-count="1" />
-          <img :src="fan" alt />
-          <span>头像面</span>
-        </div>
+      <div class="shenfen flex" style="padding:5px 8px 15px 15px" v-if="initdata.truename">
+        <van-image
+          width="4.5rem"
+          height="2.7rem"
+          fit="cover"
+          :src="initdata.front_card_image"
+          @click="getImg1()"
+          style="margin-right:10px"
+        />
+        <van-image
+          width="4.5rem"
+          height="2.7rem"
+          fit="cover"
+          :src="initdata.back_card_image"
+          @click="getImg2()"
+          style="margin-right:10px"
+        />
+      </div>
+      <div class="upload flex" v-else>
         <div class="item flex">
           <van-uploader v-model="zheng" :after-read="afterRead2" :max-count="1" />
           <img :src="zheng" alt />
           <span>国徽面</span>
         </div>
+        <div class="item flex">
+          <van-uploader v-model="fan" :after-read="afterRead1" :max-count="1" />
+          <img :src="fan" alt />
+          <span>头像面</span>
+        </div>
       </div>
     </van-cell-group>
     <div class="title flex">
       <span>支付凭证</span>
-      <!-- <span class="flex_r" @click="$router.push('/shoukuan')">
-        查看公司收款账号
+      <span class="flex_r" @click="shoukuan(initdata.up_agent_id)">
+        查看{{initdata.up_agent_id?'上级':'公司'}}收款账号
         <van-icon name="arrow" />
-      </span>-->
+      </span>
     </div>
     <van-cell-group>
-      <div class="upload1 flex">
+      <div class="pay" style="padding:15px;" v-if="initdata.truename">
+        <van-image
+          width="2.7rem"
+          height="2.7rem"
+          fit="cover"
+          :src="item"
+          v-for="(item,i) in payImg"
+          :key="i"
+          @click="getImg3(i)"
+          style="margin-right:10px"
+        />
+      </div>
+      <div class="upload1 flex" v-else>
         <div class="item flex">
-          <van-uploader v-model="fileList" multiple :max-count="3" :after-read="afterRead3" />
+          <div class="uppay flex">
+            <van-uploader v-model="pay1" :max-count="1" :after-read="afterRead3" />
+            <van-uploader v-model="pay2" :max-count="1" :after-read="afterRead4" />
+            <van-uploader v-model="pay3" :max-count="1" :after-read="afterRead5" />
+          </div>
           <span>支付凭证（最多三张）</span>
         </div>
       </div>
     </van-cell-group>
-    <van-button type="primary" size="large" @click="submit">申请授权</van-button>
-    <!-- 地区弹窗 -->
-    <!-- <van-action-sheet v-model="showArea">
-      <van-area :area-list="areaList" @confirm="confirmArea" />
-    </van-action-sheet>-->
+    <van-button v-if="!initdata.truename" type="primary" size="large" @click="submit">申请授权</van-button>
   </div>
 </template>
 <script>
 import areaList from "../../common/js/newArea";
 import { upload } from "../../common/js/common";
+import Vue from "vue";
+import { ImagePreview } from "vant";
+Vue.use(ImagePreview);
 export default {
   data() {
     return {
@@ -89,15 +119,18 @@ export default {
       initdata: {},
       zheng: [], //身份证
       fan: [], //身份证
-      fileList: [] //支付凭证
+      pay1: [], //支付凭证
+      pay2: [], //支付凭证
+      pay3: [], //支付凭证
+      payImg: [] //支付凭证
     };
   },
 
   mounted() {
     this.id = this.$route.query.id;
-    alert(location.href);
+    // alert(location.href);
     if (this.$route.query.sign_id) {
-      alert(111);
+      // alert(111);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
       localStorage.setItem(
         "baseURL",
@@ -108,7 +141,7 @@ export default {
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       !this.$route.query.token
     ) {
-      alert(33333333);
+      // alert(33333333);
 
       location.href =
         localStorage.getItem("baseURL") +
@@ -118,8 +151,8 @@ export default {
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       this.$route.query.token
     ) {
-      alert(11111111111);
-      alert(this.$route.query.token);
+      // alert(11111111111);
+      // alert(this.$route.query.token);
       localStorage.setItem(
         "token" + localStorage.getItem("sign_id"),
         this.$route.query.token
@@ -128,7 +161,7 @@ export default {
     } else if (
       localStorage.getItem("token" + localStorage.getItem("sign_id"))
     ) {
-      alert(666);
+      // alert(666);
       this.init();
     }
   },
@@ -139,34 +172,23 @@ export default {
         .then(data => {
           this.initdata = data;
           // 判断姓名
-          this.username = data.truename;
-          //判断手机号
-          this.tel = data.tel;
-          // 判断身份证
-          this.IDcard = data.idcard;
-          // 身份证照片
-          if (!data.front_card_image) {
-            this.zheng = [];
-          } else {
-            this.zheng = [{ url: data.front_card_image }];
+          if (data.truename) {
+            this.username = data.truename;
           }
-          if (!data.back_card_image) {
-            this.fan = [];
-          } else {
-            this.fan = [{ url: data.back_card_image }];
+          //判断手机号
+          if (data.tel) {
+            this.tel = data.tel;
+          }
+          // 判断身份证
+          if (data.idcard) {
+            this.IDcard = data.idcard;
           }
           // 支付凭证
-          data.pay_proof_images.split(",").forEach(item => {
-            this.fileList.push({ url: item });
-          });
+          if (data.pay_proof_images) {
+            this.payImg = data.pay_proof_images.split(",");
+          }
         });
     },
-    // 选择地区点击确定
-    // confirmArea(area) {
-    //   console.log(11111);
-    //   this.area = area[0].name + " " + area[1].name + " " + area[2].name;
-    //   // this.showArea = false;
-    // },
     afterRead1() {
       upload(this.fan[0].content, this.fan[0].file.name).then(data => {
         this.back_card_image = data.url;
@@ -178,16 +200,19 @@ export default {
       });
     },
     afterRead3() {
-      console.log(this.fileList);
-      let payimg = [];
-      this.fileList.forEach(item => {
-        upload(item.content, item.file.name).then(data => {
-          payimg.push(data.url);
-          if (payimg.length == this.fileList.length) {
-            console.log(payimg);
-            this.pay_proof_images = payimg;
-          }
-        });
+      upload(this.pay1[0].content, this.pay1[0].file.name).then(data => {
+        this.img1 = data.url;
+        console.log(this.img1);
+      });
+    },
+    afterRead4() {
+      upload(this.pay2[0].content, this.pay2[0].file.name).then(data => {
+        this.img2 = data.url;
+      });
+    },
+    afterRead5() {
+      upload(this.pay3[0].content, this.pay3[0].file.name).then(data => {
+        this.img3 = data.url;
       });
     },
     submit() {
@@ -201,9 +226,15 @@ export default {
         this.$toast("请上传身份证正面");
       } else if (this.fan.length == 0) {
         this.$toast("请上传身份证反面");
-      } else if (this.fileList.length == 0) {
+      } else if (!this.img1 && !this.img2 && !this.img3) {
         this.$toast("请上传支付凭证");
       } else {
+        // 上传图片
+        console.log(this.front_card_image);
+        console.log(this.back_card_image);
+        this.payImg = [this.img1, this.img2, this.img3];
+        console.log(this.payImg);
+
         this.axios
           .post("/api/agent/sbinviteAgent", {
             id: this.id,
@@ -212,10 +243,13 @@ export default {
             idcard: this.IDcard,
             front_card_image: this.front_card_image,
             back_card_image: this.back_card_image,
-            pay_proof_images: this.pay_proof_images.join(",")
+            pay_proof_images: this.payImg.join(",")
           })
           .then(data => {
             this.$toast("申请成功，请耐心等待审核通过");
+            setTimeout(() => {
+              this.init();
+            }, 1000);
           });
       }
     },
@@ -234,6 +268,30 @@ export default {
           path: "/shoukuan"
         });
       }
+    },
+    getImg1() {
+      ImagePreview({
+        images: [this.initdata.front_card_image],
+        showIndex: true,
+        loop: true,
+        startPosition: 0
+      });
+    },
+    getImg2() {
+      ImagePreview({
+        images: [this.initdata.back_card_image],
+        showIndex: true,
+        loop: true,
+        startPosition: 0
+      });
+    },
+    getImg3(i) {
+      ImagePreview({
+        images: this.payImg,
+        showIndex: true,
+        loop: true,
+        startPosition: i
+      });
     }
   }
 };

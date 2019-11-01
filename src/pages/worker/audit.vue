@@ -13,16 +13,15 @@
           <div class="flex_l">
             <img :src="item.wx_avatar" alt />
             <div>
-              <p style="color:black;font-size:16px;">{{item.wx_nickname}}</p>
+              <p style="color:black;font-size:16px;margin-bottom:5px;">{{item.wx_nickname}}</p>
               <p>申请级别：{{item.level_name}}</p>
             </div>
           </div>
-          <div>
-            {{item.createtime}}
-            <br />
+          <div style="text-align:right;">
             <span style="color:#fc4c4c" v-if="item.man_check_status==1">未审核</span>
             <span style="color:#fc4c4c" v-if="item.man_check_status==2">审核通过</span>
             <span style="color:#fc4c4c" v-if="item.man_check_status==3">审核失败</span>
+            <p style="font-size:13px;margin-top:5px;">{{item.createtime}}</p>
           </div>
         </div>
       </div>
@@ -85,7 +84,7 @@ export default {
     },
     tap(id) {
       this.$router.push({
-        path: "/auditcontent",
+        path: "/authorization",
         query: {
           id: id
         }

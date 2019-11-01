@@ -13,23 +13,14 @@
         </van-swipe>
       </van-col>
       <van-col span="22" offset="1">
-        <div class="article">
-          {{initdata.name}}
-          <van-tag mark type="warning">{{initdata.label}}</van-tag>
-        </div>
-        <!-- <p>剩余：{{goodsMsg.number}}</p> -->
+        <div class="article">{{initdata.name}}</div>
       </van-col>
       <van-col span="22" offset="1">
         <div class="flex_l">
-          <span class="price" style="font-size:18px;color:#f00">
-            <i>￥</i>
+          <span class="price flex_l" style="font-size:20px;color:#f00">
+            <img src="../../image/图标/jinbi.png" alt />
             {{goodsMsg.price}}
           </span>
-          <!-- <van-tag round type="warning">标签</van-tag> -->
-          <!-- <p>
-            价格
-            <s>￥16</s>
-          </p>-->
         </div>
         <div class="flex" style="margin-top:8px;">
           <span>规格：{{goodsMsg.size_name+goodsMsg.size_value}}</span>
@@ -277,11 +268,16 @@ export default {
   font-size: 20px;
   font-weight: 700;
   margin-right: 15px;
-  i {
-    font-size: 14px;
-    font-weight: normal;
-    margin-right: -5px;
+  img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
   }
+  // i {
+  //   font-size: 14px;
+  //   font-weight: normal;
+  //   margin-right: -5px;
+  // }
 }
 .yard {
   margin: 1.25rem;

@@ -1,6 +1,6 @@
 <template>
   <div class="topup">
-    <navbar title="充值中心"></navbar>
+    <navbar title="充值中心" navbar_right_name="记录" navbar_right_link="/chongzhilist"></navbar>
     <!-- <p class="shenqing">向品牌方申请</p> -->
     <van-cell-group>
       <van-field v-model="money" type="text" label="充值金额" placeholder="请输入金额" />

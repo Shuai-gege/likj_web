@@ -1,9 +1,9 @@
 <template>
   <div class="detail">
     <navbar title="提现记录"></navbar>
-    <div class="null" v-if="list.length==0">暂无提现记录</div>
     <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
       <div class="box">
+        <div class="null" v-if="list.length==0">暂无提现记录</div>
         <div class="flex minxi" v-for="(item,i) in list" :key="i" @click="todetail(item.cash_id)">
           <div>
             <p
@@ -14,9 +14,12 @@
             </p>
           </div>
           <div>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right">{{item.money}}</p>
+            <p style="font-size:14px;color:#fc4c4c;text-align:right" class="flex_r">
+              <img src="../../image/图标/jinbi.png" alt />
+              {{item.money}}
+            </p>
             <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==1">待审核</p>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==2">已审核</p>
+            <p style="font-size:14px;color:#04BE02;text-align:right" v-if="item.status==2">已审核</p>
             <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==3">审核失败</p>
           </div>
         </div>
@@ -93,23 +96,33 @@ export default {
 .detail {
   font-size: 14px;
   background: #f5f5f5;
+  min-height: 100vh;
+  /deep/.mescroll-upwarp {
+    background: #f5f5f5 !important;
+  }
+  img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+  }
   .mescroll {
     position: fixed;
     top: 0px;
     bottom: 0;
     height: auto;
   }
-  .yue {
-    margin: 55px 0 15px 0;
-    padding: 20px;
-    background: #fff;
-  }
+
   .box {
-    margin-top: 44px;
+    margin-top: 53px;
+    background: #f5f5f5;
     .minxi {
       padding: 10px 20px;
       background: #fff;
       margin-bottom: 1px;
+      width: 94%;
+      margin: 0 auto;
+      margin-top: 10px;
+      border-radius: 10px;
     }
   }
 }

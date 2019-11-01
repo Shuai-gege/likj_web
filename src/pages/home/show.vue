@@ -18,7 +18,7 @@ export default {
     this.axios.post("/api/index/unauthorized").then(data => {
       console.log(data);
       this.con = data
-        .replace(/width=*[0-9]*/g, 'width="375"')
+        .replace(/width=*[0-9]*/g, 'width="100%"')
         .replace(/height=*[0-9]*/g, 'height="auto"');
     });
   },

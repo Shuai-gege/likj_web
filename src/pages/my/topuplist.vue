@@ -25,9 +25,12 @@
           </div>
           <div>
             <!-- <p style="font-size:12px;">{{list.createtime}}</p> -->
-            <p style="font-size:14px;color:#fc4c4c;text-align:right">{{item.amount}}</p>
+            <p style="font-size:14px;color:#F59969;text-align:right" class="flex_r">
+              <img src="../../image/图标/jinbi.png" alt class="money" />
+              {{item.amount}}
+            </p>
             <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==1">待审核</p>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==2">已审核</p>
+            <p style="font-size:14px;text-align:right; color:#07C160;" v-if="item.status==2">已审核</p>
             <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==3">审核失败</p>
           </div>
         </div>
@@ -89,7 +92,7 @@ export default {
     },
     todetail(id) {
       this.$router.push({
-        path: "/topuporder",
+        path: "/topupremind",
         query: {
           id: id
         }
@@ -103,6 +106,7 @@ export default {
 .detail {
   font-size: 14px;
   background: #f5f5f5;
+
   .mescroll {
     position: fixed;
     top: 0px;
@@ -122,6 +126,11 @@ export default {
         height: 50px;
         margin-right: 10px;
         border-radius: 5px;
+      }
+      .money {
+        margin-right: 8px;
+        width: 15px;
+        height: 15px;
       }
       padding: 10px 20px;
       background: #fff;

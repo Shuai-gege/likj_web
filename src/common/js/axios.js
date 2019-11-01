@@ -1,9 +1,6 @@
 //router
 import router from "@/router/index"; //引入路由对象
-import {
-  Toast,
-  Dialog
-} from "vant"; //引入vant提示框
+import { Toast, Dialog } from "vant"; //引入vant提示框
 //原生交互
 // import WebDemo from '../../common/js/webdemo'
 // var demo = new WebDemo;
@@ -20,14 +17,18 @@ axios.defaults.headers.post["Content-Type"] =
 // axios请求拦截
 axios.interceptors.request.use(
   config => {
-    // config.headers['token'] = localStorage.getItem('token');
+    config.headers["token"] = localStorage.getItem(
+      "token" + localStorage.getItem("sign_id")
+    );
+    config.headers["signid"] = localStorage.getItem("sign_id");
+    console.log(config);
 
     // loading
     Toast.loading({
       duration: 0, // 持续展示 toast
       forbidClick: true, // 禁用背景点击
-      mask: false, // 是否显示遮罩层
-      message: "数据加载中..."
+      mask: false // 是否显示遮罩层
+      // message: "数据加载中..."
     });
     return config;
   },
@@ -68,7 +69,7 @@ axios.interceptors.response.use(
           });
           break;
 
-          // 其他错误，直接抛出错误提示
+        // 其他错误，直接抛出错误提示
         default:
           Toast({
             message: error.response.data.msg,
@@ -134,42 +135,30 @@ export function get(url, data) {
  */
 export function post(url, data) {
   return new Promise((resolve, reject) => {
+    //  +"?token=" +localStorage.getItem("token" + localStorage.getItem("sign_id")) +"&sign_id=" +localStorage.getItem("sign_id")
     axios
-      .post(
-        url +
-        "?token=" +
-        localStorage.getItem("token" + localStorage.getItem("sign_id")) +
-        "&sign_id=" +
-        localStorage.getItem("sign_id"),
-        qs.stringify(data)
-      )
+      .post(url, qs.stringify(data))
       .then(res => {
         Toast.clear();
         if (res.data.code == -1) {
-          Toast({
-            message: "登录过期，请重新登录!",
-            duration: 2000
-          });
+          // Toast({
+          //   message: "登录过期，请重新登录!",
+          //   duration: 2000
+          // });
           // localStorage.clear();
-          setTimeout(() => {
-            vms.$router.push("/");
-          }, 1000);
+          // setTimeout(() => {
+          //   vms.$router.push("/");
+          // }, 1000);
           return;
         } else if (res.data.code == -2) {
-          alert("不是代理");
-
           location.href = `${localStorage.getItem(
             "baseURL"
           )}/web/#/show?token=${localStorage.getItem(
             `token${localStorage.getItem("sign_id")}`
           )}&sign_id=${localStorage.getItem("sign_id")}`;
-          // vms.$router.push("/show");
           return;
         } else if (res.data.code == 0) {
-          Toast({
-            message: res.data.msg,
-            duration: 2000
-          });
+          Toast(res.data.msg);
         } else if (res.data.code == 1) {
           console.log(res.data.data);
           resolve(res.data.data);
@@ -182,25 +171,25 @@ export function post(url, data) {
       })
       .catch(error => {
         Toast.clear();
-        alert("错了");
+        // alert("错了");
         if (
           error.code == "ECONNABORTED" &&
           error.message.indexOf("timeout") != -1
         ) {
-          Toast({
-            message: "请求超时,请稍后重试!",
-            duration: 2000
-          });
+          // Toast({
+          //   message: "请求超时,请稍后重试!",
+          //   duration: 2000
+          // });
         } else if (error.message == "Network Error") {
-          Toast({
-            message: "请求超时,请稍后重试!",
-            duration: 2000
-          });
+          // Toast({
+          //   message: "请求超时,请稍后重试!",
+          //   duration: 2000
+          // });
         } else {
-          Toast({
-            message: "网络请求错误",
-            duration: 2000
-          });
+          // Toast({
+          //   message: "网络请求错误",
+          //   duration: 2000
+          // });
         }
         reject(error.data);
       });

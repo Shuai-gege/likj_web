@@ -160,48 +160,11 @@ export default {
         }
       });
     },
-    // aa(e) {
-    //   console.log(e.target.files[0]);
-    //   let file = e.target.files[0];
-    //   // 实例化FormData
-    //   var formdata = new FormData();
-    //   // 将文件信息存入formdata，键名为file
-    //   // formdata会将文件信息序列化为ajax可识别的数据类型
-    //   formdata.append("file", file);
-    //   console.log(formdata);
-    //   $.ajax({
-    //     type: "post",
-    //     url:
-    //       "http://lj.tieqiao.shop/api/common/upload?token=7f9e2ca2-ea65-4ca9-9f71-2945fc49bd2c",
-    //     data: formdata, // formdata直接赋值给data
-    //     processData: false, //formdata已将数据序列化，无需在处理
-    //     contentType: false, //formdata无需设置请求头
-    //     success: function(res) {
-    //       console.log(res);
-    //       // // 将图片预览在img标签
-    //       // $('#imgshow').attr('src', res.picAddr);
-    //     }
-    //   });
-    //   // this.axios
-    //   //   .post("/api/common/upload", {
-    //   //     file: formdata
-    //   //   })
-    //   //   .then(data => {
-    //   //     consoe.log(data);
-    //   //   });
-    // },
+
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
       console.log(file.content);
       console.log(dataURLtoFile(file.content));
-
-      this.axios
-        .post("/api/common/upload", {
-          file: dataURLtoFile(file.content, "name")
-        })
-        .then(data => {
-          consoe.log(data);
-        });
     },
     submit() {
       if (this.radio && this.radio1) {

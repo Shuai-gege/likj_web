@@ -1,6 +1,7 @@
 <template>
   <div class="wlk">
     <navbar title="团队活动"></navbar>
+    <div class="null" v-if="list.length==0">暂无团队活动</div>
     <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit">
       <div class="box">
         <van-panel title="活动名称:" :desc="item.activity_name" v-for="(item,i) in list" :key="i">

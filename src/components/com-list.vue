@@ -12,9 +12,10 @@
         style="border-radius: 5px;"
       />
       <div class="name erhang">{{item.name}}</div>
-      <span
+      <!-- 小标签 -->
+      <!-- <span
         style="border:1px solid #ffe1e1;padding:0 8px 2px;border-radius:5px;color:#fc4c4c;display:inline-block;margin-left:6px;"
-      >{{item.label}}</span>
+      >{{item.label}}</span>-->
       <!-- <div class="pro yihang">匠心制作唯美大气匠心制作唯美大气匠心制作唯美大气匠心制作唯美大气</div> -->
       <div class="price" v-if="item.price==item.self_price">
         <i style="margin-right:-5px;font-weight:400;font-size:12px;">￥</i>
@@ -24,7 +25,7 @@
         <i style="margin-right:-5px;font-weight:400;">￥</i>
         {{item.self_price}}
         <s
-          style="color:#999;font-size:10px;margin-left:10px;"
+          style="color:#999;font-size:10px;margin-left:5px;font-weight:400;"
         >￥{{item.price}}</s>
       </div>
     </li>
@@ -35,15 +36,14 @@ export default {
   data() {
     return {};
   },
-  props: ["list", "type"],
+  props: ["list"],
   mounted() {},
   methods: {
     godetail(id) {
       this.$router.push({
-        path: "/detail",
+        path: "detail",
         query: {
-          goods_id: id,
-          type: this.type
+          goods_id: id
         }
       });
     }
@@ -53,15 +53,20 @@ export default {
 
 <style lang="less" scoped>
 .list {
-  padding: 15px;
+  padding: 12px;
   flex-wrap: wrap;
   margin-top: -1px;
+  .null {
+    background: #f5f5f5;
+  }
   li {
     background-color: #fff;
     width: 48%;
     margin-bottom: 10px;
-    box-shadow: 1px 3px 5px #e6dada;
+    // box-shadow: 1px 3px 5px #f5f5f5;
     border-radius: 5px;
+    border: 1px solid #f5f5f5;
+    padding: 5px;
     .name {
       font-size: 14px;
       margin: 5px 5px 3px;

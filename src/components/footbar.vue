@@ -18,7 +18,9 @@
           :class="props.active ?'active':''"
           :src="props.active ? icon.orderActive : icon.orderNormal"
         />
+        <div style="position:absolute;left:47px;top:1px;" class="yuan" v-if="num != 0">{{num}}</div>
       </van-tabbar-item>
+
       <van-tabbar-item to="/goodsList">
         <span>热卖商品</span>
         <img
@@ -55,6 +57,7 @@ export default {
   data() {
     return {
       active: 0,
+      num: "", //未处理消息数
       icon: {
         homeNormal: require("@images/footbar/1.png"), //未选中
         homeActive: require("@images/footbar/1-1.png"), //选中
@@ -72,6 +75,17 @@ export default {
         myActive: require("@images/footbar/5-5.png")
       }
     };
+  },
+  mounted() {
+    this.axios.post("/api/outstand_order/outorder").then(data => {
+      this.num =
+        data.audit_agent +
+        data.lower_order +
+        data.yun_order +
+        data.pick_order +
+        data.recharge +
+        data.cash;
+    });
   }
 };
 </script>
@@ -79,6 +93,10 @@ export default {
 <style scoped lang="less">
 footer {
   box-shadow: 0px 0px 1px 0px rgba(229, 229, 229, 1);
+  .van-tabbar-item {
+    position: relative;
+    z-index: 10;
+  }
   .van-tabbar-item__icon img {
     height: 0.5rem;
   }

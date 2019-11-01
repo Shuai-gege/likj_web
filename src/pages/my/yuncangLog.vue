@@ -1,5 +1,5 @@
 <template>
-  <div class="orderDetail">
+  <div class="yuncanglog">
     <tabbar title="云仓记录"></tabbar>
     <div class="null" v-if="list.length==0">暂无云仓记录</div>
     <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit">
@@ -95,7 +95,7 @@ export default {
 };
 </script>
 <style lang="less">
-.orderDetail {
+.yuncanglog {
   background-color: #f5f5f5;
   .null {
     background: #f5f5f5;

@@ -1,9 +1,10 @@
 <template>
   <div class="money">
     <!-- 头部 -->
-    <navbar title="购物车"></navbar>
+    <!-- <navbar title="购物车"></navbar> -->
 
     <!-- 购物车商品信息 -->
+    <div class="null" v-if="mylist.length==0">暂无购物记录~逛一逛吧！</div>
     <!-- 左滑删除 -->
     <van-swipe-cell class="delete" v-for="(item,i) in mylist" :key="i">
       <!-- 每一条商品 -->
@@ -229,10 +230,12 @@ export default {
 <style scoped lang="less">
 .money {
   background: #f5f5f5;
-  padding: 44px 10px 100px;
+  padding: 0px 10px 100px;
   min-height: 100vh;
   color: #666;
-
+  .null {
+    background: #f5f5f5;
+  }
   .car {
     padding: 15px 5px;
     background-color: #fff;

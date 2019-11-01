@@ -13,13 +13,23 @@
       </van-cell-group>
       <div class="image">
         <p>支付凭证</p>
-        <van-image radius="10" width="3rem" height="3rem" fit="cover" :src="query.payment_voucher" />
+        <van-image
+          radius="10"
+          width="3rem"
+          height="3rem"
+          fit="cover"
+          :src="query.payment_voucher"
+          @click="getImg1()"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import tabbar from "../../components/navbar";
+import Vue from "vue";
+import { ImagePreview } from "vant";
+Vue.use(ImagePreview);
 export default {
   data() {
     return {
@@ -27,7 +37,8 @@ export default {
       type: "", //充值类型
       way: "", //充值方式
       audit: "", //审核
-      query: "" //充值列表参数
+      query: "", //充值列表参数
+      payimage: []
     };
   },
   components: {
@@ -39,6 +50,7 @@ export default {
       .post("/api/property_administer/rechargeInfo", { id: this.id })
       .then(data => {
         this.query = data;
+        this.payimage = data.payment_voucher.split(",");
         //支付类型
         if (this.query.recharge_way == 1) {
           this.type = "余额";
@@ -63,7 +75,16 @@ export default {
         }
       });
   },
-  methods: {}
+  methods: {
+    getImg1() {
+      ImagePreview({
+        images: this.payimage,
+        showIndex: true,
+        loop: true,
+        startPosition: 0
+      });
+    }
+  }
 };
 </script>
 
@@ -71,6 +92,7 @@ export default {
 .recordinfo {
   padding-top: 44px;
   .con {
+    margin-top: -1px;
     .image {
       padding: 20px;
       p {

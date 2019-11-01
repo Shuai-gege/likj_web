@@ -1,19 +1,4 @@
-body,
-html,
-p,
-h1,
-h2,
-h3,
-h4,
-form,
-figure,
-figcaption,
-ul,
-li,
-dl,
-dt,
-dd,
-img {
+* {
   margin: 0;
   padding: 0;
 }
@@ -23,7 +8,7 @@ img {
   border: none;
 }
 
-img[lazy=loading] {
+img[lazy="loading"] {
   display: block;
   width: 105px !important;
   height: 105px !important;
@@ -48,12 +33,14 @@ button,
 input {
   outline: none;
   border: none;
-  font-family: 'PingFang-SC-Medium', 'Microsoft YaHei', 'Heiti SC', tahoma, arial, 'Hiragino Sans GB', sans-serif;
+  font-family: "PingFang-SC-Medium", "Microsoft YaHei", "Heiti SC", tahoma,
+    arial, "Hiragino Sans GB", sans-serif;
 }
 
 body {
   background-color: #fff;
-  font: 26px/1.5 'PingFang-SC-Medium', 'Microsoft YaHei', 'Heiti SC', tahoma, arial, 'Hiragino Sans GB', sans-serif;
+  font: 26px/1.5 "PingFang-SC-Medium", "Microsoft YaHei", "Heiti SC", tahoma,
+    arial, "Hiragino Sans GB", sans-serif;
   color: #6a727a;
 }
 
@@ -61,10 +48,9 @@ body {
   box-sizing: border-box;
 }
 
-input[type=text] {
+input[type="text"] {
   color: #000;
 }
-
 
 /* 頁面切換動畫 */
 
@@ -97,14 +83,12 @@ input[type=text] {
   transform: translate3d(-100%, 0, 0);
 }
 
-
 /*自动换行*/
 
 .autowrap {
   word-wrap: break-word;
   word-break: normal;
 }
-
 
 /* 一行超出显示省略号 */
 
@@ -113,7 +97,6 @@ input[type=text] {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 /* 两行超出显示省略号 */
 
@@ -170,9 +153,33 @@ input[type=text] {
 }
 
 .null {
-  margin-top: 100px;
+  padding-top: 100px;
   text-align: center;
   color: #666;
   font-size: 14px;
-  background-color: #fff;
+  background-color: #f5f5f5;
+}
+
+.yuan {
+  display: block;
+  background: #fc4c4c;
+  text-align: center;
+  line-height: 15px;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 8px;
+  padding: 0.5px 5px;
+}
+
+.van-toast {
+  background: url("../../image/loading.gif") no-repeat center center !important;
+  background-size: 100% 100% !important;
+}
+
+.van-toast.van-toast--text {
+  background: rgba(50, 50, 51, 0.88) url() no-repeat center center !important;
+}
+
+.van-loading__spinner.van-loading__spinner--circular {
+  color: transparent !important;
 }

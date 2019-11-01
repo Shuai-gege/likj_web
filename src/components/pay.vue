@@ -5,8 +5,13 @@
       <p class="center title">付款详情</p>
       <div class="price center">{{price}} 元</div>
       <van-radio-group v-model="radio">
-        <!-- <van-radio class="center" name="1" checked-color="rgb(240, 64, 64)">余额支付</van-radio> -->
-        <van-radio class="center" name="2" checked-color="rgb(240, 64, 64)">货款支付</van-radio>
+        <van-radio
+          class="center"
+          v-if="orderType != 3"
+          name="2"
+          checked-color="rgb(240, 64, 64)"
+        >货款支付</van-radio>
+        <van-radio class="center" v-else name="1" checked-color="rgb(240, 64, 64)">余额支付</van-radio>
         <!-- <van-radio class="center" name="4" checked-color="rgb(240, 64, 64)">线下支付</van-radio> -->
         <!-- <van-radio class="center" name="3" checked-color="rgb(240, 64, 64)">微信支付</van-radio> -->
       </van-radio-group>
@@ -40,7 +45,7 @@
 export default {
   data() {
     return {
-      radio: "2",
+      radio: "1",
       showpsd: false, //密码弹窗
       value: "", // 密码
       showKeyboard: false //数字键盘
@@ -52,6 +57,7 @@ export default {
       this.$emit("close");
     },
     gopay() {
+      console.log(this.radio);
       this.close();
       if (this.radio != 4) {
         this.axios
@@ -77,12 +83,13 @@ export default {
         this.$router.push("/offline");
       }
 
-      // if (this.radio == 1) {
-      //   //余额支付 判断是否设置支付密码和实名认证
-      //   this.showpsd = true;
-      // } else if (this.radio == 2) {
-      //   // 货款支付
-      // } else if (this.radio == 3) {
+      if (this.radio == 1) {
+        //余额支付 判断是否设置支付密码和实名认证
+        this.showpsd = true;
+      } else if (this.radio == 2) {
+        // 货款支付
+      }
+      // else if (this.radio == 3) {
       //   // 调微信支付
       // } else {
       //   //线下支付

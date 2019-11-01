@@ -1,23 +1,23 @@
 <template>
   <div class="orderList">
-    <tabbar title="下级订单" @back="goback"></tabbar>
-    <div class="order">
-      <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
-        <van-tab title="待付款">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <mescroll-vue ref="mescroll1" :up="mescrollUp1" @init="mescrollInit1">
+    <tabbar title="下级订单" @back="goback" v-if="!$route.query.sign_id"></tabbar>
+    <div class="order" style="padding-top: 44px;">
+      <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
+        <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
+          <van-tab title="待付款">
+            <div class="null" v-if="list.length==0">暂无商品</div>
             <div class="item" v-for="(item,i) in list" :key="i">
-              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+              <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
                   <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
                     <van-image
-                      width="2.5rem"
-                      height="2.5rem"
+                      width="2.1rem"
+                      height="2.1rem"
                       fit="cover"
                       :src="gooditem.cover_Image"
                     />
-                    <div class="pro">
-                      <div class="name erhang">{{gooditem.name}}</div>
+                    <div class="pro" style="width:70%;">
+                      <div class="name yihang">{{gooditem.name}}</div>
                       <div class="price flex">
                         <span>
                           <i>￥</i>
@@ -29,12 +29,25 @@
                     </div>
                   </div>
                   <van-cell-group>
-                    <van-cell title="订单编号" :value="item.order_number" />
+                    <van-cell title="订单时间" :value="item.createtime" />
                   </van-cell-group>
-                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
+                  <div class="foot">
+                    共1件商品 &nbsp; 实付:
+                    <i>￥{{item.order_money}}</i>
+                  </div>
                 </div>
-                <div slot="footer">
-                  <!-- <van-button size="small">取消订单</van-button> -->
+                <div slot="footer" class="flex" style="width:100%;">
+                  <div style="width: 80%;padding:5px 0;" class="flex_l">
+                    <img
+                      :src="item.wx_avatar"
+                      alt
+                      style="border-radius:50%;width:30px;margin:0 5px;"
+                    />
+                    <i
+                      style="color:#333;font-size:14px;"
+                      v-if="item.agent_name&&item.wx_nickname"
+                    >{{item.wx_nickname}}（{{item.agent_name}}）</i>
+                  </div>
                   <van-button
                     size="small"
                     type="danger"
@@ -43,13 +56,11 @@
                 </div>
               </van-panel>
             </div>
-          </mescroll-vue>
-        </van-tab>
-        <van-tab title="待发货">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <mescroll-vue ref="mescroll2" :up="mescrollUp2" @init="mescrollInit2">
+          </van-tab>
+          <van-tab title="待发货">
+            <div class="null" v-if="list.length==0">暂无商品</div>
             <div class="item" v-for="(item,i) in list" :key="i">
-              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+              <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
                   <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
                     <van-image
@@ -71,23 +82,35 @@
                     </div>
                   </div>
                   <van-cell-group>
-                    <van-cell title="订单编号" :value="item.order_number" />
+                    <van-cell title="订单时间" :value="item.createtime" />
                   </van-cell-group>
-                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
+                  <div class="foot">
+                    共1件商品 &nbsp; 实付:
+                    <i>￥{{item.order_money}}</i>
+                  </div>
                 </div>
-                <div slot="footer">
-                  <van-button size="small" @click="fahuo(item.shop_order_id)">立即发货</van-button>
-                  <van-button size="small" type="danger" @click="zhuandan(item.shop_order_id)">转单</van-button>
+                <div slot="footer" style="width: 100%;" class="flex">
+                  <div style="width: 70%;padding:5px 0;" class="flex_l">
+                    <img
+                      :src="item.wx_avatar"
+                      alt
+                      style="border-radius:50%;width:30px;margin:0 5px;"
+                    />
+                    <i
+                      style="color:#333;font-size:14px;"
+                      v-if="item.agent_name&&item.wx_nickname"
+                    >{{item.wx_nickname}}（{{item.agent_name}}）</i>
+                  </div>
+                  <van-button size="small" @click="fahuo(item.shop_order_id)" color="#EE0A24">立即发货</van-button>
+                  <van-button size="small" @click="zhuandan(item.shop_order_id)">转单</van-button>
                 </div>
               </van-panel>
             </div>
-          </mescroll-vue>
-        </van-tab>
-        <van-tab title="已完成">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <mescroll-vue ref="mescroll3" :up="mescrollUp3" @init="mescrollInit3">
+          </van-tab>
+          <van-tab title="已完成">
+            <div class="null" v-if="list.length==0">暂无商品</div>
             <div class="item" v-for="(item,i) in list" :key="i">
-              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+              <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
                   <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
                     <van-image
@@ -109,11 +132,25 @@
                     </div>
                   </div>
                   <van-cell-group>
-                    <van-cell title="订单编号" :value="item.order_number" />
+                    <van-cell title="订单时间" :value="item.createtime" />
                   </van-cell-group>
-                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
+                  <div class="foot">
+                    共1件商品 &nbsp; 实付:
+                    <i>￥{{item.order_money}}</i>
+                  </div>
                 </div>
-                <div slot="footer">
+                <div slot="footer" style="width:100%" class="flex">
+                  <div style="width: 70%;padding:5px 0;" class="flex_l">
+                    <img
+                      :src="item.wx_avatar"
+                      alt
+                      style="border-radius:50%;width:30px;margin:0 5px;"
+                    />
+                    <i
+                      style="color:#333;font-size:14px;"
+                      v-if="item.agent_name&&item.wx_nickname"
+                    >{{item.wx_nickname}}（{{item.agent_name}}）</i>
+                  </div>
                   <!-- 已取消 -->
                   <van-button
                     size="small"
@@ -123,13 +160,11 @@
                 </div>
               </van-panel>
             </div>
-          </mescroll-vue>
-        </van-tab>
-        <van-tab title="全部">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <mescroll-vue ref="mescroll4" :up="mescrollUp4" @init="mescrollInit4">
+          </van-tab>
+          <van-tab title="全部">
+            <div class="null" v-if="list.length==0">暂无商品</div>
             <div class="item" v-for="(item,i) in list" :key="i">
-              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+              <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
                   <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
                     <van-image
@@ -151,11 +186,25 @@
                     </div>
                   </div>
                   <van-cell-group>
-                    <van-cell title="订单编号" :value="item.order_number" />
+                    <van-cell title="订单时间" :value="item.createtime" />
                   </van-cell-group>
-                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
+                  <div class="foot">
+                    共1件商品 &nbsp; 实付:￥
+                    <i>{{item.order_money}}</i>
+                  </div>
                 </div>
-                <div slot="footer">
+                <div slot="footer" style="width:100%;" class="flex">
+                  <div style="width: 70%;padding:5px 0;" class="flex_l">
+                    <img
+                      :src="item.wx_avatar"
+                      alt
+                      style="border-radius:50%;width:30px;margin:0 5px;"
+                    />
+                    <i
+                      style="color:#333;font-size:14px;"
+                      v-if="item.agent_name&&item.wx_nickname"
+                    >{{item.wx_nickname}}（{{item.agent_name}}）</i>
+                  </div>
                   <!-- 已取消 -->
                   <van-button v-if="item.order_status==-1" size="small" type="default">订单已取消</van-button>
                   <!-- 代付款 -->
@@ -197,9 +246,9 @@
                 </div>
               </van-panel>
             </div>
-          </mescroll-vue>
-        </van-tab>
-      </van-tabs>
+          </van-tab>
+        </van-tabs>
+      </mescroll-vue>
     </div>
   </div>
 </template>
@@ -213,103 +262,59 @@ export default {
   },
   data() {
     return {
-      tab: 0, //tab切换高亮
+      tab: 1, //tab切换高亮
       order_state: 0, //订单状态
       list: [], //订单列表
       page: 1,
       order_status: "", //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已完成,4=待退货,5=已退货
-
-      // 三个配置项
-      mescrollUp1: {
+      mescrollUp: {
         callback: this.upCallback
       },
-      mescrollUp2: {
-        callback: this.upCallback
-      },
-      mescrollUp3: {
-        callback: this.upCallback
-      },
-      mescrollUp4: {
-        callback: this.upCallback
-      },
-      // 使用数组接收三个列表
-      navData: [
-        {
-          tit: "代付款",
-          mescroll: null,
-          list: []
-        },
-        {
-          tit: "待发货",
-          mescroll: null,
-          list: []
-        },
-        {
-          tit: "已完成",
-          mescroll: null,
-          list: []
-        },
-        {
-          tit: "全部",
-          mescroll: null,
-          list: []
-        }
-      ]
+      mescroll: null
     };
   },
   mounted() {
-    this.init(Number(this.tab) + 1);
+    // this.init(Number(this.tab) + 1);
     // alert(location.href);
     // alert(location.protocol + "//" + location.hostname);
-    if (this.$route.query.sign_id) {
-      // alert(111);
-      localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
-    }
-    if (
-      !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
-    ) {
-      // alert(33333333);
-
-      location.href =
-        localStorage.getItem("baseURL") +
-        "/api/user/wxlogin?sign_id=" +
-        localStorage.getItem("sign_id");
-    } else if (
-      !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      this.$route.query.token
-    ) {
-      // alert(11111111111);
-      // alert(this.$route.query.token);
-      localStorage.setItem(
-        "token" + localStorage.getItem("sign_id"),
-        this.$route.query.token
-      );
-      // this.init();
-    } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
-    ) {
-      // alert(666);
-      // this.init();
-    }
+    // if (this.$route.query.sign_id) {
+    //   // alert(111);
+    //   localStorage.setItem("sign_id", this.$route.query.sign_id);
+    //   localStorage.setItem(
+    //     "baseURL",
+    //     location.protocol + "//" + location.hostname
+    //   );
+    // }
+    // if (
+    //   !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
+    //   !this.$route.query.token
+    // ) {
+    //   // alert(33333333);
+    //   location.href =
+    //     localStorage.getItem("baseURL") +
+    //     "/api/user/wxlogin?sign_id=" +
+    //     localStorage.getItem("sign_id");
+    // } else if (
+    //   !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
+    //   this.$route.query.token
+    // ) {
+    //   // alert(11111111111);
+    //   // alert(this.$route.query.token);
+    //   localStorage.setItem(
+    //     "token" + localStorage.getItem("sign_id"),
+    //     this.$route.query.token
+    //   );
+    //   // this.init();
+    // } else if (
+    //   localStorage.getItem("token" + localStorage.getItem("sign_id"))
+    // ) {
+    //   // alert(666);
+    //   // this.init();
+    // }
   },
   methods: {
-    // 三个初始化方法
-    mescrollInit1(mescroll) {
-      this.navData[1].mescroll = mescroll;
-    },
-    mescrollInit2(mescroll) {
-      this.navData[2].mescroll = mescroll;
-    },
-    mescrollInit3(mescroll) {
-      this.navData[3].mescroll = mescroll;
-    },
-    mescrollInit4(mescroll) {
-      this.navData[4].mescroll = mescroll;
+    mescrollInit(mescroll) {
+      this.mescroll = mescroll;
     },
     upCallback(page, mescroll) {
       console.log(page);
@@ -367,51 +372,12 @@ export default {
           mescroll.endErr();
         });
     },
-    init(state) {
-      this.axios
-        .post("/api/goods_order/myLowerOrder", {
-          order_status: state, //订单状态 1 待支付 2 待发货 3 已完成  不传全部
-          page: this.page
-        })
-        .then(data => {
-          data.forEach(item => {
-            let flag;
-            switch (item.order_status) {
-              case -1:
-                flag = "已取消";
-                break;
-              case 0:
-                flag = "待付款";
-                break;
-              case 1:
-                flag = "待发货";
-                break;
-              case 2:
-                flag = "待收货";
-                break;
-              case 3:
-                flag = "已完成";
-                break;
-              case 4:
-                flag = "退款中";
-                break;
-              case 5:
-                flag = "已退款";
-                break;
-              case 6:
-                flag = "已完成";
-                break;
-            }
-            this.$set(item, "orderState", flag);
-          });
-          this.list = data;
-          console.log(this.list);
-        });
-    },
+
     // 点击tab切换
-    clickTab(name, title) {
+    clickTab(name, title, mescroll) {
       console.log(name);
-      this.init(name + 1);
+      this.tab = Number(name);
+      this.mescroll.resetUpScroll();
     },
     // 发货
     fahuo(id) {
@@ -422,6 +388,7 @@ export default {
         .then(data => {
           this.$toast("发货成功");
           this.tab = 2;
+          history.go(0);
         });
     },
     // 转单
@@ -432,8 +399,9 @@ export default {
         })
         .then(data => {
           this.$toast("转单成功");
+          history.go(0);
           setTimeout(() => {
-            this.init(2);
+            // this.init(2);
           }, 1000);
         });
     },
@@ -504,13 +472,18 @@ export default {
 </script>
 <style lang="less">
 .order {
-  padding-top: 44px;
   background-color: #f5f6f7;
   min-height: 100vh;
   padding-bottom: 10px;
+  i {
+    color: #fc4c4c;
+  }
+  .van-button--small {
+    width: 80px;
+  }
   .mescroll {
     position: fixed;
-    top: 85px;
+    top: 44px;
     bottom: 0;
     height: auto;
   }
@@ -518,12 +491,12 @@ export default {
     background-color: #f5f6f7;
   }
   .item {
-    margin: 12px 12px 0;
+    margin: 12px 12px 10px;
     .van-cell {
       border-radius: 6px;
       display: flex;
       justify-content: space-between;
-      padding: 10px 5px;
+      padding: 10px;
     }
     .van-cell-group {
       border-radius: 6px;
@@ -550,7 +523,7 @@ export default {
         flex: 1;
         margin-left: 10px;
         .name {
-          font-size: 16px;
+          font-size: 14px;
           margin-bottom: 10px;
           color: #333;
         }
@@ -580,6 +553,7 @@ export default {
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      padding: 5px;
     }
   }
 }

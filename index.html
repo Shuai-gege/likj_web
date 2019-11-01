@@ -13,7 +13,14 @@
 <body>
   <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
   <script>
-    var vConsole = new VConsole();
+    // var vConsole = new VConsole();
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      function onBridgeReady() {
+        // 通过下面这个API隐藏右上角按钮
+        WeixinJSBridge.call("hideOptionMenu");
+      }
+    );
 
   </script>
   <div id="app"></div>
@@ -39,7 +46,6 @@
             return false;
         })
     </script> -->
-
 </body>
 
 </html>
