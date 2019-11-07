@@ -178,10 +178,10 @@ export default {
     },
     // 点击弹窗确定按钮
     gopay() {
-      if (this.goodsMsg.self_pick - 1 >= this.value) {
+      if (this.goodsMsg.self_pick > this.value) {
         this.$toast("您的最低购买数量为" + this.goodsMsg.self_pick);
       } else {
-        if (this.goodsMsg.stock == 0) {
+        if (this.value > this.goodsMsg.stock) {
           this.$toast("该商品库存不足");
         } else {
           if (this.button == 2) {

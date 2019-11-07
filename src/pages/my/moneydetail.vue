@@ -1,32 +1,27 @@
 <template>
-  <div class="detail">
-    <navbar title="充值记录"></navbar>
-
+  <div class="moneydetail">
+    <navbar title="资金明细"></navbar>
     <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit">
       <div class="box">
-        <div class="null" v-if="list.length==0">暂无充值记录</div>
-        <div
-          class="flex minxi"
-          v-for="(item,i) in list"
-          :key="i"
-          @click="todetail(item.recharge_id)"
-        >
+        <div class="null" v-if="list.length==0">暂无记录</div>
+        <div class="flex minxi" v-for="(item,i) in list" :key="i">
           <div>
-            <p
-              style="font-size:13px;margin-bottom:10px;color:black;"
-            >充值到{{item.recharge_way==1?'余额':'货款'}}</p>
+            <p style="font-size:13px;margin-bottom:10px;color:black;">{{item.msg}}</p>
             <p style="font-size:13px;color:#CDC9C9;">
               <span>{{item.createtime}}</span>
             </p>
           </div>
           <div>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right" class="flex_r">
-              <img src="../../image/图标/jinbi.png" alt />
+            <p style="font-size:14px;color:#04BE02" v-if="item.fluctuate_type == 1" class="flex_r">
+              +
+              <img src="../../image/图标/jinbi.png" alt class="money" />
               {{item.amount}}
             </p>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==1">待审核</p>
-            <p style="font-size:14px;color:#04BE02;text-align:right" v-if="item.status==2">已审核</p>
-            <p style="font-size:14px;color:#fc4c4c;text-align:right" v-if="item.status==3">审核失败</p>
+            <p style="font-size:14px;color:#fc4c4c" v-if="item.fluctuate_type == 2" class="flex_r">
+              -
+              <img src="../../image/图标/jinbi.png" alt class="money" />
+              {{item.amount}}
+            </p>
           </div>
         </div>
       </div>
@@ -39,7 +34,11 @@ import MescrollVue from "mescroll.js/mescroll.vue";
 export default {
   data() {
     return {
-      list: [], // 请求数据
+      name: "", //title名
+      list: [], //请求数据
+      type: "", //1余额，2货款，3奖金，4保证金
+      name: "", //title名字
+
       mescroll: null, // mescroll实例对象
       mescrollDown: {}, //下拉刷新的配置. (如果下拉刷新和上拉加载处理的逻辑是一样的,则mescrollDown可不用写了)
       mescrollUp: {
@@ -62,7 +61,7 @@ export default {
       console.log(page);
       // this.init(page.num, mescroll);
       this.axios
-        .post("/api/property_administer/rechargeList", {
+        .post("/api/property_administer/propertyDetails", {
           page: page.num
         })
         .then(data => {
@@ -84,52 +83,59 @@ export default {
           // 联网失败的回调,隐藏下拉刷新和上拉加载的状态;
           mescroll.endErr();
         });
-    },
-    todetail(id) {
-      this.$router.push({
-        path: "/recordinfo",
-        query: {
-          id: id
-        }
-      });
     }
   },
-  mounted() {}
+  mounted() {
+    this.type = this.$route.query.type;
+    if (this.type == 1) {
+      this.name = "余额";
+    } else if (this.type == 2) {
+      this.name = "货款";
+    } else {
+      this.name = "保证金";
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
-.detail {
+.moneydetail {
+  font-size: 14px;
+  background: #f5f5f5;
   /deep/.mescroll-upwarp {
     background: #f5f5f5 !important;
   }
   .null {
     background: #f5f5f5;
   }
-  min-height: 100vh;
-  img {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-  }
-  font-size: 14px;
-  background: #f5f5f5;
   .mescroll {
     position: fixed;
-    top: 0px;
+    top: 10px;
     bottom: 0;
     height: auto;
+    background: #f5f5f5;
+  }
+  .yue {
+    margin: 55px 0 15px 0;
+    padding: 20px;
+    background: #fff;
   }
   .box {
-    margin-top: 53px;
+    margin-top: 44px;
     background: #f5f5f5;
+    min-height: 100vh;
+    padding-bottom: 5px;
     .minxi {
       padding: 10px 20px;
       background: #fff;
-      margin-bottom: 1px;
       width: 94%;
       margin: 0 auto;
       margin-top: 10px;
-      border-radius: 10px;
+      border-radius: 5px;
+      .money {
+        margin-right: 8px;
+        width: 15px;
+        height: 15px;
+      }
     }
   }
 }

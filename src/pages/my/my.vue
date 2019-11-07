@@ -1,10 +1,5 @@
 <template>
   <div class="my">
-    <!-- <div class="top">
-      <van-icon name="arrow-left" @click="out" style="font-size:20px;color:#333;" class="out" />
-      <van-icon name="setting" class="setting" @click="set" />
-      <van-icon name="comment-circle" class="comment-circle" @click="message" />
-    </div>-->
     <div class="head">
       <p class="flex_c" style="color:white;font-size:30px;">{{initdata.money}}</p>
       <p class="flex_c" style="color:#F2A559;">余额（RMB）</p>
@@ -60,13 +55,20 @@
         <!-- <van-cell icon="records" title="本月订单总额" is-link to="/history" /> -->
         <van-cell icon="exchange" title="余额转货款" is-link @click="zhuan" />
         <van-cell icon="cluster-o" title="云仓记录" is-link to="/yuncangLog" />
-        <van-cell icon="manager-o" title="邀请会员" is-link to="/inviteagent" />
+        <van-cell
+          icon="shop-collect-o"
+          v-if="has_shop!=-2"
+          :title="has_shop==1?'我的店铺':'申请店铺'"
+          is-link
+          :to="has_shop==1?'/mystore':'/applystore'"
+        />
+        <van-cell icon="manager-o" v-if="has_shop==1" title="邀请会员" is-link to="/inviteagent" />
         <van-cell icon="description" title="授权证书" is-link to="/ccie" />
       </van-cell-group>
 
       <van-cell-group class="centers">
-        <van-cell icon="points" title="充值中心" is-link to="/topup" />
-        <van-cell icon="friends-o" title="我的团队" is-link to="/myteam/?type=0" />
+        <!-- <van-cell icon="points" title="充值中心" is-link to="/topup" /> -->
+        <!-- <van-cell icon="friends-o" title="我的团队" is-link to="/myteam/?type=0" /> -->
         <van-cell icon="logistics" title="管理收货地址" is-link @click="$router.push('/address')" />
         <van-cell icon="setting-o" title="设置" is-link to="/set" />
         <van-cell icon="chat-o" title="消息中心" is-link to="/message" />
@@ -82,7 +84,8 @@ export default {
       initdata: {},
       type: "", //跳转奖金传参
       pending: "", //待处理数量
-      num: "" //余额
+      num: "", //余额
+      has_shop: "" //-2当前等级不可申请；-1会员不可申请；0没店铺；1有店铺；
     };
   },
   methods: {
@@ -134,6 +137,7 @@ export default {
     this.axios.post("/api/user/index").then(data => {
       this.initdata = data;
       this.num = data.money;
+      this.has_shop = data.has_shop;
     });
     //各种待处理数据
     this.axios.post("/api/outstand_order/outorder").then(data => {
@@ -278,12 +282,18 @@ export default {
   color: #80b3ff;
   margin-top: 4px;
 }
+.van-icon-shop-collect-o:before {
+  color: #04d1b6;
+  margin-top: 4px;
+}
+
 .van-cell {
   font-size: 0.75rem;
 }
 .van-button--large {
   padding-right: 20px;
 }
+
 span {
   margin-left: 0.625rem;
   font-size: 14px;

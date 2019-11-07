@@ -1,6 +1,6 @@
 <template>
-  <div class="orderList">
-    <tabbar title="下级订单" @back="goback" v-if="!$route.query.sign_id"></tabbar>
+  <div class="storeorder">
+    <tabbar title="店铺订单" v-if="!$route.query.sign_id"></tabbar>
     <div class="order" style="padding-top: 44px;">
       <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
         <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
@@ -102,7 +102,6 @@
                     >{{item.wx_nickname}}（{{item.agent_name}}）</i>
                   </div>
                   <van-button size="small" @click="fahuo(item.shop_order_id)" color="#EE0A24">立即发货</van-button>
-                  <van-button size="small" @click="zhuandan(item.shop_order_id)">转单</van-button>
                 </div>
               </van-panel>
             </div>
@@ -218,15 +217,10 @@
                   <van-button
                     v-if="item.order_status==1"
                     size="small"
-                    type="default"
+                    type="danger"
                     @click="fahuo(item.shop_order_id)"
                   >立即发货</van-button>
-                  <van-button
-                    v-if="item.order_status==1"
-                    size="small"
-                    type="danger"
-                    @click="zhuandan(item.shop_order_id)"
-                  >转单</van-button>
+
                   <!-- 已完成 -->
                   <van-button
                     size="small"
@@ -319,7 +313,7 @@ export default {
     upCallback(page, mescroll) {
       console.log(page);
       this.axios
-        .post("/api/goods_order/myLowerOrder", {
+        .post("/api/goods_order/myShopOrder", {
           page: page.num,
           order_status: Number(this.tab) + 1 //订单状态 1 待支付 2 待发货 3 已完成  不传全部
         })
@@ -381,35 +375,14 @@ export default {
     },
     // 发货
     fahuo(id) {
-      this.axios
-        .post("/api/goods_order/deliveryGoods", {
-          order_id: id
-        })
-        .then(data => {
-          this.$toast("发货成功");
-          this.tab = 2;
-          history.go(0);
-        });
-    },
-    // 转单
-    zhuandan(id) {
-      this.axios
-        .post("/api/goods_order/shiftOrder", {
-          order_id: id
-        })
-        .then(data => {
-          this.$toast("转单成功");
-          history.go(0);
-          setTimeout(() => {
-            // this.init(2);
-          }, 1000);
-        });
-    },
-    goback() {
       this.$router.push({
-        path: "/worker"
+        path: "/wuliuCode",
+        query: {
+          order_id: id
+        }
       });
     },
+
     // 订单详情
     orderDetail(id) {
       this.$router.push({
@@ -471,89 +444,91 @@ export default {
 };
 </script>
 <style lang="less">
-.order {
-  background-color: #f5f6f7;
-  min-height: 100vh;
-  padding-bottom: 10px;
-  i {
-    color: #fc4c4c;
-  }
-  .van-button--small {
-    width: 80px;
-  }
-  .mescroll {
-    position: fixed;
-    top: 44px;
-    bottom: 0;
-    height: auto;
-  }
-  .null {
+.storeorder {
+  .order {
     background-color: #f5f6f7;
-  }
-  .item {
-    margin: 12px 12px 10px;
-    .van-cell {
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
+    min-height: 100vh;
+    padding-bottom: 10px;
+    i {
+      color: #fc4c4c;
     }
-    .van-cell-group {
-      border-radius: 6px;
+    .van-button--small {
+      width: 80px;
     }
-    .van-cell__title {
-      font-size: 13px;
+    .mescroll {
+      position: fixed;
+      top: 44px;
+      bottom: 0;
+      height: auto;
     }
-    .van-cell__value {
-      -webkit-box-flex: none;
-      -webkit-flex: none;
-      flex: none;
+    .null {
+      background-color: #f5f6f7;
     }
-    .con {
-      margin-top: -1px;
-      padding: 0 10px 10px;
-      .top {
-        margin: 10px 0;
+    .item {
+      margin: 12px 12px 10px;
+      .van-cell {
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
       }
-      img {
-        border-radius: 5px;
-        border: 1px solid #f5f5f5;
+      .van-cell-group {
+        border-radius: 6px;
       }
-      .pro {
-        flex: 1;
-        margin-left: 10px;
-        .name {
-          font-size: 14px;
-          margin-bottom: 10px;
-          color: #333;
+      .van-cell__title {
+        font-size: 13px;
+      }
+      .van-cell__value {
+        -webkit-box-flex: none;
+        -webkit-flex: none;
+        flex: none;
+      }
+      .con {
+        margin-top: -1px;
+        padding: 0 10px 10px;
+        .top {
+          margin: 10px 0;
         }
-        .price {
-          color: red;
-          font-size: 14px;
-          i {
+        img {
+          border-radius: 5px;
+          border: 1px solid #f5f5f5;
+        }
+        .pro {
+          flex: 1;
+          margin-left: 10px;
+          .name {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #333;
+          }
+          .price {
+            color: red;
+            font-size: 14px;
+            i {
+              font-size: 10px;
+            }
+          }
+          .size {
+            padding: 1px 10px;
+            background-color: #f5f6f7;
+            color: #999;
             font-size: 10px;
+            margin-top: 10px;
+            display: inline-block;
+            border-radius: 8px;
           }
         }
-        .size {
-          padding: 1px 10px;
-          background-color: #f5f6f7;
-          color: #999;
-          font-size: 10px;
-          margin-top: 10px;
-          display: inline-block;
-          border-radius: 8px;
+        .foot {
+          margin-top: 5px;
+          text-align: right;
         }
       }
-      .foot {
-        margin-top: 5px;
-        text-align: right;
+      .van-panel__footer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        padding: 5px;
       }
-    }
-    .van-panel__footer {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      padding: 5px;
     }
   }
 }

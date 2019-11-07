@@ -41,6 +41,7 @@
           fit="cover"
           :src="item"
           v-for="(item,i) in payment_voucher"
+          v-if="item"
           :key="i"
           @click="getImg(i)"
           style="margin-right:10px"
@@ -195,6 +196,9 @@ export default {
           })
           .then(data => {
             this.$toast("已同意");
+            setTimeout(() => {
+              this.init();
+            }, 1000);
           });
       }
     },
@@ -208,6 +212,9 @@ export default {
         })
         .then(data => {
           this.$toast("已拒绝");
+          setTimeout(() => {
+            this.init();
+          }, 1000);
         });
     }
   }
@@ -218,7 +225,7 @@ export default {
 .recordinfo {
   .con {
     &.hastab {
-      margin-top: 44px;
+      padding-top: 44px;
     }
     .image {
       padding: 20px;

@@ -13,9 +13,9 @@
       </van-cell-group>
     </div>
     <!-- 实名认证 -->
-    <div class="shiming">
+    <!-- <div class="shiming">
       <van-cell title="实名认证" is-link to="/Certification">未认证</van-cell>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>

@@ -6,10 +6,10 @@
       <div class="item flex" v-for="(item,i) in list" :key="i">
         <div class="left">
           <p>{{item.agent_name}}</p>
-          <span class="money">{{item.level_conditions}}</span>
         </div>
         <van-button
           type="danger"
+          size="small"
           :disabled="item.weigh<=item.user_weigh"
           @click="update(item.agent_level_id,item.agent_name)"
         >申请升级</van-button>
@@ -64,7 +64,7 @@ export default {
     .item {
       background-color: #fff;
       border-radius: 5px;
-      padding: 20px 10px;
+      padding: 10px;
       margin-bottom: 10px;
       .left {
         flex: 1;
@@ -77,7 +77,7 @@ export default {
         color: rgb(247, 135, 8);
       }
       button {
-        width: 90px;
+        width: 70px;
         margin-left: 10px;
       }
     }

@@ -43,10 +43,9 @@ export default {
           })
           .then(data => {
             this.$toast("转换成功");
-            let thas = this;
             setTimeout(() => {
-              thas.num = thas.num - thas.value;
-            }, 500);
+              this.$router.go(-1);
+            }, 1000);
           });
       }
     },

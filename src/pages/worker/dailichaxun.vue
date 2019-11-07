@@ -48,7 +48,12 @@
       </div>
     </div>
     <div class="btn">
-      <van-button type="primary" size="large" color="#fc4c4c" @click="init">查询</van-button>
+      <van-button
+        type="primary"
+        size="large"
+        color="linear-gradient(to right bottom, #ffb305, rgb(123, 46, 46))"
+        @click="init"
+      >查询</van-button>
     </div>
   </div>
 </template>
@@ -145,14 +150,14 @@ export default {
       position: fixed;
       width: 100%;
       z-index: 100;
+      background: url("../../image/bgt2.png");
+      padding: 30px 15px;
       p {
         text-align: center;
         padding-bottom: 20px;
         font-size: 20px;
-        color: white;
+        color: #ffb305;
       }
-      background: #fc4c4c;
-      padding: 30px 15px;
     }
     .image {
       position: relative;

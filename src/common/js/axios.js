@@ -21,8 +21,8 @@ axios.interceptors.request.use(
       "token" + localStorage.getItem("sign_id")
     );
     config.headers["signid"] = localStorage.getItem("sign_id");
+    config.headers["webtype"] = "agent";
     console.log(config);
-
     // loading
     Toast.loading({
       duration: 0, // 持续展示 toast
@@ -141,14 +141,14 @@ export function post(url, data) {
       .then(res => {
         Toast.clear();
         if (res.data.code == -1) {
-          // Toast({
-          //   message: "登录过期，请重新登录!",
-          //   duration: 2000
-          // });
-          // localStorage.clear();
-          // setTimeout(() => {
-          //   vms.$router.push("/");
-          // }, 1000);
+          Toast({
+            message: "登录过期，请重新登录!",
+            duration: 2000
+          });
+          localStorage.clear();
+          setTimeout(() => {
+            vms.$router.push("/");
+          }, 1000);
           return;
         } else if (res.data.code == -2) {
           location.href = `${localStorage.getItem(
@@ -172,6 +172,11 @@ export function post(url, data) {
       .catch(error => {
         Toast.clear();
         // alert("错了");
+        axios
+          .post(localStorage.getItem("baseURL") + "/api/common/debugLog", {
+            message: url + "&" + error
+          })
+          .then(data => {});
         if (
           error.code == "ECONNABORTED" &&
           error.message.indexOf("timeout") != -1

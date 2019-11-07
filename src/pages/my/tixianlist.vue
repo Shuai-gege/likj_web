@@ -100,6 +100,9 @@ export default {
   /deep/.mescroll-upwarp {
     background: #f5f5f5 !important;
   }
+  .null {
+    background: #f5f5f5;
+  }
   img {
     width: 15px;
     height: 15px;

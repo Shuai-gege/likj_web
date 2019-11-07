@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 Vue.use(Router);
 
-const xinjian = () => import("@/pages/car/xinjian"); // 我的收款账户
+const myaccount = () => import("@/pages/car/myaccount"); // 我的收款账户
 
 const stock = () => import("@/pages/stock/stock"); // 云仓
 const stockdetail = () => import("@/pages/stock/stockdetail"); // 云仓详情
@@ -13,6 +13,7 @@ const search = () => import("@/pages/home/search"); // 搜索页面
 const goodsList = () => import("@/pages/home/goodsList"); // 商品列表
 const show = () => import("@/pages/home/show"); // 未授权页面
 
+// 工作台
 const worker = () => import("@/pages/worker/worker"); // 工作台
 const wodeshoukuan = () => import("@/pages/worker/wodeshoukuan"); // 我的首款账户
 const agentType = () => import("@/pages/worker/agentType"); // 邀请代理方式选择
@@ -36,13 +37,16 @@ const updateRecord = () => import("@/pages/worker/updateRecord"); // 升级记�
 const updateDetail = () => import("@/pages/worker/updateDetail"); // 升级详情
 const Certification = () => import("@/pages/worker/Certification"); // 实名认证
 const dailichaxun = () => import("@/pages/worker/dailichaxun"); // 代理查询
-
 const hot = () => import("@/pages/hot/hot"); // 热卖商品
 
+
+// 购物车
 const car = () => import("@/pages/car/car"); // 购物车
 const confirmOrder = () => import("@/pages/car/confirmOrder"); // 确认订单
 const offline = () => import("@/pages/car/offline"); // 线下支付
 
+
+// 我的
 const my = () => import("@/pages/my/my"); // 我的
 const myteam = () => import("@/pages/my/myteam"); // 我的团队
 const mysuperior = () => import("@/pages/my/mysuperior"); // 我的上级
@@ -73,11 +77,26 @@ const add_address = () => import("@/pages/my/add_address"); // 添加地址
 const modify_psd = () => import("@/pages/my/modify_psd"); // 修改登录密码
 const payPsd = () => import("@/pages/my/payPsd"); // 修改登录密码
 const yuncangLog = () => import("@/pages/my/yuncangLog"); // 云仓记录
-
 const orderList = () => import("@/pages/order/orderList"); // 订单列表
 const backMoney = () => import("@/pages/order/backMoney"); // 订单列表
 const orderDetail = () => import("@/pages/order/orderDetail"); // 订单详情
 const wuliu = () => import("@/pages/order/wuliu"); // 物流
+const moneydetail = () => import("@/pages/my/moneydetail"); // 资金明细
+
+
+
+// 店铺
+const rule = () => import("@/pages/store/rule"); //免责声明
+const applystore = () => import("@/pages/store/applystore"); // 申请店铺
+const newstore = () => import("@/pages/store/newstore"); // 店铺上新
+const mystore = () => import("@/pages/store/mystore"); // 我的店铺
+const noticeDetail = () => import("@/pages/store/noticeDetail"); // 公告详情
+const storeorder = () => import("@/pages/store/storeorder"); // 店铺订单
+const wuliuCode = () => import("@/pages/store/wuliuCode"); // 物流信息
+
+
+const sucaiconter = () => import("../pages/worker/tool/sucaiconter"); // 素材中心
+const upsucai = () => import("../pages/worker/tool/upsucai"); // 上传素材
 
 let router = new Router({
   routes: [{
@@ -98,9 +117,9 @@ let router = new Router({
       }
     },
     {
-      path: "/xinjian", //我的收款账户
-      name: "xinjian",
-      component: xinjian
+      path: "/myaccount", //我的收款账户
+      name: "myaccount",
+      component: myaccount
     },
     {
       path: "/search", //搜索
@@ -159,7 +178,6 @@ let router = new Router({
       meta: {
         title: "邀请代理"
       }
-
     },
     {
       path: "/audit", //审核授权
@@ -185,7 +203,6 @@ let router = new Router({
       meta: {
         title: "申请授权"
       }
-
     },
     {
       path: "/ccie", //授权证书
@@ -377,6 +394,62 @@ let router = new Router({
       meta: {
         // ifShow_Footbar: true,
         title: "团队活动"
+      }
+    },
+    {
+      path: "/applystore", //申请店铺
+      name: "applystore",
+      component: applystore,
+      meta: {
+        title: "申请店铺"
+      }
+    },
+    {
+      path: "/newstore", //店铺上新
+      name: "newstore",
+      component: newstore,
+      meta: {
+        title: "店铺上新"
+      }
+    },
+    {
+      path: "/mystore", //我的店铺
+      name: "mystore",
+      component: mystore,
+      meta: {
+        title: "我的店铺"
+      }
+    },
+    {
+      path: "/noticeDetail", //公告详情
+      name: "noticeDetail",
+      component: noticeDetail,
+      meta: {
+        title: "公告详情"
+      }
+    },
+    {
+      path: "/storeorder", //店铺订单
+      name: "storeorder",
+      component: storeorder,
+      meta: {
+        title: "店铺订单"
+      }
+    },
+    {
+      path: "/wuliuCode", //物流信息
+      name: "wuliuCode",
+      component: wuliuCode,
+      meta: {
+        title: "物流信息"
+      }
+    },
+    {
+      path: "/rule", //免责声明
+      name: "rule",
+      component: rule,
+      meta: {
+        title: "免责声明"
       }
     },
     {
@@ -628,6 +701,30 @@ let router = new Router({
       component: wuliu,
       meta: {
         title: "物流"
+      }
+    },
+    {
+      path: "/moneydetail", //资金明细
+      name: "moneydetail",
+      component: moneydetail,
+      meta: {
+        title: "资金明细"
+      }
+    },
+    {
+      path: "/sucaiconter", //素材中心
+      name: "sucaiconter",
+      component: sucaiconter,
+      meta: {
+        title: "素材中心"
+      }
+    },
+    {
+      path: "/upsucai", //上传素材
+      name: "upsucai",
+      component: upsucai,
+      meta: {
+        title: "上传素材"
       }
     },
     {

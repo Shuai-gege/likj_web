@@ -50,11 +50,14 @@
       </div>
 
       <!-- 运费 -->
-      <van-cell
-        style="margin-top:10px;border-radius: 5px 5px 0 0; "
+      <!-- <van-cell
+        style="margin-top:10px;border-radius: 5px 5px 0 0;"
         title="运费"
-      >{{freight_money?`￥${freight_money}`:'快递 免邮'}}</van-cell>
-      <van-cell style="margin-top:-4px;border-radius:0 0 5px 5px;" title="订单总额">￥{{price}}</van-cell>
+      >{{freight_money?`￥${freight_money}`:'快递 免邮'}}</van-cell>-->
+      <van-cell
+        style="margin-top:10px;border-radius: 5px 5px 0 0;"
+        title="订单总额"
+      >￥{{Number(price)-Number(freight_money)}}</van-cell>
       <van-cell
         v-if="type==1"
         style="margin-top:-4px;border-radius:0 0 5px 5px;color:#fc4c4c"
@@ -69,7 +72,12 @@
       @submit="onSubmit(1)"
     />
     <van-submit-bar v-if="type==0" :price="price*100" button-text="提交订单" @submit="onSubmit(0)" />
-    <van-submit-bar v-if="type==2" :price="price*100" button-text="加入云仓" @submit="onSubmit(2)" />
+    <van-submit-bar
+      v-if="type==2"
+      :price="(price - freight_money)*100"
+      button-text="加入云仓"
+      @submit="onSubmit(2)"
+    />
     <!-- <pay v-if="type!=1" :showpay="showpay" :price="price" :order_id="order_id" @close="closePay"></pay> -->
   </div>
 </template>

@@ -79,18 +79,10 @@
     </div>
     <div class="flex btn" v-if="infodata.man_check_status==1">
       <div style="width:150px;margin-right:30px;" @click="shenhe(2)">
-        <van-button
-          type="primary"
-          size="large"
-          color="linear-gradient(to right, #fc4c4c, #6149f6)"
-        >拒绝</van-button>
+        <van-button type="primary" size="large" color="#fc4c4c">拒绝</van-button>
       </div>
       <div style="width:150px;" @click="shenhe(1)">
-        <van-button
-          type="primary"
-          size="large"
-          color="linear-gradient(to right, #4bb0ff, #6149f6)"
-        >通过</van-button>
+        <van-button type="primary" size="large" color="#3DAC6A">通过</van-button>
       </div>
     </div>
     <!-- 同意弹窗 -->
@@ -100,20 +92,6 @@
         <van-cell title="首次充值" :value="infodata.money" />
         <van-cell title="我的账户余额" :value="yue" />
       </van-cell-group>
-      <!-- 输入框 -->
-      <!-- <van-cell-group>
-        <van-field
-          v-model="message"
-          rows="2"
-          autosize
-          label="留言"
-          type="textarea"
-          maxlength="50"
-          placeholder="请输入留言"
-          show-word-limit
-        />
-      </van-cell-group>-->
-
       <van-button
         type="primary"
         size="large"
@@ -184,12 +162,6 @@ export default {
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       !this.$route.query.token
     ) {
-      // alert(33333333);
-      // alert(
-      //   localStorage.getItem("baseURL") +
-      //     "/api/user/wxlogin?sign_id=" +
-      //     localStorage.getItem("sign_id")
-      // );
       location.href =
         localStorage.getItem("baseURL") +
         "/api/user/wxlogin?sign_id=" +

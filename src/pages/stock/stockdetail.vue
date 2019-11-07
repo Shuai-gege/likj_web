@@ -20,6 +20,9 @@
           <span class="price flex_l" style="font-size:20px;color:#f00">
             <img src="../../image/图标/jinbi.png" alt />
             {{goodsMsg.price}}
+            <s
+              style="color:#999;font-weight:400;font-size:12px;margin-left:10px"
+            >￥{{sizes.price}}</s>
           </span>
         </div>
         <div class="flex" style="margin-top:8px;">
@@ -36,61 +39,8 @@
     <!-- 商品详情展示 -->
     <div class="datail">
       <p style="margin-bottom:15px;">商品详情</p>
-      <div v-html="initdata.details"></div>
+      <div v-html="detail"></div>
     </div>
-
-    <!-- 选择规格 -->
-    <van-action-sheet v-model="show" round title="选择商品规格">
-      <div class="head flex_l">
-        <img :src="goodsMsg.size_image" alt />
-        <div class="Font">
-          <p class="price">
-            ￥
-            <b>{{goodsMsg.price}}</b>
-          </p>
-          <div class="number flex" style="color:#666,;font-size:13px;width:200px;">
-            <p>库存：{{goodsMsg.stock}}</p>
-            <p>销量：{{goodsMsg.sales}}</p>
-          </div>
-        </div>
-      </div>
-      <!-- 规格-->
-      <div class="size">
-        <p>商品规格</p>
-        <div class="flex_l">
-          <span
-            :class="active==i?'active':''"
-            v-for="(item,i) in sizeArr"
-            :key="i"
-            @click="getSize(i)"
-          >{{item}}</span>
-        </div>
-      </div>
-      <van-divider />
-      <van-divider />
-      <!-- 步进器 -->
-      <div class="flex num">
-        <p>购买数量</p>
-        <van-stepper v-model="value" :max="goodsMsg.stock" :disabled="goodsMsg.stock==0" />
-      </div>
-      <!-- 按钮 -->
-      <van-button type="primary" color="#f04c46" size="large" @click="gopay">确定</van-button>
-    </van-action-sheet>
-
-    <!-- 尾部 -->
-    <!-- <van-goods-action style="border-top:1px solid #f5f5f5;">
-      <van-goods-action-icon icon="chat-o" text="客服" />
-      <van-goods-action-icon icon="cart-o" v-if="type!=1" text="购物车" @click="$router.push('/car')" />
-      <van-goods-action-button v-if="!type" type="warning" text="加入购物车" @click="text(1)" />
-      <van-goods-action-button v-if="!type" type="danger" text="立即购买" @click="text(2)" />
-      <van-goods-action-button
-        v-if="type"
-        type="danger"
-        style="margin-left:150px;"
-        text="立即提货"
-        @click="text(2)"
-      />
-    </van-goods-action>-->
   </div>
 </template>
 <script>
@@ -100,12 +50,11 @@ import { Dialog } from "vant";
 export default {
   data() {
     return {
-      type: null, //列表类型 0 商城列表  1 本地仓库列表
       goods_id: "",
       size_id: "", //规格id
       num: "", //云仓提货的库存
       initdata: {}, //产品详情
-      sizes: [], //商品规则
+      sizes: {}, //商品规则
       sizeArr: [], //规格名字数组
       active: 0, //点击规格
       goodsMsg: {}, //当前规格商品弹窗信息
@@ -113,7 +62,8 @@ export default {
       button: 0, //点击加入购物车 1  点击立即购买 2
       current: 0, //轮播图当前
       show: false, //商品规格弹窗
-      value: 1 //购买数量
+      value: 1, //购买数量
+      detail: ""
     };
   },
   components: {
@@ -123,7 +73,6 @@ export default {
     this.goods_id = this.$route.query.goods_id;
     this.size_id = this.$route.query.size_id;
     this.num = this.$route.query.num;
-    this.type = this.$route.query.type;
     this.init();
   },
   methods: {
@@ -133,7 +82,13 @@ export default {
         .then(data => {
           this.$set(data, "lunbo", data.carousel_images.split(","));
           this.initdata = data;
-          this.sizes = data.size;
+          this.detail = data.details.replace(/<img/g, '<img width="100%"');
+          data.size.forEach((item, i) => {
+            if (item.goods_size_id == this.size_id) {
+              this.sizes = data.size[i];
+            }
+          });
+
           data.size.forEach(item => {
             this.sizeArr.push(item.size_name + item.size_value);
           });
@@ -159,69 +114,7 @@ export default {
       console.log(this.sizeArr);
       this.size_id = this.goodsMsg.goods_size_id;
     },
-    // 点击弹窗确定按钮
-    gopay() {
-      if (this.goodsMsg.stock == 0) {
-        this.$toast("该商品库存不足");
-      } else {
-        if (this.button == 2) {
-          if (this.type != 1) {
-            Dialog.confirm({
-              title: "请选择购买方式",
-              message: "您可以选择直接购买或放入本地仓库中",
-              confirmButtonText: "直接购买",
-              confirmButtonColor: "#fc4c4c",
-              cancelButtonText: "加入云仓",
-              cancelButtonColor: "#fc4c4c"
-            })
-              .then(() => {
-                // on confirm
-                this.type = 0;
-                this.$router.push({
-                  path: "/confirmOrder",
-                  query: {
-                    type: this.type,
-                    cart_ids:
-                      this.goods_id + "|" + this.size_id + "|" + this.value
-                  }
-                });
-              })
-              .catch(() => {
-                // on cancel
-                this.type = 2;
-                this.$router.push({
-                  path: "/confirmOrder",
-                  query: {
-                    type: this.type,
-                    cart_ids:
-                      this.goods_id + "|" + this.size_id + "|" + this.value
-                  }
-                });
-              });
-          } else {
-            this.$router.push({
-              path: "/confirmOrder",
-              query: {
-                type: this.type,
-                cart_ids: this.goods_id + "|" + this.size_id + "|" + this.value
-              }
-            });
-          }
-        } else {
-          this.axios
-            .post("/api/goods/editCart", {
-              goods_id: this.goods_id,
-              size_id: this.goodsMsg.goods_size_id,
-              num: this.value,
-              type: 1
-            })
-            .then(data => {
-              this.$toast("加入购物车成功");
-            });
-        }
-        this.show = false;
-      }
-    },
+
     onChange(index) {
       this.current = index;
     },
@@ -236,7 +129,6 @@ export default {
 <style lang="less" scoped>
 .box {
   padding-top: 44px;
-  padding-bottom: 55px;
 }
 .van-goods-action {
   z-index: 2;
@@ -294,11 +186,12 @@ export default {
 }
 
 .datail {
-  padding: 0 15px;
+  // padding: 0 15px;
   p {
     font-size: 16px;
     color: #333;
     margin-top: 15px;
+    margin-left: 12px;
     border-left: 3px solid red;
     height: 18px;
     line-height: 18px;

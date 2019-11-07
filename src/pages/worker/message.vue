@@ -110,6 +110,9 @@ export default {
 <style lang="less" scoped>
 .message {
   padding-top: 44px;
+  .null {
+    background-color: #fff;
+  }
   .mescroll {
     position: fixed;
     top: 44px;

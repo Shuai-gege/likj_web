@@ -19,8 +19,11 @@
     </van-cell-group>-->
     <div v-if="num1 == 1">
       <p style="margin-left:15px;">付款凭证</p>
-      <div style="background:#fff;padding: 15px;" class="pingzheng">
-        <van-uploader v-model="fileList" multiple :max-count="3" />
+      <div style="background:#fff;padding: 15px;" class="pingzheng flex_l">
+        <!-- <van-uploader v-model="fileList" multiple :max-count="3" /> -->
+        <van-uploader v-model="pay1" :max-count="1" :after-read="afterRead1" />
+        <van-uploader v-model="pay2" :max-count="1" :after-read="afterRead2" />
+        <van-uploader v-model="pay3" :max-count="1" :after-read="afterRead3" />
       </div>
     </div>
     <div style="padding:20px;margin-top:50px;">
@@ -36,7 +39,9 @@ export default {
     return {
       show: false,
       show1: false,
-      fileList: [],
+      pay1: [], //支付凭证
+      pay2: [], //支付凭证
+      pay3: [], //支付凭证
       message: "", //留言
       time: "", //打款时间
       money: "", //充值金额
@@ -86,41 +91,46 @@ export default {
     onCancel() {},
     //点击提交按钮
     init() {
+      this.payImg = [this.img1, this.img2, this.img3];
       if (!this.money.trim()) {
         this.$toast("请输入充值金额");
       } else if (!this.num) {
         this.$toast("请选择充值类型");
       } else if (!this.num1) {
         this.$toast("请选择充值方式");
-      } else if (this.fileList.length == 0) {
+      } else if (!this.img1 && !this.img2 && !this.img3) {
         this.$toast("请上传支付凭证");
       } else {
-        console.log(this.fileList);
-        // 上传图片
-        this.fileList.forEach(item => {
-          upload(item.content, item.file.name)
-            .then(data => {
-              this.payImg.push(data.url);
-            })
-            .then(() => {
-              if (this.payImg.length == this.fileList.length) {
-                this.axios
-                  .post("/api/property_administer/sbRecharge", {
-                    amount: this.money,
-                    recharge_way: this.num,
-                    recharge_type: this.num1,
-                    payment_voucher: this.payImg.join(",")
-                  })
-                  .then(data => {
-                    this.$toast("充值成功");
-                    setTimeout(() => {
-                      this.$router.push("/mypurse");
-                    }, 1000);
-                  });
-              }
-            });
-        });
+        this.axios
+          .post("/api/property_administer/sbRecharge", {
+            amount: this.money,
+            recharge_way: this.num,
+            recharge_type: this.num1,
+            payment_voucher: this.payImg.join(",")
+          })
+          .then(data => {
+            this.$toast("充值成功");
+            setTimeout(() => {
+              this.$router.go(-1);
+            }, 1000);
+          });
       }
+    },
+    afterRead1() {
+      upload(this.pay1[0].content, this.pay1[0].file.name).then(data => {
+        this.img1 = data.url;
+        console.log(this.img1);
+      });
+    },
+    afterRead2() {
+      upload(this.pay2[0].content, this.pay2[0].file.name).then(data => {
+        this.img2 = data.url;
+      });
+    },
+    afterRead3() {
+      upload(this.pay3[0].content, this.pay3[0].file.name).then(data => {
+        this.img3 = data.url;
+      });
     }
   }
 };

@@ -2,7 +2,7 @@
   <div class="invite">
     <!-- 头部公共搜索框 -->
     <tabbar title="邀请代理" v-if="level_id"></tabbar>
-    <tabbar title="邀请代理" v-else></tabbar>
+    <tabbar title="邀请会员" v-else></tabbar>
     <div class="share">
       <img :src="img" alt v-if="img" style="width:375px;height:100%;" />
       <div class="con">

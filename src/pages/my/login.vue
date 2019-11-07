@@ -52,8 +52,9 @@
             right-icon="question-o"
             placeholder="请输入用户名"
             @click-right-icon="$toast('请输入用户名')"
+            v-if="init.user_bool == 1"
           />
-
+          <!-- 注册手机号 -->
           <van-field
             v-model="signtel"
             required
@@ -62,7 +63,7 @@
             placeholder="请输入手机号"
             @click-right-icon="$toast('请输入正确的手机号')"
           />
-
+          <!-- 注册密码 -->
           <van-field
             v-model="signpassword"
             type="password"
@@ -70,12 +71,21 @@
             placeholder="请输入密码"
             required
           />
+          <!-- 注册邀请人 -->
+          <van-field v-model="inviter" label="邀请人" placeholder="请输入邀请人" required />
         </van-cell-group>
         <!-- 分割线 -->
         <van-divider />
         <!-- 验证码 -->
-        <van-cell-group>
-          <van-field v-model="sms" center clearable label="短信验证码" placeholder="请输入短信验证码">
+        <van-cell-group v-if="init.captcha_bool == 1">
+          <van-field
+            v-model="sms"
+            @blur="yanzheng"
+            center
+            clearable
+            label="短信验证码"
+            placeholder="请输入短信验证码"
+          >
             <van-button
               slot="button"
               size="small"
@@ -83,7 +93,14 @@
               color="linear-gradient(to right, pink, #f00)"
               round
               @click="send"
-            >发送验证码</van-button>
+              :disabled="flag"
+            >
+              <span v-if="!flag">发送验证码</span>
+              <div class="flex_l" v-else>
+                <van-count-down format="ss" :time="time" style="color:#fff;" @finish="finished" />
+                <i style="font-size: 15px; margin-left: 8px;margin-bottom: 2px;">S</i>
+              </div>
+            </van-button>
           </van-field>
         </van-cell-group>
         <!-- btn -->
@@ -93,7 +110,7 @@
           color="linear-gradient(to right, pink, #f00)"
           style="margin:100px auto 0; width:90%; display:block;"
           @click="signup"
-        >登录</van-button>
+        >注册</van-button>
       </van-tab>
     </van-tabs>
   </div>
@@ -108,12 +125,21 @@ export default {
       signusername: "", //用户名
       signtel: "", //注册手机号
       signpassword: "", //注册密码
+      inviter: "", //注册邀请人
       sms: "", //验证码
-      active: "0"
+      active: "0",
+      init: {}, //注册限制
+      flag: false,
+      time: 60 * 1000
     };
   },
   components: {
     head1
+  },
+  mounted() {
+    this.axios.post("/api/user/user_set").then(data => {
+      this.init = data;
+    });
   },
   methods: {
     onClickLeft() {
@@ -128,6 +154,7 @@ export default {
       } else if (!this.signusername) {
         this.$toast("请输入用户名");
       } else {
+        this.flag = true;
         this.axios
           .post("/api/sms/send", {
             mobile: this.signtel,
@@ -138,11 +165,12 @@ export default {
           });
       }
     },
-    // 注册
-    signup() {
-      if (!this.sms) {
-        this.$toast("验证码");
-      } else if (!this.signusername) {
+    finished() {
+      this.flag = false;
+    },
+    // 验证验证码
+    yanzheng() {
+      if (!this.signusername) {
         this.$toast("请输入用户名");
       } else if (!/^1[3456789]\d{9}$/.test(this.signtel)) {
         this.$toast("请输入正确的手机号");
@@ -155,20 +183,33 @@ export default {
             event: "register",
             captcha: this.sms
           })
+          .then(data => {});
+      }
+    },
+    // 注册
+    signup() {
+      if (!this.signusername) {
+        this.$toast("请输入用户名");
+      } else if (!/^1[3456789]\d{9}$/.test(this.signtel)) {
+        this.$toast("请输入正确的手机号");
+      } else if (!this.signpassword) {
+        this.$toast("请输入密码");
+      } else {
+        this.axios
+          .post("/api/user/register", {
+            username: this.signusername, //会员名称
+            password: this.signpassword, //会员密码
+            mobile: this.signtel, //会员手机号
+            recommend: this.inviter, //邀请人
+            event: "register", //发送短信事件
+            captcha: this.sms //验证码
+          })
           .then(data => {
-            this.axios
-              .post("/api/user/register", {
-                username: this.signusername,
-                password: this.signpassword,
-                mobile: this.signtel
-              })
-              .then(data => {
-                this.$toast("注册成功");
-                let thsi = this;
-                setTimeout(() => {
-                  thsi.active = 1;
-                }, 1000);
-              });
+            this.$toast("注册成功");
+            let thsi = this;
+            setTimeout(() => {
+              thsi.active = 1;
+            }, 1000);
           });
       }
     },
@@ -186,6 +227,9 @@ export default {
           })
           .then(data => {
             this.$toast("登录成功");
+            setTimeout(() => {
+              this.$router.push("/home");
+            }, 1000);
           });
       }
     }

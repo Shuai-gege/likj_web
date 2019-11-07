@@ -13,14 +13,12 @@
           </div>
           <div>
             <p style="font-size:14px;color:#04BE02" v-if="item.fluctuate_type == 1" class="flex_r">
-              +
               <img src="../../image/图标/jinbi.png" alt class="money" />
-              {{item.amount}}
+              +{{item.amount}}
             </p>
             <p style="font-size:14px;color:#fc4c4c" v-if="item.fluctuate_type == 2" class="flex_r">
-              -
               <img src="../../image/图标/jinbi.png" alt class="money" />
-              {{item.amount}}
+              -{{item.amount}}
             </p>
           </div>
         </div>
@@ -102,6 +100,7 @@ export default {
 .detail {
   font-size: 14px;
   background: #f5f5f5;
+  min-height: 100vh;
   /deep/.mescroll-upwarp {
     background: #f5f5f5 !important;
   }
@@ -110,7 +109,7 @@ export default {
   }
   .mescroll {
     position: fixed;
-    top: 0px;
+    top: 7px;
     bottom: 0;
     height: auto;
   }
@@ -128,13 +127,12 @@ export default {
       padding: 10px 20px;
       background: #fff;
       width: 94%;
-      margin: 0 auto;
-      margin-top: 10px;
+      margin: 7px auto;
       border-radius: 5px;
       .money {
         margin-right: 8px;
         width: 15px;
-        height: 15px;
+        height: 20px;
       }
     }
   }

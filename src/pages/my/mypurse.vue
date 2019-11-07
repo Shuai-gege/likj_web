@@ -3,7 +3,13 @@
     <navbar title="我的钱包"></navbar>
     <!-- 余额 -->
     <div class="zonge">
-      <p>钱包总额（RMB）</p>
+      <p class="flex">
+        钱包总额（RMB）
+        <span
+          style="font-size:12px;padding:5px 10px;background:#FDC083;color:#fff;border-radius:5px;"
+          @click="$router.push('/moneydetail')"
+        >资金明细</span>
+      </p>
       <p style="font-size:30px;">{{initdata.money}}</p>
     </div>
     <!-- 可提现，货款，奖金 -->

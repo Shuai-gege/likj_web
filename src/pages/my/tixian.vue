@@ -100,7 +100,7 @@ export default {
               message: "设置个人收款账户后，才可以转账"
             })
               .then(() => {
-                this.$router.push("/myshoukuan");
+                this.$router.push("/myaccount");
               })
               .catch(() => {
                 this.$router.go(-1);

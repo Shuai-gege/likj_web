@@ -60,6 +60,8 @@
           </div>
         </div>
       </div>
+      <div class="title">升级条件</div>
+      <div class="head1" v-html="initdata.level_conditions" style="color:#fc4c4c"></div>
     </div>
     <van-button type="primary" size="large" @click="submit">确认升级</van-button>
   </div>

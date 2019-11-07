@@ -25,10 +25,12 @@
       :style="{ height: '55%' }"
       @close="closePsd"
     >
-      <p class="center title">支付密码</p>
+      <div class="title flex_r" @click="topsd" style="color:#fc4c4c;margin:10px 20px ">
+        <van-icon name="question-o" />忘记密码
+      </div>
       <van-password-input
         :value="value"
-        info="忘记密码"
+        info="密码为6为数字"
         :focused="showKeyboard"
         @focus="showKeyboard = true"
       />
@@ -45,7 +47,7 @@
 export default {
   data() {
     return {
-      radio: "1",
+      radio: "",
       showpsd: false, //密码弹窗
       value: "", // 密码
       showKeyboard: false //数字键盘
@@ -58,14 +60,60 @@ export default {
     },
     gopay() {
       console.log(this.radio);
-      this.close();
-      if (this.radio != 4) {
+      if (!this.radio) {
+        this.$toast("请选择支付方式");
+      } else {
+        if (this.radio == 1 || this.radio == 2) {
+          //余额1货款2支付 判断是否设置支付密码和实名认证
+          this.showpsd = true;
+        }
+        // else if (this.radio == 3) {
+        //   // 调微信支付
+        // } else {
+        //   //线下支付
+        //   this.$router.push("/offline");
+        // }
+        this.close();
+        // if (this.radio != 4) {
+        //   this.axios
+        //     .post("/api/goods_order/pay", {
+        //       order_id: this.order_id,
+        //       money: this.price,
+        //       pay_type: this.radio, //1 余额  2 货款  4 线下
+        //       order_type: this.order_type
+        //     })
+        //     .then(data => {
+        //       this.$toast("支付成功");
+        //       setTimeout(() => {
+        //         this.$router.push({
+        //           path: "/orderList",
+        //           query: {
+        //             orderType: this.orderType,
+        //             tab: 1
+        //           }
+        //         });
+        //       }, 1000);
+        //     });
+        // } else {
+        //   this.$router.push("/offline");
+        // }
+      }
+    },
+    closePsd() {
+      this.showpsd = false;
+    },
+    onInput(key) {
+      this.value = (this.value + key).slice(0, 6);
+      if (this.value.length == 6) {
+        this.showpsd = false;
+        // 走余额支付
         this.axios
           .post("/api/goods_order/pay", {
             order_id: this.order_id,
             money: this.price,
             pay_type: this.radio, //1 余额  2 货款  4 线下
-            order_type: this.order_type
+            order_type: this.order_type,
+            pay_password: this.value
           })
           .then(data => {
             this.$toast("支付成功");
@@ -79,37 +127,16 @@ export default {
               });
             }, 1000);
           });
-      } else {
-        this.$router.push("/offline");
       }
-
-      if (this.radio == 1) {
-        //余额支付 判断是否设置支付密码和实名认证
-        this.showpsd = true;
-      } else if (this.radio == 2) {
-        // 货款支付
-      }
-      // else if (this.radio == 3) {
-      //   // 调微信支付
-      // } else {
-      //   //线下支付
-      //   this.$router.push("/offline");
-      // }
     },
-    closePsd() {
-      this.showpsd = false;
-    },
-    onInput(key) {
-      this.value = (this.value + key).slice(0, 6);
-      if (this.value.length == 6) {
-        this.showpsd = false;
-        // 走余额支付
-      }
+    topsd() {
+      this.$router.push("/payPsd");
     },
     onDelete() {
       this.value = this.value.slice(0, this.value.length - 1);
     }
-  }
+  },
+  mouted() {}
 };
 </script>
 <style lang="less">
@@ -118,8 +145,11 @@ export default {
   color: #333;
   padding: 10px;
   .title {
-    height: 40px;
-    // border-bottom: 1px solid #f5f5f5;
+    i {
+      font-size: 18px;
+      display: inline-block;
+      margin-right: 5px;
+    }
   }
   .price {
     font-size: 16px;

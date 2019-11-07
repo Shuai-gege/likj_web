@@ -207,7 +207,7 @@ export default {
         .post("/api/property_administer/personalAccount", querys)
         .then(data => {
           this.$toast("设置成功");
-          // this.$router.go(-1);
+          this.init();
         });
     },
     init() {

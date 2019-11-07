@@ -29,11 +29,11 @@
       </van-row>
       <!-- 每一项 -->
       <van-row class="one solo">
-        <van-col span="8" @click="yeji(0)">
+        <van-col span="8">
           <span class="DaiFaHuo">{{initdata.results}}</span>
           <p>个人业绩</p>
         </van-col>
-        <van-col span="8" @click="yeji(1)">
+        <van-col span="8">
           <span class="ShouYi1">{{initdata.team_results}}</span>
           <p>团队业绩</p>
         </van-col>
@@ -112,10 +112,6 @@
           <img src="../../image/图标/zhuandan.png" alt />
           <p>我的转单</p>
         </van-col>
-        <van-col span="6" @click="shangji" v-if="initdata.up_agent_id != 0">
-          <img src="../../image/图标/shangjishoukuan.png" alt />
-          <p>上级收款账户</p>
-        </van-col>
       </van-row>
       <!-- 充值管理 -->
       <van-row class="one chongzhi">
@@ -162,13 +158,21 @@
         <van-col span="8" @click="team(1)">
           <!-- <i class="iconfont icon-daili"></i> -->
           <img style="width:35px;height:35px" src="../../image/图标/直接代理.png" alt />
-          <p>直接代理</p>
+          <p>我的团队</p>
         </van-col>
-        <van-col span="8" @click="team(2)">
-          <!-- <i class="iconfont icon-daili"></i> -->
-          <img style="width:35px;height:35px" src="../../image/图标/间接代理.png" alt />
+        <van-col span="8" @click="shangji" v-if="initdata.up_agent_id != 0">
+          <img
+            style="width:28px;height:31px;margin-top:14px"
+            src="../../image/图标/shangjishoukuan.png"
+            alt
+          />
+          <p>上级收款账户</p>
+        </van-col>
+        <!-- <van-col span="6" @click="team(2)"> -->
+        <!-- <i class="iconfont icon-daili"></i> -->
+        <!-- <img style="width:35px;height:35px" src="../../image/图标/间接代理.png" alt />
           <p>间接代理</p>
-        </van-col>
+        </van-col>-->
       </van-row>
       <!-- 授权管理 -->
       <!-- <van-row class="one"> -->
@@ -208,7 +212,7 @@
           <img src="../../image/图标/公司收款账户1.png" alt />
           <p>公司收款账户</p>
         </van-col>
-        <van-col span="6" @click="$router.push('/xinjian')">
+        <van-col span="6" @click="$router.push('/myaccount')">
           <!-- <i class="iconfont icon-daichuli"></i> -->
           <img src="../../image/图标/收款.png" alt />
           <p>我的收款账户</p>
@@ -219,22 +223,18 @@
       <van-row class="one">
         <h5 class="else">常用工具</h5>
         <van-col span="6">
-          <!-- <i class="iconfont icon-sucai"></i> -->
           <img style="width:33px;height:33px;" src="../../image/彩色/gengduo.png" alt />
           <p>素材中心</p>
         </van-col>
         <van-col span="6" @click="address">
-          <!-- <i class="iconfont icon-shouhuodizhi"></i> -->
           <img style="width:33px;height:33px;" src="../../image/彩色/ditu.png" alt />
           <p>收货地址</p>
         </van-col>
         <van-col span="6" @click="orderList">
-          <!-- <i class="iconfont icon-techreport-"></i> -->
           <img style="width:33px;height:33px;" src="../../image/彩色/fuwusheshixinxichaxun.png" alt />
           <p>商品跟踪</p>
         </van-col>
         <van-col span="6">
-          <!-- <i class="iconfont icon-shouxufei"></i> -->
           <img style="width:33px;height:33px;" src="../../image/彩色/shebaojiaofei.png" alt />
           <p>审核续期</p>
         </van-col>
@@ -340,14 +340,6 @@ export default {
       this.$router.push("/Ccie");
     },
 
-    yeji(tab) {
-      this.$router.push({
-        path: "/bonus",
-        query: {
-          tab
-        }
-      });
-    },
     shangji() {
       this.$router.push({
         path: "/shangjishoukuan",

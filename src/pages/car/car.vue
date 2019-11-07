@@ -15,7 +15,7 @@
           width="80px"
           height="80px"
           fit="cover"
-          :src="item.cover_Image"
+          :src="item.size_image"
           style="margin-left:6px;"
           radius="5px"
           @click="toDetail(item.goods_id,item.goods_size_id)"
@@ -181,36 +181,14 @@ export default {
       if (cart_ids.length == 0) {
         this.$toast("请选择商品");
       } else {
-        Dialog.confirm({
-          title: "请选择购买方式",
-          message: "您可以选择直接购买或放入本地仓库中",
-          confirmButtonText: "直接购买",
-          confirmButtonColor: "#fc4c4c",
-          cancelButtonText: "加入云仓",
-          cancelButtonColor: "#fc4c4c"
-        })
-          .then(() => {
-            // on confirm
-            this.type = 0;
-            this.$router.push({
-              path: "/confirmOrder",
-              query: {
-                type: this.type,
-                cart_ids: cart_ids.join(",")
-              }
-            });
-          })
-          .catch(() => {
-            // on cancel
-            this.type = 2;
-            this.$router.push({
-              path: "/confirmOrder",
-              query: {
-                type: this.type,
-                cart_ids: cart_ids.join(",")
-              }
-            });
-          });
+        this.type = 2;
+        this.$router.push({
+          path: "/confirmOrder",
+          query: {
+            type: this.type,
+            cart_ids: cart_ids.join(",")
+          }
+        });
       }
     },
     // 详情

@@ -4,222 +4,224 @@
     <tabbar v-else-if="orderType==3" title="提货订单" @back="goback" back="1"></tabbar>
     <tabbar v-else title="云仓订单" @back="goback" back="1"></tabbar>
     <div class="order">
-      <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
-        <van-tab title="待付款">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <div class="item" v-for="(item,i) in list" :key="i">
-            <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
-                  <van-image
-                    width="2.5rem"
-                    height="2.5rem"
-                    fit="cover"
-                    :src="gooditem.cover_Image"
-                  />
-                  <div class="pro">
-                    <div class="name erhang">{{gooditem.name}}</div>
-                    <div class="price flex">
-                      <span>
-                        <i>￥</i>
-                        {{gooditem.price}}
-                      </span>
-                      <span style="color:#999;">x {{gooditem.goods_num}}</span>
+      <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
+        <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
+          <van-tab title="待付款">
+            <div class="null" v-if="list.length==0">暂无订单</div>
+            <div class="item" v-for="(item,i) in list" :key="i">
+              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+                <div class="con" @click="orderDetail(item.shop_order_id)">
+                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                    <van-image
+                      width="2.5rem"
+                      height="2.5rem"
+                      fit="cover"
+                      :src="gooditem.cover_Image"
+                    />
+                    <div class="pro">
+                      <div class="name erhang">{{gooditem.name}}</div>
+                      <div class="price flex">
+                        <span>
+                          <i>￥</i>
+                          {{gooditem.price}}
+                        </span>
+                        <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                      </div>
+                      <div class="size">{{gooditem.space_name}}</div>
                     </div>
-                    <div class="size">{{gooditem.space_name}}</div>
                   </div>
+                  <van-cell-group>
+                    <van-cell title="订单编号" :value="item.order_number" />
+                  </van-cell-group>
+                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
                 </div>
-                <van-cell-group>
-                  <van-cell title="订单编号" :value="item.order_number" />
-                </van-cell-group>
-                <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
-              </div>
-              <div slot="footer">
-                <van-button size="small" @click="cancalOrder(item.shop_order_id)">取消订单</van-button>
-                <van-button size="small" type="danger" @click="orderDetail(item.shop_order_id)">付款</van-button>
-              </div>
-            </van-panel>
-          </div>
-        </van-tab>
-        <van-tab title="待发货">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <div class="item" v-for="(item,i) in list" :key="i">
-            <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
-                  <van-image
-                    width="2.5rem"
-                    height="2.5rem"
-                    fit="cover"
-                    :src="gooditem.cover_Image"
-                  />
-                  <div class="pro">
-                    <div class="name erhang">{{gooditem.name}}</div>
-                    <div class="price flex">
-                      <span>
-                        <i>￥</i>
-                        {{gooditem.price}}
-                      </span>
-                      <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                <div slot="footer">
+                  <van-button size="small" @click="cancalOrder(item.shop_order_id)">取消订单</van-button>
+                  <van-button size="small" type="danger" @click="orderDetail(item.shop_order_id)">付款</van-button>
+                </div>
+              </van-panel>
+            </div>
+          </van-tab>
+          <van-tab title="待发货">
+            <div class="null" v-if="list.length==0">暂无订单</div>
+            <div class="item" v-for="(item,i) in list" :key="i">
+              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+                <div class="con" @click="orderDetail(item.shop_order_id)">
+                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                    <van-image
+                      width="2.5rem"
+                      height="2.5rem"
+                      fit="cover"
+                      :src="gooditem.cover_Image"
+                    />
+                    <div class="pro">
+                      <div class="name erhang">{{gooditem.name}}</div>
+                      <div class="price flex">
+                        <span>
+                          <i>￥</i>
+                          {{gooditem.price}}
+                        </span>
+                        <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                      </div>
+                      <div class="size">{{gooditem.space_name}}</div>
                     </div>
-                    <div class="size">{{gooditem.space_name}}</div>
                   </div>
+                  <van-cell-group>
+                    <van-cell title="订单编号" :value="item.order_number" />
+                  </van-cell-group>
+                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
                 </div>
-                <van-cell-group>
-                  <van-cell title="订单编号" :value="item.order_number" />
-                </van-cell-group>
-                <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
-              </div>
-              <div slot="footer">
-                <van-button size="small" @click="backMoney">申请退款</van-button>
-                <van-button size="small" type="danger">提醒发货</van-button>
-              </div>
-            </van-panel>
-          </div>
-        </van-tab>
-        <van-tab title="待收货" v-if="orderType!=2">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <div class="item" v-for="(item,i) in list" :key="i">
-            <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
-                  <van-image
-                    width="2.5rem"
-                    height="2.5rem"
-                    fit="cover"
-                    :src="gooditem.cover_Image"
-                  />
-                  <div class="pro">
-                    <div class="name erhang">{{gooditem.name}}</div>
-                    <div class="price flex">
-                      <span>
-                        <i>￥</i>
-                        {{gooditem.price}}
-                      </span>
-                      <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                <div slot="footer">
+                  <van-button
+                    size="small"
+                    type="danger"
+                    @click="orderDetail(item.shop_order_id)"
+                  >查看详情</van-button>
+                </div>
+              </van-panel>
+            </div>
+          </van-tab>
+          <van-tab title="待收货" v-if="orderType!=2">
+            <div class="null" v-if="list.length==0">暂无订单</div>
+            <div class="item" v-for="(item,i) in list" :key="i">
+              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+                <div class="con" @click="orderDetail(item.shop_order_id)">
+                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                    <van-image
+                      width="2.5rem"
+                      height="2.5rem"
+                      fit="cover"
+                      :src="gooditem.cover_Image"
+                    />
+                    <div class="pro">
+                      <div class="name erhang">{{gooditem.name}}</div>
+                      <div class="price flex">
+                        <span>
+                          <i>￥</i>
+                          {{gooditem.price}}
+                        </span>
+                        <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                      </div>
+                      <div class="size">{{gooditem.space_name}}</div>
                     </div>
-                    <div class="size">{{gooditem.space_name}}</div>
                   </div>
+                  <van-cell-group>
+                    <van-cell title="订单编号" :value="item.order_number" />
+                  </van-cell-group>
+                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
                 </div>
-                <van-cell-group>
-                  <van-cell title="订单编号" :value="item.order_number" />
-                </van-cell-group>
-                <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
-              </div>
-              <div slot="footer">
-                <van-button size="small" @click="backMoney">申请退款</van-button>
-                <van-button size="small" @click="toWuliu(item.shop_order_id)">查看物流</van-button>
-                <van-button size="small" type="danger" @click="confirm(item.shop_order_id)">确认收货</van-button>
-              </div>
-            </van-panel>
-          </div>
-        </van-tab>
-        <van-tab title="全部">
-          <div class="null" v-if="list.length==0">暂无商品</div>
-          <div class="item" v-for="(item,i) in list" :key="i">
-            <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
-                  <van-image
-                    width="2.5rem"
-                    height="2.5rem"
-                    fit="cover"
-                    :src="gooditem.cover_Image"
-                  />
-                  <div class="pro">
-                    <div class="name erhang">{{gooditem.name}}</div>
-                    <div class="price flex">
-                      <span>
-                        <i>￥</i>
-                        {{gooditem.price}}
-                      </span>
-                      <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                <div slot="footer">
+                  <van-button size="small" @click="backMoney">申请退款</van-button>
+                  <van-button size="small" @click="toWuliu(item.shop_order_id)">查看物流</van-button>
+                  <van-button size="small" type="danger" @click="confirm(item.shop_order_id)">确认收货</van-button>
+                </div>
+              </van-panel>
+            </div>
+          </van-tab>
+          <van-tab title="全部">
+            <div class="null" v-if="list.length==0">暂无商品</div>
+            <div class="item" v-for="(item,i) in list" :key="i">
+              <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
+                <div class="con" @click="orderDetail(item.shop_order_id)">
+                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                    <van-image
+                      width="2.5rem"
+                      height="2.5rem"
+                      fit="cover"
+                      :src="gooditem.cover_Image"
+                    />
+                    <div class="pro">
+                      <div class="name erhang">{{gooditem.name}}</div>
+                      <div class="price flex">
+                        <span>
+                          <i>￥</i>
+                          {{gooditem.price}}
+                        </span>
+                        <span style="color:#999;">x {{gooditem.goods_num}}</span>
+                      </div>
+                      <div class="size">{{gooditem.space_name}}</div>
                     </div>
-                    <div class="size">{{gooditem.space_name}}</div>
                   </div>
+                  <van-cell-group>
+                    <van-cell title="订单编号" :value="item.order_number" />
+                  </van-cell-group>
+                  <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
                 </div>
-                <van-cell-group>
-                  <van-cell title="订单编号" :value="item.order_number" />
-                </van-cell-group>
-                <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
-              </div>
-              <div slot="footer">
-                <!-- 已取消 -->
-                <van-button v-if="item.order_status==-1" size="small" type="default">订单已取消</van-button>
-                <!-- 代付款 -->
-                <van-button
-                  v-if="item.order_status==0"
-                  size="small"
-                  type="default"
-                  @click="cancalOrder(item.shop_order_id)"
-                >取消订单</van-button>
-                <van-button
-                  v-if="item.order_status==0"
-                  size="small"
-                  type="danger"
-                  @click="gopay"
-                >立即付款</van-button>
-                <!-- 待发货 -->
-                <van-button
-                  v-if="item.order_status==1"
-                  size="small"
-                  type="default"
-                  @click="backMoney"
-                >申请退款</van-button>
-                <van-button
-                  v-if="item.order_status==1"
-                  size="small"
-                  type="danger"
-                  @click="warn"
-                >提醒发货</van-button>
-                <!-- 待收货 -->
-                <van-button
-                  v-if="item.order_status==2"
-                  size="small"
-                  type="default"
-                  @click="backMoney"
-                >申请退款</van-button>
-                <van-button
-                  v-if="item.order_status==2"
-                  size="small"
-                  type="default"
-                  @click="toWuliu(item.shop_order_id)"
-                >查看物流</van-button>
-                <van-button
-                  v-if="item.order_status==2"
-                  size="small"
-                  type="danger"
-                  @click="confirm(item.shop_order_id)"
-                >确认收货</van-button>
-                <!-- 已完成 -->
-                <van-button
-                  size="small"
-                  type="danger"
-                  v-if="item.order_status==3||item.order_status==6"
-                  @click="delOrder"
-                >删除订单</van-button>
-                <!-- 待退货 -->
-                <van-button
-                  size="small"
-                  type="danger"
-                  v-if="item.order_status==4"
-                  @click="backDetail"
-                >查看退款详情</van-button>
-                <!-- 已退货 -->
-                <van-button size="small" type="default" v-if="item.order_status==5">退款完成</van-button>
-              </div>
-            </van-panel>
-          </div>
-        </van-tab>
-      </van-tabs>
+                <div slot="footer">
+                  <!-- 已取消 -->
+                  <van-button v-if="item.order_status==-1" size="small" type="default">订单已取消</van-button>
+                  <!-- 代付款 -->
+                  <van-button
+                    v-if="item.order_status==0"
+                    size="small"
+                    type="default"
+                    @click="cancalOrder(item.shop_order_id)"
+                  >取消订单</van-button>
+                  <van-button
+                    v-if="item.order_status==0"
+                    size="small"
+                    type="danger"
+                    @click="gopay"
+                  >立即付款</van-button>
+                  <!-- 待发货 -->
+
+                  <van-button
+                    v-if="item.order_status==1"
+                    size="small"
+                    type="danger"
+                    @click="orderDetail(item.shop_order_id)"
+                  >查看详情</van-button>
+                  <!-- 待收货 -->
+                  <van-button
+                    v-if="item.order_status==2"
+                    size="small"
+                    type="default"
+                    @click="backMoney"
+                  >申请退款</van-button>
+                  <van-button
+                    v-if="item.order_status==2"
+                    size="small"
+                    type="default"
+                    @click="toWuliu(item.shop_order_id)"
+                  >查看物流</van-button>
+                  <van-button
+                    v-if="item.order_status==2"
+                    size="small"
+                    type="danger"
+                    @click="confirm(item.shop_order_id)"
+                  >确认收货</van-button>
+                  <!-- 已完成 -->
+                  <van-button
+                    size="small"
+                    type="danger"
+                    v-if="item.order_status==3||item.order_status==6"
+                    @click="orderDetail(item.shop_order_id)"
+                  >查看详情</van-button>
+                  <!-- 待退货 -->
+                  <van-button
+                    size="small"
+                    type="danger"
+                    v-if="item.order_status==4"
+                    @click="backDetail"
+                  >查看退款详情</van-button>
+                  <!-- 已退货 -->
+                  <van-button size="small" type="default" v-if="item.order_status==5">退款完成</van-button>
+                </div>
+              </van-panel>
+            </div>
+          </van-tab>
+        </van-tabs>
+      </mescroll-vue>
     </div>
   </div>
 </template>
 <script>
 import tabbar from "../../components/navbar";
+import MescrollVue from "mescroll.js/mescroll.vue";
 export default {
   components: {
-    tabbar
+    tabbar,
+    MescrollVue
   },
   data() {
     return {
@@ -227,8 +229,12 @@ export default {
       orderType: 0, //订单类型  1 商城订单  2 云仓  3 提货
       order_state: 0, //订单状态
       list: [], //订单列表
-      order_status: "" //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已完成,4=待退货,5=已退货
-      // back: "" //返回路径
+      order_status: "", //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已完成,4=待退货,5=已退货
+      mescrollUp: {
+        callback: this.upCallback
+      },
+      mescroll: null,
+      state: "" //订单状态 1 待支付 2 待发货 3 待收货 不传全部
     };
   },
   mounted() {
@@ -236,13 +242,18 @@ export default {
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
     }
-    this.init(Number(this.tab) + 1);
+    this.state = Number(this.tab) + 1;
   },
   methods: {
-    init(state) {
+    mescrollInit(mescroll) {
+      this.mescroll = mescroll;
+    },
+    upCallback(page, mescroll) {
+      console.log(page);
       this.axios
         .post("/api/goods_order/index", {
-          order_status: state, //订单状态 1 待支付 2 待发货 3 待收货 不传全部
+          page: page.num,
+          order_status: this.state, //订单状态 1 待支付 2 待发货 3 待收货 不传全部
           order_type: this.orderType //1 商城 2 云仓 3 提货
         })
         .then(data => {
@@ -276,22 +287,78 @@ export default {
             }
             this.$set(item, "orderState", flag);
           });
-          this.list = data;
-          console.log(this.list);
+          // 请求的列表数据
+          let arr = data;
+          // 如果是第一页需手动置空列表
+          if (page.num === 1) {
+            this.list = [];
+          }
+          // 把请求到的数据添加到列表
+          this.list = this.list.concat(arr);
+          // 数据渲染成功后,隐藏下拉刷新的状态
+          this.$nextTick(() => {
+            mescroll.endSuccess(arr.length, true);
+          });
+        })
+        .catch(e => {
+          // 联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+          mescroll.endErr();
         });
     },
+    // init() {
+    //   this.axios
+    //     .post("/api/goods_order/index", {
+    //       order_status: this.state, //订单状态 1 待支付 2 待发货 3 待收货 不传全部
+    //       order_type: this.orderType //1 商城 2 云仓 3 提货
+    //     })
+    //     .then(data => {
+    //       data.forEach(item => {
+    //         let flag;
+    //         switch (item.order_status) {
+    //           case -1:
+    //             flag = "已取消";
+    //             break;
+    //           case 0:
+    //             flag = "待付款";
+    //             break;
+    //           case 1:
+    //             flag = "待发货";
+    //             break;
+    //           case 2:
+    //             flag = "待收货";
+    //             break;
+    //           case 3:
+    //             flag = "已完成";
+    //             break;
+    //           case 4:
+    //             flag = "退款中";
+    //             break;
+    //           case 5:
+    //             flag = "已退款";
+    //             break;
+    //           case 6:
+    //             flag = "已完成";
+    //             break;
+    //         }
+    //         this.$set(item, "orderState", flag);
+    //       });
+    //       this.list = data;
+    //       console.log(this.list);
+    //     });
+    // },
     // 点击tab切换
     clickTab(name, title) {
       if (this.orderType == 2) {
         //云仓
         if (name < 2) {
-          this.init(name + 1);
+          this.state = name + 1;
         } else {
-          this.init();
+          this.state = "";
         }
       } else {
-        this.init(name + 1);
+        this.state = name + 1;
       }
+      this.mescroll.resetUpScroll();
     },
     goback() {
       this.$router.push({
@@ -390,6 +457,12 @@ export default {
   padding-bottom: 10px;
   .null {
     background: #f5f5f5;
+  }
+  .mescroll {
+    position: fixed;
+    top: 44px;
+    bottom: 0;
+    height: auto;
   }
   .item {
     margin: 12px 12px 0;

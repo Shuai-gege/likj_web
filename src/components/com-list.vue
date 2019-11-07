@@ -2,7 +2,7 @@
   <!-- 商品列表 -->
   <div class="list flex">
     <div class="null" v-if="list.length==0" style="text-align:center;width:100%;">暂无商品</div>
-    <li @click="godetail(item.goods_id)" v-for="(item,i) in list" :key="i">
+    <li v-for="(item,i) in list" :key="i">
       <van-image
         width="100%"
         height="160px"
@@ -10,42 +10,71 @@
         fit="cover"
         :src="item.cover_Image"
         style="border-radius: 5px;"
+        @click="godetail(item.goods_id,item.goods_size_id,item.stock)"
       />
-      <div class="name erhang">{{item.name}}</div>
-      <!-- 小标签 -->
-      <!-- <span
-        style="border:1px solid #ffe1e1;padding:0 8px 2px;border-radius:5px;color:#fc4c4c;display:inline-block;margin-left:6px;"
-      >{{item.label}}</span>-->
-      <!-- <div class="pro yihang">匠心制作唯美大气匠心制作唯美大气匠心制作唯美大气匠心制作唯美大气</div> -->
-      <div class="price" v-if="item.price==item.self_price">
-        <i style="margin-right:-5px;font-weight:400;font-size:12px;">￥</i>
-        {{item.price}}
+      <div
+        class="name erhang"
+        @click="godetail(item.goods_id,item.goods_size_id,item.stock)"
+      >{{item.name}}</div>
+      <div class="flex" @click="godetail(item.goods_id,item.goods_size_id,item.stock)">
+        <div class="price" v-if="item.price==item.self_price||!item.self_price">
+          <i style="margin-right:-5px;font-weight:400;font-size:12px;">￥</i>
+          {{item.price}}
+        </div>
+        <div v-else class="price">
+          <i style="margin-right:-5px;font-weight:400;">￥</i>
+          {{item.self_price}}
+          <s
+            style="color:#999;font-size:10px;margin-left:5px;font-weight:400;"
+          >￥{{item.price}}</s>
+        </div>
+        <div class="num" v-if="store">库存：{{item.stock}}</div>
       </div>
-      <div v-else class="price">
-        <i style="margin-right:-5px;font-weight:400;">￥</i>
-        {{item.self_price}}
-        <s
-          style="color:#999;font-size:10px;margin-left:5px;font-weight:400;"
-        >￥{{item.price}}</s>
+      <!-- 上下架开关 -->
+      <div v-if="store" class="flex_r" style="color:#999;padding:3px;">
+        <span style="color:#85C4D3;margin:0 3px;">下架</span>
+        <van-switch
+          :value="item.checked"
+          @input="onInput(i,item.id)"
+          size="15px"
+          active-color="#FFB305"
+        />
+        <span style="color:#fc4c4c;margin:0 3px;">上架</span>
       </div>
     </li>
   </div>
 </template>
 <script>
+import { Dialog } from "vant";
 export default {
   data() {
     return {};
   },
-  props: ["list"],
+  props: ["list", "store"],
   mounted() {},
   methods: {
-    godetail(id) {
-      this.$router.push({
-        path: "detail",
-        query: {
-          goods_id: id
-        }
-      });
+    godetail(id, size_id, num) {
+      if (this.store) {
+        this.$router.push({
+          path: "/stockdetail",
+          query: {
+            goods_id: id,
+            size_id: size_id,
+            num: num
+          }
+        });
+      } else {
+        this.$router.push({
+          path: "/detail",
+          query: {
+            goods_id: id
+          }
+        });
+      }
+    },
+    // 上下架开关
+    onInput(i, id) {
+      this.$emit("upDown", i, id);
     }
   }
 };
@@ -57,7 +86,7 @@ export default {
   flex-wrap: wrap;
   margin-top: -1px;
   .null {
-    background: #f5f5f5;
+    background: #fff;
   }
   li {
     background-color: #fff;
@@ -87,6 +116,9 @@ export default {
         font-size: 14px;
       }
     }
+  }
+  .van-switch--on {
+    margin: 0 5px;
   }
 }
 </style>

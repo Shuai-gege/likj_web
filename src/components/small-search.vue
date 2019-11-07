@@ -7,7 +7,7 @@
         <img src="../image/cat.png" alt />
         <span>分类</span>
       </div>
-      <input type="search" @keyup.13="searchGoods" placeholder="请输入关键词" v-model="searchValue" />
+      <input type="search" @keyup.13="searchGoods" placeholder="请输入关键词" v-model="searchVal" />
       <p @click="searchGoods">搜索</p>
     </div>
   </div>
@@ -15,10 +15,9 @@
 <script>
 export default {
   data() {
-    return {
-      searchValue: "" //搜索词
-    };
+    return {};
   },
+  props: ["searchVal"],
   mounted() {},
   methods: {
     //
@@ -26,7 +25,7 @@ export default {
       this.$emit("cat");
     },
     searchGoods() {
-      this.$emit("gosearch", this.searchValue);
+      this.$emit("gosearch", this.searchVal);
     }
   }
 };

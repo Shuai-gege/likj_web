@@ -98,7 +98,7 @@ export default {
 .yuncanglog {
   background-color: #f5f5f5;
   .null {
-    background: #f5f5f5;
+    background: #fff;
   }
   .mescroll {
     position: fixed;
@@ -108,10 +108,11 @@ export default {
   }
   .detail {
     .item {
+      padding-top: 15px;
       border-bottom: 1px solid #f5f5f5;
     }
     margin-top: 44px;
-    padding: 15px;
+    padding: 0 12px;
     .name {
       img {
         width: 55px;

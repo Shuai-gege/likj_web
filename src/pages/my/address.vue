@@ -86,4 +86,7 @@ export default {
 .list {
   margin-top: 44px;
 }
+.null {
+  background-color: #fff;
+}
 </style>

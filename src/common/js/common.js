@@ -16,11 +16,19 @@ export function dataURLtoFile(dataurl, filename) {
     type: mime
   });
 }
-
+import { Toast, Dialog } from "vant"; //引入vant提示框
 // ajax上传图片——文件流方式
 export function upload(base64, name) {
   return new Promise((resolve, reject) => {
-    lrz(base64, { quality: 1 }).then(function(rst) {
+    Toast.loading({
+      duration: 0, // 持续展示 toast
+      forbidClick: true, // 禁用背景点击
+      mask: false // 是否显示遮罩层
+      // message: "图片上传中..."
+    });
+    lrz(base64, {
+      quality: 0.5
+    }).then(function(rst) {
       // 处理成功会执行
       // console.log("压缩：", rst);
       let file = dataURLtoFile(rst.origin, name);
@@ -41,6 +49,7 @@ export function upload(base64, name) {
         processData: false, //formdata已将数据序列化，无需在处理
         contentType: false, //formdata无需设置请求头
         success: function(res) {
+          Toast.clear();
           resolve(res.data);
         }
       });

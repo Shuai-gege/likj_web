@@ -43,7 +43,11 @@
       </van-cell-group>
       <div class="image">
         <p>{{query.status==3?'拒绝理由':'支付凭证'}}</p>
-        <van-uploader v-model="fileList" multiple :max-count="3" v-if="query.status==1" />
+        <div class="up flex_l" v-if="query.status==1">
+          <van-uploader v-model="pay1" :max-count="1" :after-read="afterRead1" />
+          <van-uploader v-model="pay2" :max-count="1" :after-read="afterRead2" />
+          <van-uploader v-model="pay3" :max-count="1" :after-read="afterRead3" />
+        </div>
         <div class="img" v-if="query.status==2">
           <van-image
             width="2.7rem"
@@ -51,6 +55,7 @@
             fit="cover"
             :src="item"
             v-for="(item,i) in payment_voucher"
+            v-if="item"
             :key="i"
             @click="getImg(i)"
             style="margin-right:10px"
@@ -102,7 +107,10 @@ export default {
       fileList: [], //支付凭证
       show: false, //拒绝理由
       message: "", //理由
-      payImg: [] //支付凭证
+      payImg: [], //支付凭证
+      pay1: [], //支付凭证
+      pay2: [], //支付凭证
+      pay3: [] //支付凭证
     };
   },
   components: {
@@ -169,49 +177,42 @@ export default {
         startPosition: index
       });
     },
+    afterRead1() {
+      upload(this.pay1[0].content, this.pay1[0].file.name).then(data => {
+        this.img1 = data.url;
+        console.log(this.img1);
+      });
+    },
+    afterRead2() {
+      upload(this.pay2[0].content, this.pay2[0].file.name).then(data => {
+        this.img2 = data.url;
+      });
+    },
+    afterRead3() {
+      upload(this.pay3[0].content, this.pay3[0].file.name).then(data => {
+        this.img3 = data.url;
+      });
+    },
     // 同意2 拒绝3
     shenhe(status) {
       if (status == 3) {
         this.show = true;
       } else {
-        if (this.fileList.length == 0) {
+        this.payImg = [this.img1, this.img2, this.img3];
+        console.log(this.payImg);
+        if (!this.img1 && !this.img2 && !this.img3) {
           this.$toast("请上传支付凭证");
         } else {
-          console.log(this.fileList);
-          // 上传图片
-          this.fileList.forEach(item => {
-            upload(item.content, item.file.name)
-              .then(data => {
-                this.payImg.push(data.url);
-              })
-              .then(() => {
-                if (this.payImg.length == this.fileList.length) {
-                  this.axios
-                    .post("/api/property_administer/checkCash", {
-                      id: this.query.cash_id,
-                      status: 2,
-                      payment_voucher: this.payImg.join(",")
-                    })
-                    .then(data => {
-                      this.$toast("已同意");
-                      this.init();
-                    });
-                  // this.axios
-                  //   .post("/api/property_administer/sbRecharge", {
-                  //     amount: this.money,
-                  //     recharge_way: this.num,
-                  //     recharge_type: this.num1,
-                  //     payment_voucher: this.payImg.join(",")
-                  //   })
-                  //   .then(data => {
-                  //     this.$toast("充值成功");
-                  //     setTimeout(() => {
-                  //       this.$router.push("/mypurse");
-                  //     }, 1000);
-                  //   });
-                }
-              });
-          });
+          this.axios
+            .post("/api/property_administer/checkCash", {
+              id: this.query.cash_id,
+              status: 2,
+              payment_voucher: this.payImg.join(",")
+            })
+            .then(data => {
+              this.$toast("已同意");
+              this.init();
+            });
         }
       }
     },
