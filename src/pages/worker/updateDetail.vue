@@ -121,10 +121,10 @@ export default {
 <style lang="less" scoped>
 .shenqing {
   background: #f5f5f5;
-  min-height: 100vh;
+  min-height: 93.3vh;
   color: #333;
   font-size: 14px;
-  padding-bottom: 30px;
+  // padding-bottom: 30px;
   .title {
     font-weight: normal;
     color: #666;

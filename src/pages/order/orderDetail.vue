@@ -1,7 +1,7 @@
 <template>
   <div class="orderDetail">
     <tabbar title="订单详情" @back="goback" back="1"></tabbar>
-    <div class="detail">
+    <div class="detail" v-if="initdata.goods_list&&initdata.goods_list.length>0">
       <div class="address" v-if="order_type!=2">
         <van-cell :title="initdata.consignee" icon="location-o" :value="initdata.receiving_tel" />
         <van-cell :value="'地址：'+initdata.address+' '+initdata.address_details" class="solo" />
@@ -16,13 +16,13 @@
                 <i>￥</i>
                 {{item.price}}
               </span>
-              <span style="color:#999;">x {{item.goods_num}}</span>
+              <span style="color:#666;">{{item.unit_info.str}}</span>
             </div>
             <div class="size">{{item.space_name}}</div>
           </div>
         </div>
         <div class="item">
-          <van-cell title="运费" :value="'￥'+initdata.freight_money" />
+          <van-cell v-if="order_type!=2" title="运费" :value="'￥'+initdata.freight_money" />
           <van-cell title="订单总价" :value="'￥'+initdata.goods_money" />
           <van-cell
             class="price"
@@ -51,26 +51,26 @@
           <van-cell v-if="order_status==5" title="退款时间" :value="initdata.confirm_return_time" />
         </div>
       </div>
-      <div class="foot flex">
+      <div class="foot flex" v-if="order_status==0||order_status==2">
         <!-- 已取消 -->
         <van-button v-if="order_status==-1" size="small" type="default">订单已取消</van-button>
         <!-- 代付款 -->
         <van-button v-if="order_status==0" size="small" type="default" @click="cancel">取消订单</van-button>
         <van-button v-if="order_status==0" size="small" type="danger" @click="gopay">立即付款</van-button>
         <!-- 待发货 -->
-        <van-button v-if="order_status==1" size="small" type="default" @click="backMoney">申请退款</van-button>
-        <van-button v-if="order_status==1" size="small" type="danger" @click="warn">提醒发货</van-button>
+        <!-- <van-button v-if="order_status==1" size="small" type="default" @click="backMoney">申请退款</van-button> -->
+        <!-- <van-button v-if="order_status==1" size="small" type="danger" @click="warn">提醒发货</van-button> -->
         <!-- 待收货 -->
-        <van-button v-if="order_status==2" size="small" type="default" @click="backMoney">申请退款</van-button>
+        <!-- <van-button v-if="order_status==2" size="small" type="default" @click="backMoney">申请退款</van-button> -->
         <van-button v-if="order_status==2" size="small" type="default" @click="toWuliu">查看物流</van-button>
         <van-button v-if="order_status==2" size="small" type="danger" @click="confirm">确认收货</van-button>
         <!-- 已完成 -->
-        <van-button
+        <!-- <van-button
           size="small"
           type="danger"
           v-if="order_status==3||order_status==6"
           @click="delOrder"
-        >删除订单</van-button>
+        >删除订单</van-button>-->
         <!-- 待退货 -->
         <van-button size="small" type="danger" v-if="order_status==4" @click="backDetail">查看退款详情</van-button>
         <!-- 已退货 -->
@@ -81,6 +81,7 @@
         :price="price"
         :order_id="order_id"
         :orderType="order_type"
+        :freight_money="initdata.freight_money"
         @close="closePay"
       ></pay>
     </div>
@@ -102,11 +103,13 @@ export default {
       initdata: {}, //初始数据
       order_type: "", //订单类型1商城订单2云仓订单3云仓提货订单
       order_status: "", //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已收货,4=待退货,5=已退货,6=已完成
-      payType: "" //支付方式: 1 余额 2 货款 3 微信 4 线下
+      payType: "", //支付方式: 1 余额 2 货款 3 微信 4 线下
+      tab: "" //订单状态
     };
   },
   mounted() {
     this.order_id = this.$route.query.id;
+    this.tab = this.$route.query.tab;
     this.init();
   },
   methods: {
@@ -121,6 +124,8 @@ export default {
           this.order_status = data.order_status;
           if (data.order_type == 3 && data.order_status == 0) {
             this.price = data.freight_money;
+          } else if (data.order_type == 1) {
+            this.price = data.goods_money;
           } else {
             this.price = data.order_money;
           }
@@ -145,7 +150,7 @@ export default {
     goback() {
       this.$router.push({
         path: "/orderList",
-        query: { orderType: this.order_type }
+        query: { orderType: this.order_type, tab: this.tab }
       });
     },
     // 立即付款
@@ -154,12 +159,6 @@ export default {
     },
     closePay() {
       this.showpay = false;
-      // this.$router.push({
-      //   path: "/orderList",
-      //   query: {
-      //     orderType: this.type + 1
-      //   }
-      // });
     },
     // 取消订单
     cancel() {
@@ -169,6 +168,9 @@ export default {
         })
         .then(data => {
           this.$toast("取消成功");
+          setTimeout(() => {
+            this.$router.go(-1);
+          });
         });
     },
     // 申请退款
@@ -221,7 +223,7 @@ export default {
 .orderDetail {
   margin-top: 44px;
   background-color: #f5f5f5;
-  min-height: 93.4vh;
+  min-height: 100vh;
   padding-bottom: 50px;
   .van-cell__value {
     overflow: visible;

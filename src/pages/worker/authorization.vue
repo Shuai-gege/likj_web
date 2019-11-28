@@ -20,12 +20,12 @@
       <p style="padding:5px 15px;">基本信息</p>
       <van-cell-group>
         <van-cell title="成为代理的条件" :label="'首次充值'+infodata.money" />
-        <van-cell title="真实姓名" :value="infodata.truename" />
-        <van-cell title="手机号码" :value="infodata.tel" />
-        <van-cell title="身份证号" :value="infodata.idcard" />
+        <van-cell title="真实姓名" :value="infodata.truename" v-if="set.truename == 1" />
+        <van-cell title="手机号码" :value="infodata.tel" v-if="set.mobile == 1" />
+        <van-cell title="身份证号" :value="infodata.idcard" v-if="set.id_number == 1" />
         <!-- <van-cell title="地区" value="上海市 浦东新区" />
         <van-cell title="详细地址" value="康桥玥棠" />-->
-        <div class="flex" style="padding:10px 30px;">
+        <div class="flex" style="padding:10px 30px;" v-if="set.id_number_pic == 1">
           <div>
             <van-image
               width="4rem"
@@ -48,8 +48,8 @@
           </div>
         </div>
       </van-cell-group>
-      <p style="padding:5px 15px;">支付凭证</p>
-      <div class="flex" style="padding:10px 30px;background:white">
+      <p style="padding:5px 15px;" v-if="set.payment_voucher == 1">支付凭证</p>
+      <div class="flex" style="padding:10px 30px;background:white" v-if="set.payment_voucher == 1">
         <div>
           <van-image
             v-for="(item,index) in pay"
@@ -141,27 +141,41 @@ export default {
       pay: "", //分割支付凭证图片
       show1: false, //同意弹窗
       show2: false, //拒绝弹窗
-      message: "" //拒绝理由
+      message: "", //拒绝理由
+      set: "" //判断有没有
     };
   },
   components: {
     navbar
   },
   mounted() {
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
     this.id = this.$route.query.id;
     // alert(location.href);
     // alert(location.protocol + "//" + location.hostname);
+    // let token;
+    // if (localStorage.getItem("token" + localStorage.getItem("sign_id"))) {
+    //   token = localStorage.getItem("token" + localStorage.getItem("sign_id"));
+    // } else if (localStorage.getItem("token_tel")) {
+    //   token = localStorage.getItem("token_tel");
+    // }
+
     if (this.$route.query.sign_id) {
+      // alert(233);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
+      !this.$route.query.token &&
+      !localStorage.getItem("token_tel")
     ) {
+      // alert(333);
       location.href =
         localStorage.getItem("baseURL") +
         "/api/user/wxlogin?sign_id=" +
@@ -178,7 +192,8 @@ export default {
       );
       this.init();
     } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+      localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
+      localStorage.getItem("token_tel")
     ) {
       // alert(666);
       this.init();
@@ -191,6 +206,7 @@ export default {
         .then(data => {
           console.log(data);
           this.infodata = data;
+          this.set = data.data_set;
           if (data.man_check_status == 1) {
             this.audit = "待审核";
           } else if (data.man_check_status == 2) {
@@ -217,7 +233,11 @@ export default {
         this.$toast("余额不足");
       } else {
         this.axios
-          .post("/api/agent/inviteCheck", { id: this.id, status: 1 })
+          .post("/api/agent/inviteCheck", {
+            id: this.id,
+            status: 1,
+            user_type: "1"
+          })
           .then(data => {
             this.$toast("审核通过");
             this.show1 = false;

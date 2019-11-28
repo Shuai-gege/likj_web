@@ -50,7 +50,9 @@ export default {
       flag: false
     };
   },
-
+  mounted() {
+    this.tel = this.$route.query.mobile;
+  },
   methods: {
     same() {
       if (this.psd1 != this.psd2) {

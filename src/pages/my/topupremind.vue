@@ -2,7 +2,7 @@
   <div class="recordinfo">
     <!-- 头部公共搜索框 -->
     <tabbar title="充值明细详情" v-if="!$route.query.sign_id"></tabbar>
-    <div :class="{con:true,hastab:!$route.query.sign_id}">
+    <div :class="{con:true,hasid:$route.query.sign_id}">
       <div style="padding:15px" class="flex_l">
         <van-image
           width="2rem"
@@ -41,7 +41,6 @@
           fit="cover"
           :src="item"
           v-for="(item,i) in payment_voucher"
-          v-if="item"
           :key="i"
           @click="getImg(i)"
           style="margin-right:10px"
@@ -100,18 +99,22 @@ export default {
     tabbar
   },
   mounted() {
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
     this.id = this.$route.query.id;
     if (this.$route.query.sign_id) {
       // alert(111);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
+      !this.$route.query.token &&
+      !localStorage.getItem("token_tel")
     ) {
       // alert(33333333);
       // alert(localStorage.getItem("baseURL"));
@@ -130,9 +133,10 @@ export default {
         "token" + localStorage.getItem("sign_id"),
         this.$route.query.token
       );
-      // this.init();
+      this.init();
     } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+      localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
+      localStorage.getItem("token_tel")
     ) {
       // alert(666);
       this.init();
@@ -224,8 +228,9 @@ export default {
 <style lang="less" scoped>
 .recordinfo {
   .con {
-    &.hastab {
-      padding-top: 44px;
+    padding-top: 44px;
+    &.hasid {
+      padding-top: 0;
     }
     .image {
       padding: 20px;

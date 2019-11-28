@@ -7,7 +7,7 @@
       v-model="show"
       position="left"
       :overlay-style="{background:'transparent'}"
-      :style="{ width: '50%',height:'100%', background:'#182128' }"
+      :style="{ width: '40%',height:'100%', background:'#182128' }"
     >
       <div style="color:#fff" class="cat">
         <div class="item flex_l" @click="getCat('')">
@@ -134,6 +134,7 @@ export default {
 .goodsList {
   font-size: 13px;
   color: #0c0b0b;
+
   .mescroll {
     position: fixed;
     top: 44px;

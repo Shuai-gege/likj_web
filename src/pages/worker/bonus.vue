@@ -221,9 +221,7 @@ export default {
   font-size: 14px;
   background: #f5f5f5;
   min-height: 100vh;
-  .null {
-    background: #f5f5f5;
-  }
+
   .yue {
     margin: 55px 0 15px 0;
     padding: 20px;

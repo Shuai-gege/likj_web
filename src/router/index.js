@@ -25,6 +25,7 @@ const xiajiorderDetail = () => import("../pages/worker/xiajiorderDetail"); //下
 const zhuandanorder = () => import("../pages/worker/zhuandanorder"); //转单记录
 const tuijianjiang = () => import("../pages/worker/tuijianjiang"); //推荐奖
 const applyfor = () => import("../pages/worker/applyfor"); //申请授权
+const applyfor1 = () => import("../pages/worker/applyfor1"); //web申请授权
 const bonus = () => import("../pages/worker/bonus"); //奖金列表
 const authorization = () => import("../pages/worker/authorization"); //消息中心
 const message = () => import("../pages/worker/message"); //审核详情页
@@ -39,15 +40,14 @@ const Certification = () => import("@/pages/worker/Certification"); // 实名认
 const dailichaxun = () => import("@/pages/worker/dailichaxun"); // 代理查询
 const hot = () => import("@/pages/hot/hot"); // 热卖商品
 
-
 // 购物车
 const car = () => import("@/pages/car/car"); // 购物车
 const confirmOrder = () => import("@/pages/car/confirmOrder"); // 确认订单
 const offline = () => import("@/pages/car/offline"); // 线下支付
 
-
 // 我的
 const my = () => import("@/pages/my/my"); // 我的
+const newmy = () => import("@/pages/my/newmy"); // 我的
 const myteam = () => import("@/pages/my/myteam"); // 我的团队
 const mysuperior = () => import("@/pages/my/mysuperior"); // 我的上级
 const mypurse = () => import("@/pages/my/mypurse"); // 我的钱包
@@ -71,10 +71,12 @@ const yonghu = () => import("@/pages/my/yonghu"); // 用户
 const yinsi = () => import("@/pages/my/yinsi"); // 隐私
 const login = () => import("../pages/my/login"); //登录
 const set = () => import("@/pages/my/set"); // 设置
+const set_tel = () => import("@/pages/my/set_tel"); // 设置手机号
 const address = () => import("@/pages/my/address"); // 地址列表
 const edit_address = () => import("@/pages/my/edit_address"); // 地址列表
 const add_address = () => import("@/pages/my/add_address"); // 添加地址
 const modify_psd = () => import("@/pages/my/modify_psd"); // 修改登录密码
+const login_psd = () => import("@/pages/my/login_psd"); // 修改登录密码
 const payPsd = () => import("@/pages/my/payPsd"); // 修改登录密码
 const yuncangLog = () => import("@/pages/my/yuncangLog"); // 云仓记录
 const orderList = () => import("@/pages/order/orderList"); // 订单列表
@@ -82,8 +84,6 @@ const backMoney = () => import("@/pages/order/backMoney"); // 订单列表
 const orderDetail = () => import("@/pages/order/orderDetail"); // 订单详情
 const wuliu = () => import("@/pages/order/wuliu"); // 物流
 const moneydetail = () => import("@/pages/my/moneydetail"); // 资金明细
-
-
 
 // 店铺
 const rule = () => import("@/pages/store/rule"); //免责声明
@@ -94,12 +94,22 @@ const noticeDetail = () => import("@/pages/store/noticeDetail"); // 公告详情
 const storeorder = () => import("@/pages/store/storeorder"); // 店铺订单
 const wuliuCode = () => import("@/pages/store/wuliuCode"); // 物流信息
 
-
 const sucaiconter = () => import("../pages/worker/tool/sucaiconter"); // 素材中心
+const material = () => import("../pages/worker/tool/material"); // 新素材中心
 const upsucai = () => import("../pages/worker/tool/upsucai"); // 上传素材
+const mysucai = () => import("../pages/worker/tool/mysucai"); // 上传素材
+const fake = () => import("../pages/worker/tool/fake"); // 防伪查询
+const school = () => import("../pages/worker/tool/school"); // 商学院
+// const coursecontent = () => import("../pages/worker/coursecontent"); // 商学院
+const live_detail = () => import("../pages/worker/tool/live_detail"); // 直播详情
+const touwen_detail = () => import("../pages/worker/tool/touwen_detail"); // 图文详情
+const area_agent = () => import("../pages/worker/tool/area_agent"); // 区域代理
+const up_area_agent = () => import("../pages/worker/tool/up_area_agent"); // 升级区域代理
+const courseup = () => import("../pages/worker/courseup"); // 课程上传
 
 let router = new Router({
-  routes: [{
+  routes: [
+    {
       path: "/", //APP首页
       name: "home",
       component: home,
@@ -119,7 +129,10 @@ let router = new Router({
     {
       path: "/myaccount", //我的收款账户
       name: "myaccount",
-      component: myaccount
+      component: myaccount,
+      meta: {
+        title: "我的收款账户"
+      }
     },
     {
       path: "/search", //搜索
@@ -147,6 +160,23 @@ let router = new Router({
         title: "工作台"
       }
     },
+    {
+      path: "/mysucai", //我的素材
+      name: "mysucai",
+      component: mysucai,
+      meta: {
+        title: "我的素材"
+      }
+    },
+    {
+      path: "/fake", //防伪查询
+      name: "fake",
+      component: fake,
+      meta: {
+        title: "防伪查询"
+      }
+    },
+
     {
       path: "/dailichaxun", //代理查询
       name: "dailichaxun",
@@ -200,6 +230,14 @@ let router = new Router({
       path: "/applyfor", //申请授权
       name: "applyfor",
       component: applyfor,
+      meta: {
+        title: "申请授权"
+      }
+    },
+    {
+      path: "/applyfor1", //web申请授权
+      name: "applyfor1",
+      component: applyfor1,
       meta: {
         title: "申请授权"
       }
@@ -373,6 +411,15 @@ let router = new Router({
       path: "/my", //我的
       name: "my",
       component: my,
+      meta: {
+        ifShow_Footbar: true,
+        title: "我的"
+      }
+    },
+    {
+      path: "/newmy", //我的
+      name: "newmy",
+      component: newmy,
       meta: {
         ifShow_Footbar: true,
         title: "我的"
@@ -591,6 +638,14 @@ let router = new Router({
       }
     },
     {
+      path: "/set_tel", //设置
+      name: "set_tel",
+      component: set_tel,
+      meta: {
+        title: "管理手机号"
+      }
+    },
+    {
       path: "/confirmOrder", //确认订单
       name: "confirmOrder",
       component: confirmOrder,
@@ -711,10 +766,19 @@ let router = new Router({
         title: "资金明细"
       }
     },
+
     {
       path: "/sucaiconter", //素材中心
       name: "sucaiconter",
       component: sucaiconter,
+      meta: {
+        title: "素材中心"
+      }
+    },
+    {
+      path: "/material", //素材中心
+      name: "material",
+      component: material,
       meta: {
         title: "素材中心"
       }
@@ -725,6 +789,71 @@ let router = new Router({
       component: upsucai,
       meta: {
         title: "上传素材"
+      }
+    },
+    {
+      path: "/login_psd", //修改登录密码
+      name: "login_psd",
+      component: login_psd,
+      meta: {
+        title: "修改登录密码"
+      }
+    },
+    // {
+    //   path: "/coursecontent", //商学院
+    //   name: "coursecontent",
+    //   component: coursecontent,
+    //   meta: {
+    //     title: "商学院"
+    //   }
+    // },
+    {
+      path: "/school", //商学院
+      name: "school",
+      component: school,
+      meta: {
+        title: "商学院",
+        ifShow_Footbar: true
+      }
+    },
+    {
+      path: "/live_detail", //直播详情
+      name: "live_detail",
+      component: live_detail,
+      meta: {
+        title: "直播详情"
+      }
+    },
+    {
+      path: "/touwen_detail", //图文详情
+      name: "touwen_detail",
+      component: touwen_detail,
+      meta: {
+        title: "图文详情"
+      }
+    },
+    {
+      path: "/area_agent", //区域代理
+      name: "area_agent",
+      component: area_agent,
+      meta: {
+        title: "区域代理"
+      }
+    },
+    {
+      path: "/up_area_agent", //升级区域代理
+      name: "up_area_agent",
+      component: up_area_agent,
+      meta: {
+        title: "升级区域代理"
+      }
+    },
+    {
+      path: "/courseup", //课堂上传
+      name: "courseup",
+      component: courseup,
+      meta: {
+        title: "课堂上传"
       }
     },
     {
@@ -758,13 +887,34 @@ let router = new Router({
   }
 });
 
+import axios from "axios";
 router.beforeEach((to, from, next) => {
-  //修改标题
-  if (to.meta.title) {
+  if (to.path == "/") {
+    let token = "";
+    if (localStorage.getItem("token" + localStorage.getItem("sign_id"))) {
+      token = localStorage.getItem("token" + localStorage.getItem("sign_id"));
+    } else if (localStorage.getItem("token_tel")) {
+      token = localStorage.getItem("token_tel");
+    }
+    if (localStorage.getItem("baseURL") && token) {
+      axios
+        .post(
+          localStorage.getItem("baseURL") + "/api/user/index?token=" + token
+        )
+        .then(data => {
+          document.title = data.data.data.shop_name;
+          if (data.data.data.cloud_model == 2) {
+            localStorage.setItem("model", "2");
+          }
+        });
+    }
+  } else {
+    //修改标题
     document.title = to.meta.title;
   }
   next();
 });
+
 // 登录拦截
 // router.beforeEach((to, from, next) => {
 // 	// 判断有没有登录

@@ -268,20 +268,24 @@ export default {
     };
   },
   mounted() {
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
     // this.init(Number(this.tab) + 1);
     // alert(location.href);
     // alert(location.protocol + "//" + location.hostname);
     if (this.$route.query.sign_id) {
       // alert(111);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
+      !this.$route.query.token &&
+      !localStorage.getItem("token_tel")
     ) {
       // alert(33333333);
       location.href =
@@ -300,7 +304,8 @@ export default {
       );
       // this.init();
     } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+      localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
+      localStorage.getItem("token_tel")
     ) {
       // alert(666);
       // this.init();
@@ -461,9 +466,7 @@ export default {
       bottom: 0;
       height: auto;
     }
-    .null {
-      background-color: #f5f6f7;
-    }
+
     .item {
       margin: 12px 12px 10px;
       .van-cell {

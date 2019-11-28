@@ -19,7 +19,8 @@
       <!-- 确认订单信息 -->
       <div class="car" v-for="(item,i) in goods_list" :key="i" @click="todetail(item.goods_id)">
         <div class="cardateil flex_l">
-          <img :src="item.size_image" alt />
+          <!-- <img :src="item.size_image" alt /> -->
+          <van-image width="2rem" height="2rem" fit="cover" :src="item.size_image" />
           <!-- 商品名字、价钱 -->
           <div class="item">
             <p
@@ -31,16 +32,16 @@
                 ￥
                 <b>{{item.self_price}}</b>
               </span>
-              <span style="color:#000">x{{item.buy_num}}</span>
+              <span style="color:#000">{{item.number}}</span>
             </p>
             <span class="size">{{item.size_name+item.size_value}}</span>
           </div>
         </div>
         <!-- 订单详细信息 -->
-        <van-cell title="购买数量">{{item.buy_num}}件</van-cell>
+        <van-cell title="购买数量">{{item.number}}</van-cell>
         <div class="flex_r" style="margin:5px">
           <p>
-            共{{item.buy_num}}件
+            共{{item.buy_num}}{{item.three_name}}
             <span style="color:black;">
               小计：
               <span style="color:#FC4C4C;">￥{{item.good_moneys}}</span>
@@ -49,19 +50,14 @@
         </div>
       </div>
 
-      <!-- 运费 -->
-      <!-- <van-cell
-        style="margin-top:10px;border-radius: 5px 5px 0 0;"
-        title="运费"
-      >{{freight_money?`￥${freight_money}`:'快递 免邮'}}</van-cell>-->
       <van-cell
         style="margin-top:10px;border-radius: 5px 5px 0 0;"
         title="订单总额"
       >￥{{Number(price)-Number(freight_money)}}</van-cell>
       <van-cell
-        v-if="type==1"
+        v-if="type==1||type==0"
         style="margin-top:-4px;border-radius:0 0 5px 5px;color:#fc4c4c"
-        title="应付金额"
+        title="运费"
         class="jine"
       >￥{{freight_money}}</van-cell>
     </div>
@@ -89,7 +85,7 @@ export default {
   data() {
     return {
       query: "", //立即购买或购物车提交过来的参数
-      type: null, //列表类型 0 商城列表  1 本地仓库提货不付钱  2 放入云仓不填地址
+      type: null, //列表类型 0 商城列表  1 云库提货不付钱  2 放入云仓不填地址
       showpay: false,
 
       price: "", //总价
@@ -106,14 +102,19 @@ export default {
   },
   mounted() {
     this.query = this.$route.query;
-    this.type = this.$route.query.type;
+    if (localStorage.getItem("model") == 2) {
+      this.type = 0;
+    } else {
+      this.type = this.$route.query.type;
+    }
     this.init();
   },
   methods: {
     init() {
       this.axios
         .post("/api/goods_order/confirmOrder", {
-          cart_ids: this.query.cart_ids
+          cart_ids: this.query.cart_ids,
+          type: this.type == 1 ? 3 : ""
         })
         .then(data => {
           this.session_goods = data.session_goods;
@@ -129,11 +130,40 @@ export default {
             this.address = data.address;
           }
           this.price = parseFloat(data.goods_money);
-
-          console.log(data.goods_money);
-          console.log(parseFloat(data.goods_money));
-
           this.freight_money = data.freight_money;
+          data.goods_list.forEach(item => {
+            // 有三种箱盒个
+            if (item.one_name) {
+              let one = parseInt(
+                parseInt(item.buy_num) / item.t_t_multiple / item.o_t_multiple
+              );
+              let two = parseInt(
+                (parseInt(item.buy_num) %
+                  (item.t_t_multiple * item.o_t_multiple)) /
+                  item.t_t_multiple
+              );
+              let three = parseInt(parseInt(item.buy_num) % item.t_t_multiple);
+              this.$set(
+                item,
+                "number",
+                (one ? one + item.one_name : "") +
+                  (two ? two + item.two_name : "") +
+                  (three ? three + item.three_name : "")
+              );
+            } else if (!item.one_name && item.two_name) {
+              // 有两种 盒个
+              let two = parseInt(parseInt(item.buy_num) / item.t_t_multiple);
+              let three = parseInt(parseInt(item.buy_num) % item.t_t_multiple);
+              this.$set(
+                item,
+                "number",
+                (two ? two + item.two_name : "") +
+                  (three ? three + item.three_name : "")
+              );
+            } else if (!item.one_name && !item.two_name) {
+              this.$set(item, "number", item.buy_num + item.three_name);
+            }
+          });
           this.goods_list = data.goods_list;
           if (this.type != 2 && !this.address) {
             // 先判断有没有收货地址，如果没有提示添加收货地址

@@ -76,6 +76,7 @@ export default {
 .wlk {
   height: 100vh;
   background: #f5f5f5;
+
   .mescroll {
     position: fixed;
     top: 0px;

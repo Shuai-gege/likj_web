@@ -19,7 +19,7 @@
           </div>
           <div style="text-align:right;">
             <span style="color:#fc4c4c" v-if="item.man_check_status==1">未审核</span>
-            <span style="color:#fc4c4c" v-if="item.man_check_status==2">审核通过</span>
+            <span style="color:#04BE02;" v-if="item.man_check_status==2">审核通过</span>
             <span style="color:#fc4c4c" v-if="item.man_check_status==3">审核失败</span>
             <p style="font-size:13px;margin-top:5px;">{{item.createtime}}</p>
           </div>
@@ -96,6 +96,9 @@ export default {
 <style lang="less" scoped>
 .audit {
   font-size: 14px;
+  .null {
+    background: #fff;
+  }
   .mescroll {
     position: fixed;
     top: 0px;

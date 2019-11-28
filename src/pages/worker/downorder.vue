@@ -1,15 +1,20 @@
 <template>
   <div class="orderList">
-    <tabbar title="下级订单" @back="goback" v-if="!$route.query.sign_id"></tabbar>
-    <div class="order" style="padding-top: 44px;">
+    <tabbar title="下级订单" v-if="!$route.query.sign_id"></tabbar>
+    <div class="order">
       <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
-        <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
+        <van-tabs v-model="tab" sticky :offset-top="$route.query.sign_id?0:44" @click="clickTab">
           <van-tab title="待付款">
             <div class="null" v-if="list.length==0">暂无商品</div>
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.1rem"
                       height="2.1rem"
@@ -62,7 +67,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -112,7 +122,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -166,7 +181,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单编号：'+item.order_number" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -219,14 +239,14 @@
                     v-if="item.order_status==1"
                     size="small"
                     type="default"
-                    @click="fahuo(item.shop_order_id)"
-                  >立即发货</van-button>
+                    @click="zhuandan(item.shop_order_id)"
+                  >转单</van-button>
                   <van-button
                     v-if="item.order_status==1"
                     size="small"
                     type="danger"
-                    @click="zhuandan(item.shop_order_id)"
-                  >转单</van-button>
+                    @click="fahuo(item.shop_order_id)"
+                  >立即发货</van-button>
                   <!-- 已完成 -->
                   <van-button
                     size="small"
@@ -262,7 +282,7 @@ export default {
   },
   data() {
     return {
-      tab: 1, //tab切换高亮
+      tab: null, //tab切换高亮
       order_state: 0, //订单状态
       list: [], //订单列表
       page: 1,
@@ -274,20 +294,25 @@ export default {
     };
   },
   mounted() {
-    // this.init(Number(this.tab) + 1);
-    // alert(location.href);
-    // alert(location.protocol + "//" + location.hostname);
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
+    if (this.$route.query.tab) {
+      this.tab = this.$route.query.tab;
+    }
     if (this.$route.query.sign_id) {
       // alert(111);
+      document.querySelector(".mescroll").style.top = 0 + "px";
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
+      !this.$route.query.token &&
+      !localStorage.getItem("token_tel")
     ) {
       // alert(33333333);
       location.href =
@@ -306,7 +331,8 @@ export default {
       );
       // this.init();
     } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+      localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
+      localStorage.getItem("token_tel")
     ) {
       // alert(666);
       // this.init();
@@ -388,7 +414,7 @@ export default {
         .then(data => {
           this.$toast("发货成功");
           this.tab = 2;
-          history.go(0);
+          this.mescroll.resetUpScroll();
         });
     },
     // 转单
@@ -399,23 +425,17 @@ export default {
         })
         .then(data => {
           this.$toast("转单成功");
-          history.go(0);
-          setTimeout(() => {
-            // this.init(2);
-          }, 1000);
+          this.mescroll.resetUpScroll();
         });
     },
-    goback() {
-      this.$router.push({
-        path: "/worker"
-      });
-    },
+
     // 订单详情
     orderDetail(id) {
       this.$router.push({
         path: "/xiajiorderDetail",
         query: {
-          id: id
+          id: id,
+          tab: this.tab
         }
       });
     },
@@ -457,7 +477,15 @@ export default {
     // 删除订单
     delOrder() {},
     // 查看退款详情
-    backDetail() {}
+    backDetail() {},
+    tiao(goods_id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          goods_id
+        }
+      });
+    }
   }
   // beforeRouteEnter(to, from, next) {
   //   console.log(from.path);
@@ -487,9 +515,7 @@ export default {
     bottom: 0;
     height: auto;
   }
-  .null {
-    background-color: #f5f6f7;
-  }
+
   .item {
     margin: 12px 12px 10px;
     .van-cell {

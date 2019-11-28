@@ -1,56 +1,194 @@
 <template>
   <div class="worker">
-    <!-- <navbar title="工作台" ></navbar> -->
-    <div class="GongzuoTai">
-      <!-- 头像 -->
-      <van-row class="flex user" @click="mydata">
-        <van-col span="20" offset="1" class="Logo">
-          <div class="Logo flex_l">
-            <van-image width="2rem" height="2rem" radius="10" :src="initdata.wx_avatar" />
-            <div style="line-height:20px;">
-              <p class="flex_l">
-                {{initdata.wx_nickname}}
-                <span
-                  class="yuan"
-                  v-if="num != 0"
-                  style="margin-left:5px;"
-                >{{num}}</span>
-              </p>
-              <br />
-              <span style="font-size:12px;">代理等级：{{initdata.agent_name}}</span>
-            </div>
+    <!-- 头像 -->
+    <van-row class="flex user" @click="mydata">
+      <van-col span="20" offset="1" class="Logo">
+        <div class="Logo flex_l">
+          <van-image width="2rem" height="2rem" radius="10" fit="cover" :src="initdata.wx_avatar" />
+          <div class="userimage">
+            <p class="flex_l">
+              {{ initdata.wx_nickname }}
+              <!-- <span class="yuan" v-if="num != 0" style="margin-left:5px;">
+                {{
+                num
+                }}
+              </span>-->
+            </p>
+            <br />
+            <span style="font-size:12px;">代理等级：{{ initdata.agent_name }}</span>
           </div>
-        </van-col>
-        <van-col span="2" class="Logo">
-          <p>
-            <van-icon name="arrow" />
-          </p>
-        </van-col>
-      </van-row>
-      <!-- 每一项 -->
-      <van-row class="one solo">
-        <van-col span="8">
-          <span class="DaiFaHuo">{{initdata.results}}</span>
+        </div>
+      </van-col>
+      <van-col span="2" class="Logo">
+        <p>
+          <van-icon name="arrow" />
+        </p>
+      </van-col>
+    </van-row>
+    <div class="money">
+      <div class="tixian flex">
+        <div class="bouns" @click="$router.push('/bonus')">
+          余额
+          <i>￥{{initdata.money}}</i>
+        </div>
+        <div class="go" @click="$router.push('/tixian')">立即提现</div>
+      </div>
+      <div class="jiangjin flex">
+        <div>
+          <p class="qian">￥{{ initdata.results }}</p>
           <p>个人业绩</p>
-        </van-col>
-        <van-col span="8">
-          <span class="ShouYi1">{{initdata.team_results}}</span>
+        </div>
+        <div>
+          <p class="qian">￥{{ initdata.team_results }}</p>
           <p>团队业绩</p>
-        </van-col>
-        <van-col span="8">
-          <span class="ShouYi">{{initdata.profit}}</span>
+        </div>
+        <div>
+          <p class="qian">￥{{ initdata.profit }}</p>
           <p>累计收益</p>
-        </van-col>
-      </van-row>
-      <!-- 工作台功能 -->
+        </div>
+      </div>
+    </div>
+    <!-- 非云仓模式 -->
+    <div class="no_yuncang">
       <van-row class="one">
         <van-col span="6" @click="$router.push('/agentType')">
-          <!-- <i class="iconfont icon-woshou"></i> -->
+          <img src="../../image/工作台/邀请.png" alt />
+          <p>邀请代理</p>
+        </van-col>
+        <van-col span="6" @click="mypurse">
+          <img src="../../image/工作台/账户总额.png" alt />
+          <p>我的钱包</p>
+        </van-col>
+
+        <van-col span="6" @click="$router.push('/update')">
+          <img src="../../image/工作台/升级.png" alt />
+          <p>我要升级</p>
+        </van-col>
+        <van-col span="6">
+          <img src="../../image/工作台/tuanduizhuangong.png" alt @click="$router.push('/myteam')" />
+          <p>我的团队</p>
+        </van-col>
+      </van-row>
+      <div class="items flex_l">
+        <div class="item flex" @click="goList" v-if="initdata.cloud_model!=2">
+          <img src="../../image/黄黑/yuncang.png" alt />
+          <p>云仓</p>
+        </div>
+        <div class="item flex" @click="toOrder(2)" v-if="initdata.cloud_model!=2">
+          <div class="yuan" v-if="pending.yun_order">{{pending.yun_order}}</div>
+          <img src="../../image/黄黑/仓库1.png" alt />
+          <p>云仓订单</p>
+        </div>
+        <div class="item flex" @click="toOrder(3)" v-if="initdata.cloud_model!=2">
+          <div class="yuan" v-if="pending.pick_order">{{pending.pick_order}}</div>
+          <img src="../../image/黄黑/订单.png" alt />
+          <p>提货订单</p>
+        </div>
+        <div class="item flex" @click="tap">
+          <img src="../../image/黄黑/zhongxin.png" alt />
+          <p>团队中心</p>
+        </div>
+        <div class="item flex" @click="toOrder(1)" v-if="initdata.cloud_model==2">
+          <img src="../../image/黄黑/仓库2.png" alt />
+          <p>我的订单</p>
+        </div>
+        <div class="item flex" @click="zhuandan" v-if="initdata.take_type!=2">
+          <img src="../../image/黄黑/zhuandan.png" alt />
+          <p>我的转单</p>
+        </div>
+        <div class="item flex" @click="yuncangjilu" v-if="initdata.cloud_model!=2">
+          <img src="../../image/黄黑/订单 (2).png" alt />
+          <p>云仓记录</p>
+        </div>
+        <div class="item flex" @click="audit" v-if="initdata.check_type!=2">
+          <div class="yuan" v-if="pending.audit_agent">{{pending.audit_agent}}</div>
+          <img src="../../image/黄黑/官方.png" alt />
+          <p>审核授权</p>
+        </div>
+        <div class="item flex" @click="huiyuan">
+          <img src="../../image/黄黑/yaoqing.png" alt />
+          <p>邀请会员</p>
+        </div>
+        <div class="item flex" @click="zhuan">
+          <img src="../../image/黄黑/转换.png" alt />
+          <p>转货款保证金</p>
+        </div>
+        <div
+          class="item flex"
+          @click="$router.push('/topuplist')"
+          v-if="initdata.cash_rechage_type!=2"
+        >
+          <div class="yuan" v-if="pending.recharge">{{pending.recharge}}</div>
+          <img src="../../image/黄黑/充值.png" alt />
+          <p>下级充值</p>
+        </div>
+        <div
+          class="item flex"
+          @click="$router.push('/xiajitixianlist')"
+          v-if="initdata.cash_rechage_type!=2"
+        >
+          <div class="yuan" v-if="pending.cash">{{pending.cash}}</div>
+          <img src="../../image/黄黑/费用单据.png" alt />
+          <p>下级提现</p>
+        </div>
+        <div class="item flex" @click="xiajidingdan" v-if="initdata.take_type!=2">
+          <div class="yuan" v-if="pending.lower_order">{{pending.lower_order}}</div>
+          <img src="../../image/黄黑/订单 (1).png" alt />
+          <p>下级订单</p>
+        </div>
+
+        <div class="item flex" @click="shangji">
+          <img src="../../image/黄黑/账户2.png" alt />
+          <p>上级账户</p>
+        </div>
+        <!-- <div class="item flex" @click="$router.push('/bonus')">
+          <img src="../../image/工作台/yusuanfenxi.png" alt />
+          <p>奖金明细</p>
+        </div>-->
+        <div class="item flex" @click="$router.push('/shoukuan')">
+          <img src="../../image/黄黑/账户信息.png" alt />
+          <p>公司账户</p>
+        </div>
+        <div class="item flex" @click="$router.push('/myaccount')">
+          <img src="../../image/黄黑/账户信息 (1).png" alt />
+          <p>我的账户</p>
+        </div>
+        <div class="item flex" @click="$router.push('/material')">
+          <img src="../../image/黄黑/gengduo.png" alt />
+          <p>素材中心</p>
+        </div>
+
+        <div class="item flex" @click="$router.push('/area_agent')">
+          <img src="../../image/黄黑/定位.png" alt />
+          <p>区域代理</p>
+        </div>
+
+        <div class="item flex" @click="xiaoxi">
+          <img src="../../image/黄黑/xiaoxi.png" alt />
+          <p>消息中心</p>
+        </div>
+        <div class="item flex" @click="zhengshu">
+          <img src="../../image/黄黑/认证.png" alt />
+          <p>授权证书</p>
+        </div>
+        <div class="item flex" @click="$router.push('/fake')">
+          <img src="../../image/黄黑/fake.png" alt />
+          <p>防伪查询</p>
+        </div>
+        <div class="item flex" @click="$router.push('/set')">
+          <img src="../../image/黄黑/shezhi.png" alt />
+          <p>设置</p>
+        </div>
+      </div>
+    </div>
+    <!-- 云仓模式 v-else-->
+    <!-- <div class="yuncang_model" v-if="initdata&&initdata.cloud_model!=2">
+      <van-row class="one">
+        <van-col span="6" @click="$router.push('/agentType')">
           <img src="../../image/图标/邀请.png" alt />
           <p>邀请代理</p>
         </van-col>
         <van-col span="6" @click="audit">
-          <!-- <i class="iconfont icon-dinghuo"></i> -->
           <img src="../../image/图标/订货2.png" alt />
           <p>审核授权</p>
         </van-col>
@@ -58,188 +196,149 @@
           style="position: absolute;left:39%"
           class="yuan"
           v-if="pending.audit_agent != 0"
-        >{{pending.audit_agent}}</span>
+        >{{ pending.audit_agent }}</span>
         <van-col span="6" @click="$router.push('/update')">
-          <!-- <i class="iconfont icon-shangcheng"></i> -->
           <img src="../../image/图标/woyaoshengji.png" alt />
           <p>我要升级</p>
         </van-col>
         <van-col span="6" @click="goList">
-          <!-- <i class="iconfont icon-1121212"></i> -->
           <img src="../../image/图标/本地仓.png" alt />
           <p>云仓</p>
         </van-col>
-      </van-row>
-      <!-- 订单管理 -->
-      <van-row class="one">
-        <h5 class="indent">订单管理</h5>
-        <!-- <van-col span="8" @click="toOrder(1)"> -->
-        <!-- <i class="iconfont icon-dingdan"></i> -->
-        <!-- <img src="../../image/图标/商场订单.png" alt />
-          <p>商城订单</p>
-        </van-col>-->
-        <van-col span="6" @click="toOrder(2)">
-          <!-- <i class="iconfont icon-daifahuo"></i> -->
-          <img src="../../image/图标/云仓订单.png" alt />
-          <p>云仓订单</p>
-          <span
-            style="position: absolute;left:50px;top:3px;"
-            class="yuan"
-            v-if="pending.yun_order != 0"
-          >{{pending.yun_order}}</span>
-        </van-col>
-
-        <van-col span="6" @click="toOrder(3)">
-          <!-- <i class="iconfont icon-gouwuche"></i> -->
-          <img src="../../image/图标/订单.png" alt />
-          <p>提货订单</p>
-          <span
-            style="position: absolute;left:50px;top:3px;z-index:1;"
-            class="yuan"
-            v-if="pending.pick_order != 0"
-          >{{pending.pick_order}}</span>
-        </van-col>
-        <van-col span="6" @click="$router.push('/downorder')">
-          <img src="../../image/图标/xiaji.png" alt />
-          <p>下级订单</p>
-          <span
-            style="position: absolute;left:50px;top:3px;"
-            class="yuan"
-            v-if="pending.lower_order != 0"
-          >{{pending.lower_order}}</span>
-        </van-col>
-        <van-col span="6" @click="$router.push('/zhuandanorder')">
-          <img src="../../image/图标/zhuandan.png" alt />
-          <p>我的转单</p>
-        </van-col>
-      </van-row>
-      <!-- 充值管理 -->
-      <van-row class="one chongzhi">
+    </van-row>-->
+    <!-- 订单管理 -->
+    <!-- <van-row class="one">
+          <h5 class="indent">订单管理</h5>
+          <van-col span="6" @click="toOrder(2)">
+            <img src="../../image/图标/云仓订单.png" alt />
+            <p>云仓订单</p>
+            <span
+              style="position: absolute;left:50px;top:3px;"
+              class="yuan"
+              v-if="pending.yun_order != 0"
+            >{{pending.yun_order}}</span>
+          </van-col>
+          <van-col span="6" @click="toOrder(3)">
+            <img src="../../image/图标/订单.png" alt />
+            <p>提货订单</p>
+            <span
+              style="position: absolute;left:50px;top:3px;z-index:1;"
+              class="yuan"
+              v-if="pending.pick_order != 0"
+            >{{pending.pick_order}}</span>
+          </van-col>
+          <van-col span="6" @click="xiajidingdan">
+            <img src="../../image/图标/xiaji.png" alt />
+            <p>下级订单</p>
+            <span
+              style="position: absolute;left:50px;top:3px;"
+              class="yuan"
+              v-if="pending.lower_order != 0"
+            >{{pending.lower_order}}</span>
+          </van-col>
+          <van-col span="6" @click="zhuandan">
+            <img src="../../image/图标/zhuandan.png" alt />
+            <p>我的转单</p>
+          </van-col>
+    </van-row>-->
+    <!-- 充值管理 -->
+    <!-- <van-row class="one chongzhi">
         <h5 class="wallet">充值管理</h5>
         <van-col span="6" @click="$router.push('/topup')">
-          <!-- <i class="iconfont icon-qianbao"></i> -->
           <img src="../../image/图标/chongzhi.png" alt />
           <p>充值</p>
         </van-col>
         <van-col span="6" @click="$router.push('/tixian')">
-          <!-- <i class="iconfont icon-jiangjinyouhuizhengce"></i> -->
           <img src="../../image/图标/tixian.png" alt />
           <p>提现</p>
         </van-col>
         <van-col span="6" @click="$router.push('/topuplist')">
-          <!-- <i class="iconfont icon-daichuli"></i> -->
           <img src="../../image/图标/xiajichongzhi.png" alt />
           <p>下级充值</p>
-          <span
-            style="position: absolute;left:50px;top:3px;"
+          <div
+            style="position: absolute;left:60%;top:3%;"
             class="yuan"
             v-if="pending.recharge != 0"
-          >{{pending.recharge}}</span>
+          >{{ pending.recharge }}</div>
         </van-col>
         <van-col span="6" @click="$router.push('/xiajitixianlist')">
-          <!-- <i class="iconfont icon-daichuli"></i> -->
           <img src="../../image/图标/xiajitixian.png" alt />
           <p>下级提现</p>
           <span
-            style="position: absolute;left:50px;top:3px;"
+            style="position: absolute;left:60%;top:3%;"
             class="yuan"
             v-if="pending.cash != 0"
-          >{{pending.cash}}</span>
+          >{{ pending.cash }}</span>
         </van-col>
-      </van-row>
-      <!-- 我的团队 -->
-      <van-row class="one">
+    </van-row>-->
+    <!-- 我的团队 -->
+    <!-- <van-row class="one">
         <h5 class="team">我的团队</h5>
         <van-col span="8" @click="tap">
-          <!-- <i class="iconfont icon-tuandui"></i> -->
-          <img style="width:35px;height:35px" src="../../image/图标/我的团队.png" alt />
+          <img style="width:32px;height:30px;margin-top:12px" src="../../image/图标/我的团队.png" alt />
           <p>团队中心</p>
         </van-col>
         <van-col span="8" @click="team(1)">
-          <!-- <i class="iconfont icon-daili"></i> -->
-          <img style="width:35px;height:35px" src="../../image/图标/直接代理.png" alt />
+          <img style="width:32px;height:30px;margin-top:12px" src="../../image/图标/直接代理.png" alt />
           <p>我的团队</p>
         </van-col>
         <van-col span="8" @click="shangji" v-if="initdata.up_agent_id != 0">
           <img
-            style="width:28px;height:31px;margin-top:14px"
+            style="width:32px;height:35px;margin-top:7px"
             src="../../image/图标/shangjishoukuan.png"
             alt
           />
           <p>上级收款账户</p>
         </van-col>
-        <!-- <van-col span="6" @click="team(2)"> -->
-        <!-- <i class="iconfont icon-daili"></i> -->
-        <!-- <img style="width:35px;height:35px" src="../../image/图标/间接代理.png" alt />
-          <p>间接代理</p>
-        </van-col>-->
-      </van-row>
-      <!-- 授权管理 -->
-      <!-- <van-row class="one"> -->
-      <!-- <h5 class="authorization">授权管理</h5> -->
-      <!-- <van-col span="8" @click="audit"> -->
-      <!-- <i class="iconfont icon-shenhe"></i> -->
-      <!-- <img src="../../image/图标/授权审核2.png" alt />
-          <p>审核授权</p>
-      </van-col>-->
+    </van-row>-->
 
-      <!-- <van-col span="8" @click="$router.push('/update')"> -->
-      <!-- <i class="iconfont icon-shengji"></i> -->
-      <!-- <img src="../../image/图标/我要升级4.png" alt />
-          <p>我要升级</p>
-      </van-col>-->
-      <!-- <van-col span="8" @click="ccie"> -->
-      <!-- <i class="iconfont icon-zhengshu" @click="ccie"></i> -->
-      <!-- <img src="../../image/图标/品牌授权1.png" alt /> -->
-      <!-- <p>授权证书</p> -->
-      <!-- </van-col> -->
-      <!-- </van-row> -->
-      <!-- 财务管理 -->
-      <van-row class="one">
+    <!-- 财务管理 -->
+    <!-- <van-row class="one">
         <h5 class="wallet">财务管理</h5>
         <van-col span="6" @click="mypurse">
-          <!-- <i class="iconfont icon-qianbao"></i> -->
           <img src="../../image/图标/我的钱包2.png" alt />
           <p>我的钱包</p>
         </van-col>
         <van-col span="6" @click="$router.push('/bonus')">
-          <!-- <i class="iconfont icon-jiangjinyouhuizhengce"></i> -->
           <img src="../../image/图标/奖金兑换2.png" alt />
           <p>奖金明细</p>
         </van-col>
         <van-col span="6" @click="$router.push('/shoukuan')">
-          <!-- <i class="iconfont icon-daichuli"></i> -->
           <img src="../../image/图标/公司收款账户1.png" alt />
           <p>公司收款账户</p>
         </van-col>
         <van-col span="6" @click="$router.push('/myaccount')">
-          <!-- <i class="iconfont icon-daichuli"></i> -->
           <img src="../../image/图标/收款.png" alt />
           <p>我的收款账户</p>
         </van-col>
-      </van-row>
+    </van-row>-->
 
-      <!-- 其他 -->
-      <van-row class="one">
+    <!-- 其他 -->
+    <!-- <van-row class="one">
         <h5 class="else">常用工具</h5>
-        <van-col span="6">
-          <img style="width:33px;height:33px;" src="../../image/彩色/gengduo.png" alt />
+        <van-col span="6" @click="$router.push('/material')">
+    <van-col span="6" @click="$router.push('/sucaiconter')">-->
+    <!-- <img style="width:33px;height:33px;" src="../../image/彩色/gengduo.png" alt />
           <p>素材中心</p>
-        </van-col>
-        <van-col span="6" @click="address">
-          <img style="width:33px;height:33px;" src="../../image/彩色/ditu.png" alt />
-          <p>收货地址</p>
-        </van-col>
-        <van-col span="6" @click="orderList">
+    </van-col>-->
+    <!-- <van-col span="6" @click="orderList">
           <img style="width:33px;height:33px;" src="../../image/彩色/fuwusheshixinxichaxun.png" alt />
           <p>商品跟踪</p>
-        </van-col>
-        <van-col span="6">
+    </van-col>-->
+    <!-- <van-col span="6" @click="$router.push('/school')">
           <img style="width:33px;height:33px;" src="../../image/彩色/shebaojiaofei.png" alt />
-          <p>审核续期</p>
+          <p>商学院</p>
         </van-col>
-      </van-row>
-    </div>
+        <van-col span="6" @click="$router.push('/fake')">
+          <img style="width:33px;height:33px;" src="../../image/彩色/fake.png" alt />
+          <p>防伪查询</p>
+        </van-col>
+        <van-col span="6" @click="$router.push('/area_agent')" v-if="initdata.agent_area==1">
+          <img style="width:33px;height:33px;" src="../../image/彩色/定位.png" alt />
+          <p>区域代理</p>
+    </van-col>-->
+    <!-- </van-row> -->
+    <!-- </div> -->
   </div>
 </template>
 <script>
@@ -250,7 +349,8 @@ export default {
       initdata: {},
       type: "", //1直接代理，2间接代理
       pending: {}, //各种待处理信息
-      num: "" //全部待处理信息数量
+      num: "", //全部待处理信息数量
+      num1: "" //余额
     };
   },
   components: {
@@ -259,6 +359,7 @@ export default {
   mounted() {
     this.axios.post("/api/user/index").then(data => {
       this.initdata = data;
+      this.num1 = data.money;
       localStorage.setItem("agent_id", data.up_agent_id);
     });
     //各种待处理数据
@@ -279,7 +380,26 @@ export default {
       this.$router.push({
         path: "/orderList",
         query: {
-          orderType: i
+          orderType: i,
+          tab: i
+        }
+      });
+    },
+    // 下级订单
+    xiajidingdan() {
+      this.$router.push({
+        path: "/downorder",
+        query: {
+          tab: 3
+        }
+      });
+    },
+    // 转单
+    zhuandan() {
+      this.$router.push({
+        path: "/zhuandanorder",
+        query: {
+          tab: 1
         }
       });
     },
@@ -347,65 +467,127 @@ export default {
           id: localStorage.getItem("agent_id")
         }
       });
+    },
+    // 下级订单
+    xiajidingdan() {
+      this.$router.push({
+        path: "/downorder",
+        query: {
+          tab: 3
+        }
+      });
+    },
+    // 云仓订单
+    // 订单
+    toOrder(type) {
+      let tab;
+      if (type == 2) {
+        tab = 2;
+      } else {
+        tab = 3;
+      }
+      this.$router.push({
+        path: "/orderList",
+        query: {
+          orderType: type,
+          tab: tab
+        }
+      });
+    },
+    // 转单
+    zhuandan() {
+      this.$router.push({
+        path: "/zhuandanorder",
+        query: {
+          tab: 1
+        }
+      });
+    },
+    // 余额转保证及，货款
+    zhuan() {
+      this.$router.push({
+        path: "/change",
+        query: {
+          num: this.num1
+        }
+      });
+    },
+    // 设置支付密码
+    paypsd(mobile) {
+      this.$router.push({
+        path: "/payPsd",
+        query: {
+          mobile
+        }
+      });
+    },
+    // 修改登录密码
+    loginpsd(mobile) {
+      this.$router.push({
+        path: "/login_psd",
+        query: {
+          mobile
+        }
+      });
+    },
+    // 修改手机号
+    setTel(tel, iscan) {
+      this.$router.push({
+        path: "/set_tel",
+        query: {
+          type: tel ? 2 : 1,
+          iscan: iscan ? 1 : 0
+        }
+      });
+    },
+    // 云仓记录
+    yuncangjilu() {
+      this.$router.push("/yuncangLog");
+    },
+    // 邀请会员
+    huiyuan() {
+      this.$router.push("/inviteagent");
+    },
+    //授权证书
+    zhengshu() {
+      this.$router.push("/ccie");
+    },
+    // 消息中心
+    xiaoxi() {
+      this.$router.push("/message");
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .worker {
+  background: #f5f6f7;
+  padding-bottom: 55px;
   i {
     color: #fff;
   }
   .van-col--6 {
     position: relative;
   }
-}
-.van-image {
-  float: left;
-  margin-right: 10px;
-}
-
-.van-col--12,
-.van-col--8 {
-  text-align: center;
-}
-
-.DaiFaHuo {
-  color: #8aadd7;
-}
-
-.ShouYi {
-  color: #ca4131;
-}
-.ShouYi1 {
-  color: #c18d13;
-}
-
-.icon-sucai,
-.icon-shouhuodizhi,
-.icon-techreport-,
-.icon-shouxufei {
-  color: #ef5358;
-}
-
-.GongzuoTai {
-  padding-bottom: 55px;
-  margin-top: -1px;
-  background-color: #f5f5f5;
   .user {
     color: #fff;
-    background: url(../../image/bgt2.png) no-repeat center center;
+    background: linear-gradient(to right, #801336, #c72c41);
     background-size: 100%;
-
+    height: 140px;
     .Logo {
       margin: 10px 10px;
       font-size: 16px;
+    }
+    .userimage {
+      line-height: 20px;
+      margin-left: 10px;
     }
   }
   .one {
     margin: 10px;
     background: #fff;
     border-radius: 10px;
+
     &.chongzhi {
       img {
         width: 48px;
@@ -426,101 +608,103 @@ export default {
       font-size: 23px;
     }
     img {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       margin: 10px auto 4px;
     }
     p {
       color: #666;
       font-size: 12px;
       margin: 3px 0 12px;
+      font-weight: 700;
     }
     &.solo {
       font-size: 16px;
       padding: 10px 0 0;
     }
+    .van-col {
+      text-align: center;
+    }
   }
-}
+  // 头部
+  .money {
+    padding: 0 10px;
+    position: relative;
+    top: -15px;
+    .tixian {
+      background: #3c3c3b;
+      padding: 10px 20px;
+      border-radius: 10px 10px 0 0;
+      .bouns {
+        font-size: 16px;
+        color: #ffefc6;
+        i {
+          color: #ffefc6;
+        }
+      }
+      p:nth-child(1) {
+        color: #ffffdc;
+        font-size: 18px;
+      }
+      p:nth-child(2) {
+        color: #848484;
+        font-size: 10px;
+      }
+    }
+    .go {
+      font-size: 12px;
+      color: #9f7045;
+      background: #ffefc6;
+      padding: 0px 10px;
+      border-radius: 20px;
+    }
+    .jiangjin {
+      background: #fff;
+      padding: 10px 20px;
+      border-radius: 0 0 10px 10px;
+      p {
+        text-align: center;
+      }
+      p:nth-child(odd) {
+        font-size: 13px;
+        color: #000;
+        font-weight: 700;
+      }
+    }
+  }
+  .no_yuncang {
+    position: relative;
+    top: -10px;
+    .items {
+      background-color: #fff;
+      margin: 12px 10px;
+      border-radius: 5px;
+      flex-wrap: wrap;
+      .item {
+        width: 25%;
+        flex-direction: column;
+        height: 80px;
+        padding: 15px 0;
+        font-size: 12px;
+        // border-right: 1px solid #f5f6f7;
+        // border-bottom: 1px solid #f5f6f7;
+        position: relative;
+        .yuan {
+          position: absolute;
+          right: 18px;
+          top: 6px;
+        }
+        &:nth-of-type(4n) {
+          border-right: none;
+        }
 
-.icon-qianbao,
-.icon-jiangjinyouhuizhengce,
-.icon-daichuli {
-  color: #5595ef;
-}
-
-.team {
-  margin: 5px 0;
-  color: #dd9e58;
-}
-
-.else {
-  margin: 5px 0;
-  color: #ef5358;
-}
-
-.icon-tuandui,
-.icon-daili,
-.icon-tuijian {
-  color: #dd9e58;
-}
-
-.wallet {
-  color: #5595ef;
-  margin: 5px 0;
-}
-
-.indent {
-  color: #bf5d53;
-  margin: 5px 0;
-}
-
-.indent span {
-  color: #bf5d53;
-}
-
-.icon-dingdan,
-.icon-gouwuche,
-.icon-daifahuo,
-.icon-urbantubiao- {
-  color: #bf5d53;
-}
-
-.sqdl {
-  border-radius: 40%;
-  background: #868cf9;
-}
-
-.one p {
-  font-size: 12px;
-}
-
-.iconfont {
-  font-size: 20px;
-}
-
-.icon-dinghuo {
-  color: #f57968;
-}
-
-.icon-woshou {
-  color: #868cf9;
-}
-
-.icon-shangcheng {
-  color: #f4a14f;
-}
-
-.icon-1121212 {
-  color: #49c54e;
-}
-
-.van-col--6 {
-  text-align: center;
-}
-
-.icon-shenhe,
-.icon-shengji,
-.icon-zhengshu {
-  color: #868cf9;
+        img {
+          width: 25px;
+          height: 25px;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
 }
 </style>

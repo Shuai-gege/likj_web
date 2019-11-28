@@ -83,10 +83,12 @@ export default {
 };
 </script>
 <style lang="less">
-.list {
-  margin-top: 44px;
-}
-.null {
-  background-color: #fff;
+.address {
+  .null {
+    background: #fff;
+  }
+  .list {
+    margin-top: 44px;
+  }
 }
 </style>

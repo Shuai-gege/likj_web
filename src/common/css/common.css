@@ -138,6 +138,11 @@ input[type="text"] {
   align-items: center;
 }
 
+.flex_w {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .hide {
   display: none;
 }
@@ -153,11 +158,14 @@ input[type="text"] {
 }
 
 .null {
-  padding-top: 100px;
+  /* margin-top: 50px; */
+  padding-top: 180px;
   text-align: center;
   color: #666;
   font-size: 14px;
   background-color: #f5f5f5;
+  /* background: url(../../image/彩色/null.png) no-repeat center center;
+  background-size: 130px;*/
 }
 
 .yuan {

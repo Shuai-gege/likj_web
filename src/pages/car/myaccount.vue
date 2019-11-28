@@ -29,7 +29,18 @@
         <div class="upload">
           <p>上传收款二维码</p>
           <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" v-if="!erweima" />
-          <van-image v-else width="2.5rem" height="2.5rem" fit="cover" :src="erweima" />
+          <van-image
+            v-else
+            width="2.5rem"
+            height="2.5rem"
+            fit="cover"
+            :src="erweima"
+            @click="xiugai"
+          />
+        </div>
+        <div class="upload" v-show="show">
+          <p>修改收款二维码</p>
+          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
         </div>
         <!-- 按钮 -->
         <div class="btn">
@@ -67,7 +78,18 @@
             :after-read="afterRead1"
             v-if="!erweima1"
           />
-          <van-image v-else width="2.5rem" height="2.5rem" fit="cover" :src="erweima1" />
+          <van-image
+            v-else
+            width="2.5rem"
+            height="2.5rem"
+            fit="cover"
+            :src="erweima1"
+            @click="xiugai1"
+          />
+        </div>
+        <div class="upload" v-show="show1">
+          <p>修改收款二维码</p>
+          <van-uploader v-model="fileList1" :max-count="1" :after-read="afterRead1" />
         </div>
         <!-- 按钮 -->
         <div class="btn">
@@ -138,7 +160,9 @@ export default {
       fileList: [], //wx二维码
       fileList1: [], //zfb二维码
       erweima: "", //wx二维码地址
-      erweima1: "" //zfb二维码地址
+      erweima1: "", //zfb二维码地址
+      show: false,
+      show1: false
     };
   },
   //监听属性 类似于data概念
@@ -246,6 +270,13 @@ export default {
         console.log(data);
         this.erweima1 = data.url;
       });
+    },
+    // 修改收款码
+    xiugai() {
+      this.show = true;
+    },
+    xiugai1() {
+      this.show1 = true;
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

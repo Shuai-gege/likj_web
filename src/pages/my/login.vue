@@ -32,6 +32,7 @@
             color="linear-gradient(to right, pink, #f00)"
             @click="log"
           >登录</van-button>
+          <span class="forget flex_c" @click="$router.push('/modify_psd')">忘记密码？</span>
         </div>
 
         <div class="agreement">
@@ -72,20 +73,11 @@
             required
           />
           <!-- 注册邀请人 -->
-          <van-field v-model="inviter" label="邀请人" placeholder="请输入邀请人" required />
-        </van-cell-group>
-        <!-- 分割线 -->
-        <van-divider />
+          <van-field v-model="inviter" label="邀请人电话" placeholder="请输入邀请人" required />
+        </van-cell-group>&nbsp;
         <!-- 验证码 -->
         <van-cell-group v-if="init.captcha_bool == 1">
-          <van-field
-            v-model="sms"
-            @blur="yanzheng"
-            center
-            clearable
-            label="短信验证码"
-            placeholder="请输入短信验证码"
-          >
+          <van-field v-model="sms" center clearable label="短信验证码" placeholder="请输入短信验证码">
             <van-button
               slot="button"
               size="small"
@@ -127,7 +119,7 @@ export default {
       signpassword: "", //注册密码
       inviter: "", //注册邀请人
       sms: "", //验证码
-      active: "0",
+      active: "1",
       init: {}, //注册限制
       flag: false,
       time: 60 * 1000
@@ -140,6 +132,11 @@ export default {
     this.axios.post("/api/user/user_set").then(data => {
       this.init = data;
     });
+    if (this.$route.query.mobile) {
+      this.signtel = this.$route.query.mobile;
+    } else {
+      this.signtel;
+    }
   },
   methods: {
     onClickLeft() {
@@ -169,23 +166,23 @@ export default {
       this.flag = false;
     },
     // 验证验证码
-    yanzheng() {
-      if (!this.signusername) {
-        this.$toast("请输入用户名");
-      } else if (!/^1[3456789]\d{9}$/.test(this.signtel)) {
-        this.$toast("请输入正确的手机号");
-      } else if (!this.signpassword) {
-        this.$toast("请输入密码");
-      } else {
-        this.axios
-          .post("/api/sms/check", {
-            mobile: this.signtel,
-            event: "register",
-            captcha: this.sms
-          })
-          .then(data => {});
-      }
-    },
+    // yanzheng() {
+    //   if (!this.signusername) {
+    //     this.$toast("请输入用户名");
+    //   } else if (!/^1[3456789]\d{9}$/.test(this.signtel)) {
+    //     this.$toast("请输入正确的手机号");
+    //   } else if (!this.signpassword) {
+    //     this.$toast("请输入密码");
+    //   } else {
+    //     this.axios
+    //       .post("/api/sms/check", {
+    //         mobile: this.signtel,
+    //         event: "register",
+    //         captcha: this.sms
+    //       })
+    //       .then(data => {});
+    //   }
+    // },
     // 注册
     signup() {
       if (!this.signusername) {
@@ -206,9 +203,8 @@ export default {
           })
           .then(data => {
             this.$toast("注册成功");
-            let thsi = this;
             setTimeout(() => {
-              thsi.active = 1;
+              this.active = "0";
             }, 1000);
           });
       }
@@ -227,8 +223,9 @@ export default {
           })
           .then(data => {
             this.$toast("登录成功");
+            localStorage.setItem("token_tel", data.userinfo.token);
             setTimeout(() => {
-              this.$router.push("/home");
+              this.$router.push("/");
             }, 1000);
           });
       }
@@ -256,6 +253,9 @@ export default {
     height: 40px;
     line-height: 30px;
     margin: 80px 10px;
+  }
+  .forget {
+    color: #fc4c4c;
   }
 }
 

@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      id="viewport"
+      name="viewport"
+      content="width=device-width,height=device-height,user-scalable=no, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <title></title>
+    <link
+      rel="stylesheet"
+      href="http://at.alicdn.com/t/font_1256834_t5y6478rvr.css"
+    />
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta id="viewport" name="viewport"
-    content="width=device-width,height=device-height,user-scalable=no, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0" />
-  <title></title>
-  <link rel="stylesheet" href="http://at.alicdn.com/t/font_1256834_t5y6478rvr.css" />
-  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
-  <script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
-</head>
-
-<body>
-  <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
-  <script>
-    var vConsole = new VConsole();
-    document.addEventListener(
-      "WeixinJSBridgeReady",
-      function onBridgeReady() {
-        // 通过下面这个API隐藏右上角按钮
-        WeixinJSBridge.call("hideOptionMenu");
-      }
-    );
-
-  </script>
-  <div id="app"></div>
-  <!-- <script>
+  <body>
+    <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+    <script>
+      var vConsole = new VConsole();
+      document.addEventListener(
+        "WeixinJSBridgeReady",
+        function onBridgeReady() {
+          // 通过下面这个API隐藏右上角按钮
+          WeixinJSBridge.call("hideOptionMenu");
+        }
+      );
+    </script>
+    <div id="app"></div>
+    <!-- <script>
         var mkeyTime = 0;
         window.history.pushState(null, null, location.href);
         window.addEventListener("popstate", function(e) {
@@ -47,6 +51,5 @@
             return false;
         })
     </script> -->
-</body>
-
+  </body>
 </html>

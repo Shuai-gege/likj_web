@@ -1,14 +1,19 @@
 <template>
   <div class="orderList">
-    <tabbar title="转单列表" @back="goback" back="1"></tabbar>
+    <tabbar title="转单列表"></tabbar>
     <div class="order">
       <van-tabs v-model="tab" sticky :offset-top="44" @click="clickTab">
         <van-tab title="待发货">
           <div class="null" v-if="list.length==0">暂无转单记录</div>
           <div class="item" v-for="(item,i) in list" :key="i">
             <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+              <div class="con">
+                <div
+                  class="top flex_l"
+                  v-for="(gooditem,index) in item.goods_list"
+                  :key="index"
+                  @click.stop="tiao(gooditem.goods_id)"
+                >
                   <van-image
                     width="2.5rem"
                     height="2.5rem"
@@ -39,8 +44,13 @@
           <div class="null" v-if="list.length==0">暂无完成转单</div>
           <div class="item" v-for="(item,i) in list" :key="i">
             <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
-              <div class="con" @click="orderDetail(item.shop_order_id)">
-                <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+              <div class="con">
+                <div
+                  class="top flex_l"
+                  v-for="(gooditem,index) in item.goods_list"
+                  :key="index"
+                  @click.stop="tiao(gooditem.goods_id)"
+                >
                   <van-image
                     width="2.5rem"
                     height="2.5rem"
@@ -79,15 +89,17 @@ export default {
   },
   data() {
     return {
-      tab: 0, //tab切换高亮
+      tab: null, //tab切换高亮
       order_state: 0, //订单状态
       list: [], //订单列表
       order_status: "" //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已完成,4=待退货,5=已退货
-      // back: "" //返回路径
     };
   },
   mounted() {
-    this.init(Number(this.tab) + 2);
+    if (this.$route.query.tab) {
+      this.tab = this.$route.query.tab;
+      this.init(Number(this.tab) + 2);
+    }
   },
   methods: {
     init(state) {
@@ -135,18 +147,7 @@ export default {
     clickTab(name, title) {
       this.init(name + 2);
     },
-    goback() {
-      this.$router.push({
-        path: "/worker"
-      });
-      // if (vms.back) {
-      //   this.$router.push({
-      //     path: vms.back
-      //   });
-      // } else {
-      //   this.$router.go(-1);
-      // }
-    },
+
     // 订单详情
     orderDetail(id) {
       this.$router.push({
@@ -194,7 +195,15 @@ export default {
     // 删除订单
     delOrder() {},
     // 查看退款详情
-    backDetail() {}
+    backDetail() {},
+    tiao(goods_id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          goods_id
+        }
+      });
+    }
   }
   // beforeRouteEnter(to, from, next) {
   //   console.log(from.path);
@@ -213,9 +222,7 @@ export default {
   background-color: #f5f5f5;
   min-height: 100vh;
   padding-bottom: 10px;
-  .null {
-    background: #f5f5f5;
-  }
+
   .item {
     margin: 12px 12px 0;
     .van-cell {

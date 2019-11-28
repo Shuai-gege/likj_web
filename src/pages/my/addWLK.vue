@@ -15,7 +15,7 @@
           autosize
           label="活动详情"
           type="textarea"
-          maxlength="50"
+          maxlength="100"
           placeholder="请输入"
           show-word-limit
         />
@@ -50,6 +50,7 @@
 </template>
 <script>
 import tabbar from "../../components/navbar";
+import { getTime } from "../../common/js/common";
 export default {
   data() {
     return {
@@ -85,17 +86,8 @@ export default {
     // 点击确定
     confirm() {
       this.show = false;
-      this.starttime =
-        this.currentDate.getFullYear() +
-        "年" +
-        (Number(this.currentDate.getMonth()) + 1) +
-        "月" +
-        this.currentDate.getDate() +
-        "日 " +
-        this.currentDate.getHours() +
-        ":" +
-        this.currentDate.getMinutes();
-      this.starttime1 = new Date(this.currentDate).getTime() / 1000;
+      this.starttime1 = parseInt(new Date(this.currentDate).getTime() / 1000);
+      this.starttime = getTime(this.starttime1, 1);
     },
     // 点击取消
     cancel() {
@@ -103,17 +95,8 @@ export default {
     },
     confirm1() {
       this.show1 = false;
-      this.endtime =
-        this.currentDate1.getFullYear() +
-        "年" +
-        (Number(this.currentDate1.getMonth()) + 1) +
-        "月" +
-        this.currentDate1.getDate() +
-        "日 " +
-        this.currentDate1.getHours() +
-        ":" +
-        this.currentDate1.getMinutes();
-      this.endtime1 = new Date(this.currentDate1).getTime() / 1000;
+      this.endtime1 = parseInt(new Date(this.currentDate1).getTime() / 1000);
+      this.endtime = getTime(this.endtime1, 1);
     },
     cancel1() {
       this.show1 = false;
@@ -165,6 +148,7 @@ export default {
 
 <style lang="less" scoped>
 .shoukuan {
+  margin-top: -1px;
   padding-top: 44px;
   .van-button--large {
     width: 92%;

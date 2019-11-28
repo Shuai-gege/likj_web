@@ -4,7 +4,7 @@
     <div class="person flex_l">
       <img :src="info.avatar" alt />
       <div class="txt">
-        <p style="color:#333;">
+        <p style="color:#111;margin-bottom:10px;font-size:16px;">
           {{info.team_name}}
           <span v-if="info.synopsis">（{{info.synopsis}}）</span>
         </p>
@@ -18,7 +18,7 @@
     <!-- 我的上级。团队 -->
     <div class="my">
       <van-cell v-if="id" title="我的上级" is-link icon="manager-o" @click="mytop" />
-      <van-cell title="我的下级" is-link icon="user-o" @click="$router.push('/myteam')" />
+      <!-- <van-cell title="我的团队" is-link icon="user-o" /> -->
       <!-- <van-cell title="下级充值记录" is-link icon="after-sale" @click="$router.push('/topuplist')" />
       <van-cell
         title="下级提现记录"
@@ -30,13 +30,8 @@
     <!-- 团队活动 -->
     <div class="hot">
       <van-cell title="团队活动" is-link icon="smile-comment-o" @click="$router.push('/WLK')" />
-      <van-cell
-        v-if="!id"
-        title="创建团队活动"
-        is-link
-        icon="smile-comment-o"
-        @click="$router.push('/addWLK')"
-      />
+      <van-cell v-if="!id" title="创建团队活动" is-link icon="gem" @click="$router.push('/addWLK')" />
+      <van-cell v-if="!id" title="添加团队课程" is-link icon="video" @click="$router.push('/courseup')" />
     </div>
   </div>
 </template>
@@ -72,7 +67,7 @@ export default {
 .teamcenter {
   background: #f5f5f5;
   .person {
-    margin-top: 60px;
+    padding-top: 60px;
     background: #fff;
     img {
       width: 80px;
@@ -112,6 +107,16 @@ export default {
   }
   .van-icon-smile-comment-o:before {
     color: #f0c751;
+    font-size: 22px;
+    margin-right: 5px;
+  }
+  .van-icon-video:before {
+    color: #ff6f9a;
+    font-size: 22px;
+    margin-right: 5px;
+  }
+  .van-icon-gem:before {
+    color: #7674f5;
     font-size: 22px;
     margin-right: 5px;
   }

@@ -30,6 +30,11 @@
         </div>
         <div class="num" v-if="store">库存：{{item.stock}}</div>
       </div>
+      <!-- 品牌分类 -->
+      <div class="cat flex_l">
+        <div class="item">{{item.brand_name}}</div>
+        <div class="item">{{item.category_name}}</div>
+      </div>
       <!-- 上下架开关 -->
       <div v-if="store" class="flex_r" style="color:#999;padding:3px;">
         <span style="color:#85C4D3;margin:0 3px;">下架</span>
@@ -114,6 +119,19 @@ export default {
       margin: 4px 5px;
       i {
         font-size: 14px;
+      }
+    }
+    .cat {
+      .item {
+        padding: 1px 6px;
+        border-radius: 5px;
+        font-size: 12px;
+        margin-right: 5px;
+        background-color: #12c9a1;
+        color: #fff;
+        &:nth-of-type(1) {
+          background-color: #fa9d9d;
+        }
       }
     }
   }

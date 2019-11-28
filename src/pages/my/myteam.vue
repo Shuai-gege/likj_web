@@ -4,7 +4,7 @@
     <div class="content">
       <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
         <van-tabs v-model="active" sticky :offset-top="44" @click="clicktab">
-          <van-tab title="我的团队">
+          <van-tab :title="active==0?'我的团队('+list.length + ')':'我的团队'">
             <div class="null" v-if="list.length==0">暂无团队</div>
             <div class="direct flex_l" v-for="(item,i) in list" :key="i">
               <img :src="item.wx_avatar" alt />
@@ -12,11 +12,12 @@
                 <div style="color:#333;margin-bottom:10px;">
                   {{item.wx_nickname}}
                   <p>代理等级：{{item.agent_name}}</p>
+                  <span>时间：{{item.starttime}}</span>
                 </div>
               </div>
             </div>
           </van-tab>
-          <van-tab title="直接代理">
+          <van-tab :title="active==1?'直接代理('+list.length + ')':'直接代理'">
             <div class="null" v-if="list.length==0">暂无直接代理</div>
             <div class="direct flex_l" v-for="(item,i) in list" :key="i">
               <img :src="item.wx_avatar" alt />
@@ -24,11 +25,12 @@
                 <div style="color:#333;margin-bottom:10px;">
                   {{item.wx_nickname}}
                   <p>代理等级：{{item.agent_name}}</p>
+                  <span>时间：{{item.starttime}}</span>
                 </div>
               </div>
             </div>
           </van-tab>
-          <van-tab title="间接代理">
+          <van-tab :title="active==2?'间接代理('+list.length + ')':'间接代理'">
             <div class="null" v-if="list.length==0">暂无间接代理</div>
             <div class="direct flex_l" v-for="(item,i) in list" :key="i">
               <img :src="item.wx_avatar" alt />
@@ -36,6 +38,7 @@
                 <div style="color:#333;margin-bottom:10px;">
                   {{item.wx_nickname}}
                   <p>代理等级：{{item.agent_name}}</p>
+                  <span>时间：{{item.starttime}}</span>
                 </div>
               </div>
             </div>
@@ -54,6 +57,7 @@ export default {
       active: 0, //0全部代理，1直接代理，2间接代理
       page: "1", //代理分页
       list: [],
+
       mescrollUp: {
         callback: this.upCallback
       },
@@ -80,7 +84,7 @@ export default {
         })
         .then(data => {
           // 请求的列表数据
-          let arr = data;
+          let arr = data.user_list;
           // 如果是第一页需手动置空列表
           if (page.num === 1) {
             this.list = [];
@@ -118,7 +122,7 @@ export default {
 <style lang="less" scoped>
 .myteam {
   .null {
-    background-color: #fff;
+    background: #fff;
   }
   .mescroll {
     position: fixed;
@@ -130,16 +134,19 @@ export default {
     margin-top: 46px;
     .direct {
       background: #fff;
-      margin-top: 10px;
-      padding: 10px;
+      padding: 0 0 0 20px;
       img {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         border-radius: 10px;
       }
       .txt {
-        padding: 10px;
+        padding: 10px 0 0 10px;
         font-size: 14px;
+        span {
+          font-size: 12px;
+          color: #999;
+        }
       }
     }
   }

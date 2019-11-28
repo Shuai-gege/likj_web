@@ -222,9 +222,7 @@ export default {
   padding: 44px 10px 50px;
   min-height: 100vh;
   color: #666;
-  .null {
-    background: #f5f5f5;
-  }
+
   .mescroll {
     position: fixed;
     top: 44px;

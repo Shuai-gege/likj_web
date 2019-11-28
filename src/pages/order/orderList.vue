@@ -1,6 +1,6 @@
 <template>
   <div class="orderList">
-    <tabbar v-if="orderType==1" title="商城订单" @back="goback" back="1"></tabbar>
+    <tabbar v-if="orderType==1" title="我的订单" @back="goback" back="1"></tabbar>
     <tabbar v-else-if="orderType==3" title="提货订单" @back="goback" back="1"></tabbar>
     <tabbar v-else title="云仓订单" @back="goback" back="1"></tabbar>
     <div class="order">
@@ -11,7 +11,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -47,7 +52,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -86,7 +96,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -111,7 +126,7 @@
                   <div class="foot">共1件商品 &nbsp; 实付:￥{{item.order_money}}</div>
                 </div>
                 <div slot="footer">
-                  <van-button size="small" @click="backMoney">申请退款</van-button>
+                  <!-- <van-button size="small" @click="backMoney">申请退款</van-button> -->
                   <van-button size="small" @click="toWuliu(item.shop_order_id)">查看物流</van-button>
                   <van-button size="small" type="danger" @click="confirm(item.shop_order_id)">确认收货</van-button>
                 </div>
@@ -123,7 +138,12 @@
             <div class="item" v-for="(item,i) in list" :key="i">
               <van-panel :title="'订单时间：'+item.createtime" :status="item.orderState">
                 <div class="con" @click="orderDetail(item.shop_order_id)">
-                  <div class="top flex_l" v-for="(gooditem,index) in item.goods_list" :key="index">
+                  <div
+                    class="top flex_l"
+                    v-for="(gooditem,index) in item.goods_list"
+                    :key="index"
+                    @click.stop="tiao(gooditem.goods_id)"
+                  >
                     <van-image
                       width="2.5rem"
                       height="2.5rem"
@@ -161,10 +181,9 @@
                     v-if="item.order_status==0"
                     size="small"
                     type="danger"
-                    @click="gopay"
+                    @click="orderDetail(item.shop_order_id)"
                   >立即付款</van-button>
                   <!-- 待发货 -->
-
                   <van-button
                     v-if="item.order_status==1"
                     size="small"
@@ -172,7 +191,7 @@
                     @click="orderDetail(item.shop_order_id)"
                   >查看详情</van-button>
                   <!-- 待收货 -->
-                  <van-button
+                  <!-- <van-button
                     v-if="item.order_status==2"
                     size="small"
                     type="default"
@@ -189,7 +208,13 @@
                     size="small"
                     type="danger"
                     @click="confirm(item.shop_order_id)"
-                  >确认收货</van-button>
+                  >确认收货</van-button>-->
+                  <van-button
+                    size="small"
+                    type="danger"
+                    v-if="item.order_status==2"
+                    @click="orderDetail(item.shop_order_id)"
+                  >查看详情</van-button>
                   <!-- 已完成 -->
                   <van-button
                     size="small"
@@ -225,7 +250,7 @@ export default {
   },
   data() {
     return {
-      tab: 1, //tab切换高亮
+      tab: null, //tab切换高亮
       orderType: 0, //订单类型  1 商城订单  2 云仓  3 提货
       order_state: 0, //订单状态
       list: [], //订单列表
@@ -242,7 +267,15 @@ export default {
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
     }
-    this.state = Number(this.tab) + 1;
+    if (this.orderType == 2) {
+      if (this.tab < 2) {
+        this.state = Number(this.tab) + 1;
+      } else {
+        this.state = "";
+      }
+    } else {
+      this.state = Number(this.tab) + 1;
+    }
   },
   methods: {
     mescrollInit(mescroll) {
@@ -305,49 +338,10 @@ export default {
           mescroll.endErr();
         });
     },
-    // init() {
-    //   this.axios
-    //     .post("/api/goods_order/index", {
-    //       order_status: this.state, //订单状态 1 待支付 2 待发货 3 待收货 不传全部
-    //       order_type: this.orderType //1 商城 2 云仓 3 提货
-    //     })
-    //     .then(data => {
-    //       data.forEach(item => {
-    //         let flag;
-    //         switch (item.order_status) {
-    //           case -1:
-    //             flag = "已取消";
-    //             break;
-    //           case 0:
-    //             flag = "待付款";
-    //             break;
-    //           case 1:
-    //             flag = "待发货";
-    //             break;
-    //           case 2:
-    //             flag = "待收货";
-    //             break;
-    //           case 3:
-    //             flag = "已完成";
-    //             break;
-    //           case 4:
-    //             flag = "退款中";
-    //             break;
-    //           case 5:
-    //             flag = "已退款";
-    //             break;
-    //           case 6:
-    //             flag = "已完成";
-    //             break;
-    //         }
-    //         this.$set(item, "orderState", flag);
-    //       });
-    //       this.list = data;
-    //       console.log(this.list);
-    //     });
-    // },
+
     // 点击tab切换
     clickTab(name, title) {
+      this.tab = name;
       if (this.orderType == 2) {
         //云仓
         if (name < 2) {
@@ -362,7 +356,7 @@ export default {
     },
     goback() {
       this.$router.push({
-        path: "/my"
+        path: "/worker"
       });
       // if (vms.back) {
       //   this.$router.push({
@@ -377,32 +371,26 @@ export default {
       this.$router.push({
         path: "/orderDetail",
         query: {
-          id: id
+          id: id,
+          tab: this.tab
         }
       });
     },
-    // 立即付款
-    gopay() {
-      this.showpay = true;
-    },
-    closePay() {
-      this.showpay = false;
-      // this.$router.push({
-      //   path: "/orderList",
-      //   query: {
-      //     orderType: this.type + 1
-      //   }
-      // });
-    },
-    // 取消定单
+
+    // 取消订单
     cancalOrder(id) {
-      this.$router.push({
-        path: "/orderDetail",
-        query: {
-          id: id
-        }
-      });
+      this.axios
+        .post("/api/goods_order/cancelOrder", {
+          order_id: id
+        })
+        .then(data => {
+          this.$toast("取消成功");
+          setTimeout(() => {
+            this.mescroll.resetUpScroll();
+          }, 1000);
+        });
     },
+
     // 申请退款
     backMoney() {
       this.$router.push({
@@ -413,8 +401,6 @@ export default {
       });
     },
 
-    // 提醒发货
-    warn() {},
     // 查看物流
     toWuliu(id) {
       this.$router.push({
@@ -436,8 +422,17 @@ export default {
     // 删除订单
     delOrder() {},
     // 查看退款详情
-    backDetail() {}
+    backDetail() {},
+    tiao(goods_id) {
+      this.$router.push({
+        path: "/detail",
+        query: {
+          goods_id
+        }
+      });
+    }
   }
+
   // beforeRouteEnter(to, from, next) {
   //   console.log(from.path);
   //   if (from.path == "/orderDetail") {
@@ -455,9 +450,7 @@ export default {
   background-color: #f5f5f5;
   min-height: 100vh;
   padding-bottom: 10px;
-  .null {
-    background: #f5f5f5;
-  }
+
   .mescroll {
     position: fixed;
     top: 44px;

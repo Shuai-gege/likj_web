@@ -5,7 +5,7 @@
     <!-- 中间部分 -->
     <van-row>
       <van-col span="24" v-if="initdata.lunbo">
-        <van-swipe @change="onChange" :height="270" :autoplay="3000">
+        <van-swipe @change="onChange" :height="240" :autoplay="3000">
           <van-swipe-item class="Show1" v-for="(item ,i) in initdata.lunbo" :key="i">
             <van-image width="100%" height="270" fit="cover" :src="item" />
           </van-swipe-item>
@@ -19,26 +19,13 @@
             {{sizes[0].self_price}}
             <s>￥{{sizes[0].price}}</s>
           </span>
-          <!-- <van-tag round type="warning">标签</van-tag> -->
-          <!-- <p>
-            价格
-            <s>￥16</s>
-          </p>-->
         </div>
       </van-col>
       <van-col span="22" offset="1">
-        <div class="article">
-          {{initdata.name}}
-          <!-- <van-tag mark type="warning">{{initdata.label}}</van-tag> -->
-        </div>
-        <!-- 小标签 -->
-        <!-- <p>剩余：{{initdata.number}}</p> -->
+        <div class="article">{{initdata.name}}</div>
       </van-col>
     </van-row>
-    <!-- <div class="DHL flex">
-      <p>快递：包邮</p>
-      <p>已售：3654份</p>
-    </div>-->
+
     <van-divider />
     <!-- 商品详情展示 -->
     <div class="datail">
@@ -56,13 +43,24 @@
             <b>{{goodsMsg.self_price}}</b>
           </p>
           <!-- 最低提货量 -->
-          <p style="color:#666;font-size:14px;">
+          <p style="color:#666;font-size:14px;margin-bottom:3px;">
             最低提货
             <i style="color:#F04C46;">{{goodsMsg.self_pick}}</i>
           </p>
-          <div class="number flex" style="color:#666,;font-size:13px;width:200px;margin-top:15px;">
-            <p>库存：{{goodsMsg.stock}}</p>
+          <div class="number flex" style="color:#666,;font-size:13px;width:200px;">
+            <p>库存：{{goodsMsg.str}}</p>
             <p>销量：{{goodsMsg.sales}}</p>
+          </div>
+          <div class="itembox flex_l">
+            <div
+              class="item"
+              style="margin-right:15px;"
+              v-if="initdata.unit_one"
+            >1{{initdata.unit_one}}：{{initdata.o_t_multiple}}{{initdata.unit_two}}</div>
+            <div
+              class="item"
+              v-if="initdata.unit_two"
+            >1{{initdata.unit_two}}：{{initdata.t_t_multiple}}{{initdata.unit_three}}</div>
           </div>
         </div>
       </div>
@@ -79,16 +77,26 @@
         </div>
       </div>
       <van-divider />
-      <van-divider />
       <!-- 步进器 -->
       <div class="flex num">
         <p>购买数量</p>
-        <van-stepper
-          v-model="value"
-          :min="goodsMsg.self_pick"
-          :max="goodsMsg.stock"
-          :disabled="goodsMsg.stock==0"
-        />
+        <div class="step">
+          <div class="item flex_r" v-if="goodsMsg.one_name">
+            <span>{{goodsMsg.one_name}}：</span>
+            <!-- :min="goodsMsg.self_pick"
+              :max="goodsMsg.stock"
+            :disabled="goodsMsg.stock==0"-->
+            <van-stepper v-model="value1" :min="0" />
+          </div>
+          <div class="item flex_r" v-if="goodsMsg.two_name">
+            <span>{{goodsMsg.two_name}}：</span>
+            <van-stepper v-model="value2" :min="0" />
+          </div>
+          <div class="item flex_r" v-if="goodsMsg.three_name">
+            <span>{{goodsMsg.three_name}}：</span>
+            <van-stepper v-model="value3" :min="0" />
+          </div>
+        </div>
       </div>
       <!-- 按钮 -->
       <van-button type="primary" color="#f04c46" size="large" @click="gopay">确定</van-button>
@@ -96,7 +104,7 @@
 
     <!-- 尾部 -->
     <van-goods-action style="border-top:1px solid #f5f5f5;">
-      <van-goods-action-icon icon="chat-o" text="客服" />
+      <!-- <van-goods-action-icon icon="chat-o" text="客服" /> -->
       <van-goods-action-icon icon="cart-o" v-if="type!=1" text="购物车" @click="$router.push('/car')" />
       <van-goods-action-button v-if="!type" type="warning" text="加入购物车" @click="text(1)" />
       <van-goods-action-button v-if="!type" type="danger" text="立即购买" @click="text(2)" />
@@ -129,13 +137,17 @@ export default {
       button: 0, //点击加入购物车 1  点击立即购买 2
       current: 0, //轮播图当前
       show: false, //商品规格弹窗
-      value: 1, //购买数量
+      value1: 0, //购买数量  箱
+      value2: 0, //购买数量  盒
+      value3: 0, //购买数量  个
+      number: "", //总数量最小单位
       detail: "" //详情
     };
   },
   components: {
     tabbar
   },
+
   methods: {
     init() {
       this.axios
@@ -158,7 +170,7 @@ export default {
             data.size.forEach((item, i) => {
               if (item.goods_size_id == this.size_id) {
                 this.goodsMsg = data.size[i];
-                this.value = this.goodsMsg.self_pick;
+                // this.value3 = this.goodsMsg.self_pick;
                 this.active = i;
               }
             });
@@ -178,10 +190,16 @@ export default {
     },
     // 点击弹窗确定按钮
     gopay() {
-      if (this.goodsMsg.self_pick > this.value) {
+      this.number =
+        this.value1 * this.initdata.o_t_multiple * this.initdata.t_t_multiple +
+        this.value2 * this.initdata.t_t_multiple +
+        this.value3;
+      console.log("总数量：", this.number);
+
+      if (this.goodsMsg.self_pick > this.number) {
         this.$toast("您的最低购买数量为" + this.goodsMsg.self_pick);
       } else {
-        if (this.value > this.goodsMsg.stock) {
+        if (this.number > this.goodsMsg.stock) {
           this.$toast("该商品库存不足");
         } else {
           if (this.button == 2) {
@@ -192,7 +210,7 @@ export default {
                 query: {
                   type: this.type,
                   cart_ids:
-                    this.goods_id + "|" + this.size_id + "|" + this.value
+                    this.goods_id + "|" + this.size_id + "|" + this.number
                 }
               });
             } else {
@@ -201,7 +219,7 @@ export default {
                 query: {
                   type: this.type,
                   cart_ids:
-                    this.goods_id + "|" + this.size_id + "|" + this.value
+                    this.goods_id + "|" + this.size_id + "|" + this.number
                 }
               });
             }
@@ -210,7 +228,7 @@ export default {
               .post("/api/goods/editCart", {
                 goods_id: this.goods_id,
                 size_id: this.goodsMsg.goods_size_id,
-                num: this.value,
+                num: this.number,
                 type: 1
               })
               .then(data => {
@@ -250,7 +268,9 @@ export default {
 .van-goods-action {
   z-index: 2;
 }
-
+.van-goods-action-icon {
+  margin: 0 25px;
+}
 .Show1 {
   height: 300px;
   background: #f1f1f1;
@@ -276,8 +296,6 @@ export default {
 .price {
   font-size: 20px;
   font-weight: 700;
-  margin-right: 15px;
-  margin-top: 15px;
   img {
     width: 25px;
     height: 25px;
@@ -345,10 +363,18 @@ export default {
     .price {
       font-size: 20px;
       color: #f00;
-      margin-bottom: 10px;
-
+      margin-bottom: 5px;
       b {
         font-size: 28px;
+      }
+    }
+    .itembox {
+      margin-top: 3px;
+      .item {
+        background-color: rgb(250, 157, 157);
+        color: #fff;
+        border-radius: 5px;
+        padding: 1px 4px;
       }
     }
   }
@@ -409,7 +435,12 @@ export default {
 
 .num {
   margin: 15px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   font-size: 14px;
+  .step {
+    .item {
+      margin-bottom: 5px;
+    }
+  }
 }
 </style>

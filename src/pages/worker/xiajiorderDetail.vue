@@ -1,7 +1,7 @@
 <template>
   <div class="orderDetail">
     <tabbar title="订单详情" @back="goback" back="1"></tabbar>
-    <div class="detail">
+    <div class="detail" v-if="initdata.goods_list.length>0">
       <div class="address" v-if="order_type!=2">
         <van-cell :title="initdata.consignee" icon="location-o" :value="initdata.receiving_tel" />
         <van-cell :value="'地址：'+initdata.address+' '+initdata.address_details" class="solo" />
@@ -16,7 +16,7 @@
                 <i>￥</i>
                 {{item.price}}
               </span>
-              <span style="color:#999;">x {{item.goods_num}}</span>
+              <span style="color:#666;" v-if="item.unit_info">{{item.unit_info.str}}</span>
             </div>
             <div class="size">{{item.space_name}}</div>
           </div>
@@ -72,6 +72,7 @@ export default {
   },
   data() {
     return {
+      tab: "",
       showpay: false,
       price: "", //总价
       order_id: "", //订单id
@@ -83,6 +84,7 @@ export default {
   },
   mounted() {
     this.order_id = this.$route.query.id;
+    this.tab = this.$route.query.tab;
     console.log(this.order_id);
 
     this.init();
@@ -121,6 +123,12 @@ export default {
         });
     },
     goback() {
+      // this.$router.push({
+      //   path: "/downorder",
+      //   query: {
+      //     tab: this.tab
+      //   }
+      // });
       this.$router.go(-1);
     },
     // 立即付款
@@ -179,7 +187,6 @@ export default {
   margin-top: 44px;
   background-color: #f5f5f5;
   min-height: 93.4vh;
-  padding-bottom: 50px;
   .van-cell__value {
     overflow: visible;
   }

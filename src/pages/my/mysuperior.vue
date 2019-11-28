@@ -6,7 +6,7 @@
       <div class="flex_l">
         <img :src="info.wx_avatar" alt />
         <div class="superiorname">
-          <p style="width:40px;">{{info.wx_nickname}}</p>
+          <p class="yihang">{{info.wx_nickname}}</p>
           <p style="margin-top:10px;">{{info.agent_name}}</p>
         </div>
       </div>

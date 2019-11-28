@@ -26,6 +26,11 @@
             style="color:#999;font-size:10px;margin-left:5px;font-weight:400;"
           >￥{{item.price}}</s>
         </div>
+        <!-- 品牌分类 -->
+        <div class="cat flex_l">
+          <div class="item">{{item.brand_name}}</div>
+          <div class="item">{{item.category_name}}</div>
+        </div>
       </div>
     </li>
   </div>
@@ -56,9 +61,7 @@ export default {
   padding: 15px;
   flex-wrap: wrap;
   margin-top: -1px;
-  .null {
-    background: #f5f5f5;
-  }
+
   li {
     background-color: #fff;
     margin-bottom: 10px;
@@ -85,6 +88,19 @@ export default {
       margin: 4px 5px;
       i {
         font-size: 14px;
+      }
+    }
+    .cat {
+      .item {
+        padding: 1px 6px;
+        border-radius: 5px;
+        font-size: 12px;
+        margin-right: 5px;
+        background-color: #12c9a1;
+        color: #fff;
+        &:nth-of-type(1) {
+          background-color: #fa9d9d;
+        }
       }
     }
   }

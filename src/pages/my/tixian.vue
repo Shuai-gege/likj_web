@@ -32,6 +32,7 @@
           placeholder="请输入提现金额"
           left-icon="gold-coin-o"
           v-model="price"
+          type="number"
           @input="getPrice"
         />
       </van-cell-group>
@@ -189,7 +190,7 @@ export default {
             money: this.price
           })
           .then(data => {
-            this.$toast("提现成功");
+            this.$toast("提交审核成功，请耐心等待审核");
             setTimeout(() => {
               this.$router.go(-1);
             }, 1000);

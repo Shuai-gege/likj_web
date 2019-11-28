@@ -104,9 +104,7 @@ export default {
   /deep/.mescroll-upwarp {
     background: #f5f5f5 !important;
   }
-  .null {
-    background: #f5f5f5;
-  }
+
   .mescroll {
     position: fixed;
     top: 7px;

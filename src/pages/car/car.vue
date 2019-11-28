@@ -211,9 +211,7 @@ export default {
   padding: 0px 10px 100px;
   min-height: 100vh;
   color: #666;
-  .null {
-    background: #f5f5f5;
-  }
+
   .car {
     padding: 15px 5px;
     background-color: #fff;

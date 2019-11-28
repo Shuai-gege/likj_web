@@ -3,7 +3,7 @@
     <navbar title="充值中心" navbar_right_name="记录" navbar_right_link="/chongzhilist"></navbar>
     <!-- <p class="shenqing">向品牌方申请</p> -->
     <van-cell-group>
-      <van-field v-model="money" type="text" label="充值金额" placeholder="请输入金额" />
+      <van-field v-model="money" type="number" label="充值金额" placeholder="请输入金额" />
     </van-cell-group>
     <p style="margin-left:15px;">打款时间需与付款凭证上的时间一致</p>
     <!-- 充值冲到哪里 -->
@@ -17,6 +17,8 @@
     <!-- <van-cell-group>
       <van-field v-model="message" label="留言" type="textarea" placeholder="请输入留言" rows="2" />
     </van-cell-group>-->
+    <van-cell v-if="num1 == 1&&!hasShangji" title="查看公司收款账户" is-link to="shoukuan" />
+    <van-cell v-if="num1 == 1&&hasShangji" title="查看上级收款账户" is-link to="shangjishoukuan" />
     <div v-if="num1 == 1">
       <p style="margin-left:15px;">付款凭证</p>
       <div style="background:#fff;padding: 15px;" class="pingzheng flex_l">
@@ -45,19 +47,28 @@ export default {
       message: "", //留言
       time: "", //打款时间
       money: "", //充值金额
-      actions: [{ name: "余额" }, { name: "货款" }], //充值到哪里
+      actions: [{ name: "余额" }, { name: "货款" }, { name: "保证金" }], //充值到哪里
       actions1: [{ name: "线下付款" }], //充值方式
-      type: "充值到余额/货款", //充值到哪里
+      type: "充值到余额/货款/保证金", //充值到哪里
       type1: "支付方式", //充值方式
-      num: "", //把actions变成数字，1为余额，2为货款
+      num: "", //把actions变成数字，1为余额，2为货款, 3保证金
       num1: "", //把actions1变成数字，1为线下支付，2为微信，3为支付宝
-      payImg: [] //支付凭证
+      payImg: [], //支付凭证
+      hasShangji: false
     };
   },
   components: {
     navbar
   },
-
+  watch: {
+    type1(newVal) {
+      if (newVal == "线下付款") {
+        if (localStorage.getItem("agent_id")) {
+          this.hasShangji = true;
+        }
+      }
+    }
+  },
   methods: {
     onSelect(item) {
       // 点击选项时默认不会关闭菜单，可以手动关闭
@@ -65,8 +76,10 @@ export default {
       this.type = item.name;
       if (item.name == "余额") {
         this.num = 1;
-      } else {
+      } else if (item.name == "货款") {
         this.num = 2;
+      } else {
+        this.num = 3;
       }
     },
     xuanze() {
@@ -91,7 +104,10 @@ export default {
     onCancel() {},
     //点击提交按钮
     init() {
-      this.payImg = [this.img1, this.img2, this.img3];
+      let arr = [this.img1, this.img2, this.img3];
+      this.payImg = arr.filter(item => {
+        return item;
+      });
       if (!this.money.trim()) {
         this.$toast("请输入充值金额");
       } else if (!this.num) {
@@ -109,7 +125,7 @@ export default {
             payment_voucher: this.payImg.join(",")
           })
           .then(data => {
-            this.$toast("充值成功");
+            this.$toast("已提交申请，请等待审核");
             setTimeout(() => {
               this.$router.go(-1);
             }, 1000);

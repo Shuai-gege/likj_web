@@ -71,6 +71,7 @@ export default {
 .recordinfo {
   padding-top: 44px;
   .con {
+    margin-top: -1px;
     .image {
       padding: 20px;
       p {

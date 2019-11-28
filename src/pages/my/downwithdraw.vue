@@ -55,7 +55,6 @@
             fit="cover"
             :src="item"
             v-for="(item,i) in payment_voucher"
-            v-if="item"
             :key="i"
             @click="getImg(i)"
             style="margin-right:10px"
@@ -118,18 +117,22 @@ export default {
   },
 
   mounted() {
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
     this.id = this.$route.query.id; //用户id
     if (this.$route.query.sign_id) {
       // alert(111);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-      !this.$route.query.token
+      !this.$route.query.token &&
+      !localStorage.getItem("token_tel")
     ) {
       // alert(33333333);
       // alert(localStorage.getItem("baseURL"));
@@ -148,9 +151,10 @@ export default {
         "token" + localStorage.getItem("sign_id"),
         this.$route.query.token
       );
-      // this.init();
+      this.init();
     } else if (
-      localStorage.getItem("token" + localStorage.getItem("sign_id"))
+      localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
+      localStorage.getItem("token_tel")
     ) {
       // alert(666);
       this.init();
@@ -198,8 +202,10 @@ export default {
       if (status == 3) {
         this.show = true;
       } else {
-        this.payImg = [this.img1, this.img2, this.img3];
-        console.log(this.payImg);
+        let arr = [this.img1, this.img2, this.img3];
+        this.payImg = arr.filter(item => {
+          return item;
+        });
         if (!this.img1 && !this.img2 && !this.img3) {
           this.$toast("请上传支付凭证");
         } else {

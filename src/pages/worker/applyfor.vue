@@ -29,15 +29,36 @@
       </span>
     </div>
     <div class="head1">首次充值{{initdata.money}}元</div>
+    <!-- 名字 -->
     <div class="title">基本信息</div>
     <van-cell-group>
-      <van-field v-model="username" clearable label="真实姓名" placeholder="请输入姓名" />
-      <van-field v-model="tel" clearable label="手机号码" placeholder="请输入手机号" />
+      <van-field
+        v-model="username"
+        clearable
+        label="真实姓名"
+        placeholder="请输入姓名"
+        v-if="data_set.truename == 1"
+      />
+      <van-field
+        v-model="tel"
+        clearable
+        label="手机号码"
+        placeholder="请输入手机号"
+        v-if="data_set.mobile == 1"
+      />
     </van-cell-group>
-    <div class="title">身份信息</div>
+    <!-- 身份证 -->
+    <div class="title" v-if="data_set.id_number == 1 || data_set.id_number_pic == 1">身份信息</div>
     <van-cell-group>
-      <van-field v-model="IDcard" clearable label="身份证号" placeholder="请输入身份证号" />
-      <div class="title">上传身份证正反面</div>
+      <van-field
+        v-model="IDcard"
+        clearable
+        label="身份证号"
+        placeholder="请输入身份证号"
+        v-if="data_set.id_number == 1"
+      />
+
+      <div class="title" v-if="data_set.id_number_pic== 1">上传身份证正反面</div>
       <div class="shenfen flex" style="padding:5px 8px 15px 15px" v-if="initdata.truename">
         <van-image
           width="4.5rem"
@@ -46,6 +67,7 @@
           :src="initdata.front_card_image"
           @click="getImg1()"
           style="margin-right:10px"
+          v-if="data_set.id_number_pic == 1"
         />
         <van-image
           width="4.5rem"
@@ -54,9 +76,10 @@
           :src="initdata.back_card_image"
           @click="getImg2()"
           style="margin-right:10px"
+          v-if="data_set.id_number_pic == 1"
         />
       </div>
-      <div class="upload flex" v-else>
+      <div class="upload flex" v-if="data_set.id_number_pic== 1 && !initdata.truename">
         <div class="item flex">
           <van-uploader v-model="zheng" :after-read="afterRead2" :max-count="1" />
           <img :src="zheng" alt />
@@ -69,7 +92,8 @@
         </div>
       </div>
     </van-cell-group>
-    <div class="title flex">
+    <!-- 支付凭证 -->
+    <div class="title flex" v-if="data_set.payment_voucher == 1">
       <span>支付凭证</span>
       <span class="flex_r" @click="shoukuan(initdata.up_agent_id)">
         查看{{initdata.up_agent_id?'上级':'公司'}}收款账号
@@ -89,7 +113,7 @@
           style="margin-right:10px"
         />
       </div>
-      <div class="upload1 flex" v-else>
+      <div class="upload1 flex" v-if="data_set.payment_voucher == 1 && !initdata.truename">
         <div class="item flex">
           <div class="uppay flex">
             <van-uploader v-model="pay1" :max-count="1" :after-read="afterRead3" />
@@ -122,26 +146,36 @@ export default {
       pay1: [], //支付凭证
       pay2: [], //支付凭证
       pay3: [], //支付凭证
-      payImg: [] //支付凭证
+      payImg: [], //支付凭证
+      data_set: "" //判断有没有
     };
   },
 
   mounted() {
+    if (this.$route.query.token) {
+      localStorage.clear();
+    }
     this.id = this.$route.query.id;
     // alert(location.href);
     if (this.$route.query.sign_id) {
       // alert(111);
       localStorage.setItem("sign_id", this.$route.query.sign_id);
-      localStorage.setItem(
-        "baseURL",
-        location.protocol + "//" + location.hostname
-      );
     }
+    // localStorage.setItem(
+    //   "baseURL",
+    //   location.protocol + "//" + location.hostname
+    // );
     if (
       !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
       !this.$route.query.token
     ) {
       // alert(33333333);
+      // alert(localStorage.getItem("baseURL"));
+      // alert(
+      //   localStorage.getItem("baseURL") +
+      //     "/api/user/wxlogin?sign_id=" +
+      //     localStorage.getItem("sign_id")
+      // );
 
       location.href =
         localStorage.getItem("baseURL") +
@@ -171,6 +205,7 @@ export default {
         .post("/api/agent/inviteAgentInfo", { id: this.id })
         .then(data => {
           this.initdata = data;
+          this.data_set = data.data_set;
           // 判断姓名
           if (data.truename) {
             this.username = data.truename;
@@ -216,25 +251,37 @@ export default {
       });
     },
     submit() {
-      if (!this.username.trim()) {
+      if (!this.username.trim() && this.data_set.truename == 1) {
         this.$toast("请输入姓名");
-      } else if (!/^1[3456789]\d{9}$/.test(this.tel)) {
+      } else if (
+        !/^1[3456789]\d{9}$/.test(this.tel) &&
+        this.data_set.mobile == 1
+      ) {
         this.$toast("请输入正确的手机号");
-      } else if (!this.IDcard.trim()) {
+      } else if (!this.IDcard.trim() && this.data_set.id_number == 1) {
         this.$toast("请输入身份证号");
-      } else if (this.zheng.length == 0) {
+      } else if (this.zheng.length == 0 && this.data_set.id_number_pic == 1) {
         this.$toast("请上传身份证正面");
-      } else if (this.fan.length == 0) {
+      } else if (this.fan.length == 0 && this.data_set.id_number_pic == 1) {
         this.$toast("请上传身份证反面");
-      } else if (!this.img1 && !this.img2 && !this.img3) {
+      } else if (
+        this.data_set.payment_voucher == 1 &&
+        !this.img1 &&
+        !this.img2 &&
+        !this.img3
+      ) {
+        console.log(2222);
+
         this.$toast("请上传支付凭证");
       } else {
+        console.log(11111111111111111111);
         // 上传图片
         console.log(this.front_card_image);
         console.log(this.back_card_image);
-        this.payImg = [this.img1, this.img2, this.img3];
-        console.log(this.payImg);
-
+        let arr = [this.img1, this.img2, this.img3];
+        this.payImg = arr.filter(item => {
+          return item;
+        });
         this.axios
           .post("/api/agent/sbinviteAgent", {
             id: this.id,
@@ -243,7 +290,8 @@ export default {
             idcard: this.IDcard,
             front_card_image: this.front_card_image,
             back_card_image: this.back_card_image,
-            pay_proof_images: this.payImg.join(",")
+            pay_proof_images: this.payImg.join(","),
+            user_type: "1"
           })
           .then(data => {
             this.$toast("申请成功，请耐心等待审核通过");

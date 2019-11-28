@@ -1,6 +1,9 @@
 //router
 import router from "@/router/index"; //引入路由对象
-import { Toast, Dialog } from "vant"; //引入vant提示框
+import {
+  Toast,
+  Dialog
+} from "vant"; //引入vant提示框
 //原生交互
 // import WebDemo from '../../common/js/webdemo'
 // var demo = new WebDemo;
@@ -9,27 +12,27 @@ import { Toast, Dialog } from "vant"; //引入vant提示框
 import axios from "axios";
 import qs from "qs";
 // import { baseURL } from "@/common/js/common"; //域名引入
-axios.defaults.baseURL = localStorage.getItem("baseURL");
+axios.defaults.baseURL = "http://test.lojangcc.com";
+// axios.defaults.baseURL = localStorage.getItem("baseURL");
 axios.defaults.timeout = 10000; //超时毫秒 60s
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8"; //请求头
 // axios.defaults.headers.common['token'] = '7f9e2ca2-ea65-4ca9-9f71-2945fc49bd2c';
 // axios请求拦截
+
 axios.interceptors.request.use(
   config => {
-    config.headers["token"] = localStorage.getItem(
-      "token" + localStorage.getItem("sign_id")
-    );
+    if (localStorage.getItem("token" + localStorage.getItem("sign_id"))) {
+      config.headers["token"] = localStorage.getItem(
+        "token" + localStorage.getItem("sign_id")
+      );
+    } else if (localStorage.getItem("token_tel")) {
+      config.headers["token"] = localStorage.getItem("token_tel");
+    }
     config.headers["signid"] = localStorage.getItem("sign_id");
     config.headers["webtype"] = "agent";
     console.log(config);
     // loading
-    Toast.loading({
-      duration: 0, // 持续展示 toast
-      forbidClick: true, // 禁用背景点击
-      mask: false // 是否显示遮罩层
-      // message: "数据加载中..."
-    });
     return config;
   },
   error => {
@@ -69,7 +72,7 @@ axios.interceptors.response.use(
           });
           break;
 
-        // 其他错误，直接抛出错误提示
+          // 其他错误，直接抛出错误提示
         default:
           Toast({
             message: error.response.data.msg,
@@ -97,15 +100,9 @@ export function get(url, data) {
             message: "登录过期，请重新登录!",
             duration: 2000
           });
-
-          // localStorage.clear();
+          localStorage.clear();
           setTimeout(() => {
-            // router.replace({
-            //   path: '/login',
-            //   query: {
-            //     redirect: router.currentRoute.fullPath
-            // }
-            // });
+            vms.$router.push("/");
           }, 1000);
           return;
         } else if (res.data.code == 0) {
@@ -134,31 +131,39 @@ export function get(url, data) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(url, data) {
+  Toast.loading({
+    duration: 0, // 持续展示 toast
+    forbidClick: true, // 禁用背景点击
+    mask: false // 是否显示遮罩层
+    // message: "数据加载中..."
+  });
   return new Promise((resolve, reject) => {
     //  +"?token=" +localStorage.getItem("token" + localStorage.getItem("sign_id")) +"&sign_id=" +localStorage.getItem("sign_id")
+    // alert(localStorage.getItem("baseURL"));
+    // alert(localStorage.getItem("sign_id"));
+    // alert(url);
     axios
       .post(url, qs.stringify(data))
       .then(res => {
         Toast.clear();
         if (res.data.code == -1) {
-          Toast({
-            message: "登录过期，请重新登录!",
-            duration: 2000
-          });
+          // alert("登录过期111111111111");
           localStorage.clear();
           setTimeout(() => {
             vms.$router.push("/");
           }, 1000);
           return;
         } else if (res.data.code == -2) {
-          location.href = `${localStorage.getItem(
-            "baseURL"
-          )}/web/#/show?token=${localStorage.getItem(
-            `token${localStorage.getItem("sign_id")}`
-          )}&sign_id=${localStorage.getItem("sign_id")}`;
+          // alert("不是代理2222", url);
+          // alert(localStorage.getItem("baseURL"));
+          location.href = `${localStorage.getItem("baseURL")}/agent/#/show`;
+          // ?token=${localStorage.getItem(
+          //   `token${localStorage.getItem("sign_id")}`
+          // )}&sign_id=${localStorage.getItem("sign_id")}`;
           return;
         } else if (res.data.code == 0) {
           Toast(res.data.msg);
+          reject(res.data.msg);
         } else if (res.data.code == 1) {
           console.log(res.data.data);
           resolve(res.data.data);
@@ -172,11 +177,7 @@ export function post(url, data) {
       .catch(error => {
         Toast.clear();
         // alert("错了");
-        axios
-          .post(localStorage.getItem("baseURL") + "/api/common/debugLog", {
-            message: url + "&" + error
-          })
-          .then(data => {});
+
         if (
           error.code == "ECONNABORTED" &&
           error.message.indexOf("timeout") != -1

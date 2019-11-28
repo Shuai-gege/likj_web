@@ -96,12 +96,15 @@ export default {
     },
     // 跳转详情
     topage(path, id) {
-      this.$router.push({
-        path: path,
-        query: {
-          id: id
-        }
-      });
+      console.log(path);
+      if (path != "/") {
+        this.$router.push({
+          path: path,
+          query: {
+            id: id
+          }
+        });
+      }
     }
   }
 };
