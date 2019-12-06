@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <navbar title="下级提现记录"></navbar>
-    <div class="null" v-if="list.length==0" style="background-color: #fff;">暂无提现记录</div>
+    <div class="null" v-if="list.length==0" style="background-color: #fff;">暂无下级提现记录</div>
     <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit">
       <div class="box">
         <div class="flex minxi" v-for="(item,i) in list" :key="i" @click="todetail(item.cash_id)">

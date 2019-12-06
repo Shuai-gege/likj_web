@@ -82,6 +82,7 @@
         :order_id="order_id"
         :orderType="order_type"
         :freight_money="initdata.freight_money"
+        :huokuan="huokuan"
         @close="closePay"
       ></pay>
     </div>
@@ -104,7 +105,8 @@ export default {
       order_type: "", //订单类型1商城订单2云仓订单3云仓提货订单
       order_status: "", //订单状态 -1=已取消,0=待付款,1=待发货,2=待收货,3=已收货,4=待退货,5=已退货,6=已完成
       payType: "", //支付方式: 1 余额 2 货款 3 微信 4 线下
-      tab: "" //订单状态
+      tab: "", //订单状态
+      huokuan: "" //非云仓的货款
     };
   },
   mounted() {
@@ -120,12 +122,17 @@ export default {
         })
         .then(data => {
           this.initdata = data;
-          this.order_type = data.order_type;
+          if (data.order_type == 3) {
+            this.order_type = localStorage.getItem("model") == 2 ? 1 : 3;
+          } else {
+            this.order_type = data.order_type;
+          }
           this.order_status = data.order_status;
-          if (data.order_type == 3 && data.order_status == 0) {
+          if (this.order_type == 3) {
             this.price = data.freight_money;
-          } else if (data.order_type == 1) {
-            this.price = data.goods_money;
+          } else if (this.order_type == 1) {
+            this.price = data.freight_money; //非云仓的运费
+            this.huokuan = data.goods_money; //非云仓的货款
           } else {
             this.price = data.order_money;
           }
@@ -201,6 +208,15 @@ export default {
         })
         .then(data => {
           this.$toast("收货成功");
+          setTimeout(() => {
+            this.$router.push({
+              path: "/orderList",
+              query: {
+                orderType: this.order_type,
+                tab: 3
+              }
+            });
+          }, 1000);
         });
     },
     // 删除订单

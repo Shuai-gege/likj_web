@@ -18,14 +18,14 @@
             <img src="../../image/提现.png" alt style="width:15px;height:15px;" />
             充值
           </span>
-          <span
+          <!-- <span
             class="flex"
             style="font-size:12px;padding:1px 10px;background:#FDDFA9;color:#333;border-radius:30px;"
             @click="$router.push('/tixian')"
           >
             <img src="../../image/提现.png" alt style="width:15px;height:15px;" />
             提现
-          </span>
+          </span>-->
         </div>
       </div>
 
@@ -156,7 +156,16 @@
               <div>
                 <p
                   style="font-size:13px;margin-bottom:10px;color:black;"
-                >充值到{{item.recharge_way==1?'余额':'货款'}}</p>
+                  v-if="item.recharge_way==1"
+                >充值到余额</p>
+                <p
+                  style="font-size:13px;margin-bottom:10px;color:black;"
+                  v-if="item.recharge_way==2"
+                >充值到货款</p>
+                <p
+                  style="font-size:13px;margin-bottom:10px;color:black;"
+                  v-if="item.recharge_way==3"
+                >充值到保证金</p>
                 <p style="font-size:13px;color:#CDC9C9;">
                   <span>{{item.createtime}}</span>
                 </p>

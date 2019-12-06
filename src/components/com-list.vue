@@ -1,7 +1,7 @@
 <template>
   <!-- 商品列表 -->
   <div class="list flex">
-    <div class="null" v-if="list.length==0" style="text-align:center;width:100%;">暂无商品</div>
+    <!-- <div class="null" v-if="list.length==0" style="text-align:center;width:100%;">暂无商品</div> -->
     <li v-for="(item,i) in list" :key="i">
       <van-image
         width="100%"
@@ -90,6 +90,7 @@ export default {
   padding: 12px;
   flex-wrap: wrap;
   margin-top: -1px;
+
   .null {
     background: #fff;
   }

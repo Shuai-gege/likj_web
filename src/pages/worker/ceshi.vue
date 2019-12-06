@@ -1,5 +1,12 @@
 <template>
   <div class="worker">
+    <div class="oMore" @click="oMore"></div>
+    <van-popup v-model="show1" position="left" :style="{ width: '60%',height:'100%' }">
+      <van-cell-group>
+        <van-cell :title="user" value="内容" />
+      </van-cell-group>
+      <van-icon name="add" color="#000" size="25" @click="$router.push('/ceshi1')" />
+    </van-popup>
     <!-- 头像 -->
     <van-row class="flex user" @click="mydata">
       <van-col span="20" offset="1" class="Logo">
@@ -38,7 +45,7 @@
           <p class="qian">￥{{ initdata.results }}</p>
           <p>个人业绩</p>
         </div>
-        <div @click="$router.push('/rank')">
+        <div>
           <p class="qian">￥{{ initdata.team_results }}</p>
           <p>团队业绩</p>
         </div>
@@ -48,7 +55,7 @@
         </div>
       </div>
     </div>
-
+    <!-- 非云仓模式 -->
     <div class="no_yuncang">
       <van-row class="one">
         <van-col span="6" @click="$router.push('/agentType')">
@@ -58,7 +65,8 @@
         <van-col span="6" @click="mypurse">
           <img src="../../image/工作台/账户总额.png" alt />
           <p>我的钱包</p>
-        </van-col>  
+        </van-col>
+
         <van-col span="6" @click="$router.push('/update')">
           <img src="../../image/工作台/升级.png" alt />
           <p>我要升级</p>
@@ -68,15 +76,14 @@
           <p>我的团队</p>
         </van-col>
       </van-row>
-      <!-- 云仓 -->
-      <div class="y_yuncang">
+      <div class="items flex_l">
         <div class="item flex" @click="goList" v-if="initdata.cloud_model!=2" v-show="show">
           <img src="../../image/黄黑/yuncang.png" alt />
           <p>云仓</p>
         </div>
-        <div class="item flex" @click="yuncangjilu" v-if="initdata.cloud_model!=2" v-show="show">
-          <img src="../../image/黄黑/订单 (2).png" alt />
-          <p>云仓记录</p>
+        <div class="item flex" @click="$router.push('/bonus')">
+          <img src="../../image/黄黑/会员奖金.png" alt />
+          <p>奖金</p>
         </div>
         <div class="item flex" @click="toOrder(2)" v-if="initdata.cloud_model!=2" v-show="show">
           <div class="yuan" v-if="pending.yun_order">{{pending.yun_order}}</div>
@@ -88,9 +95,10 @@
           <img src="../../image/黄黑/订单.png" alt />
           <p>提货订单</p>
         </div>
-      </div>
-      <!-- 非云仓模式 -->
-      <div class="items flex_l">
+        <div class="item flex" @click="tap">
+          <img src="../../image/黄黑/zhongxin.png" alt />
+          <p>团队中心</p>
+        </div>
         <div class="item flex" @click="toOrder(1)" v-if="initdata.cloud_model==2" v-show="show">
           <img src="../../image/黄黑/仓库2.png" alt />
           <p>我的订单</p>
@@ -99,27 +107,18 @@
           <img src="../../image/黄黑/zhuandan.png" alt />
           <p>我的转单</p>
         </div>
-        <div class="item flex" @click="$router.push('/bonus')">
-          <img src="../../image/黄黑/会员奖金.png" alt />
-          <p>奖金</p>
-        </div>
-        <div class="item flex" @click="huiyuan">
-          <img src="../../image/黄黑/yaoqing.png" alt />
-          <p>邀请会员</p>
+        <div class="item flex" @click="yuncangjilu" v-if="initdata.cloud_model!=2" v-show="show">
+          <img src="../../image/黄黑/订单 (2).png" alt />
+          <p>云仓记录</p>
         </div>
         <div class="item flex" @click="audit" v-if="initdata.check_type!=2" v-show="show">
           <div class="yuan" v-if="pending.audit_agent">{{pending.audit_agent}}</div>
           <img src="../../image/黄黑/官方.png" alt />
           <p>审核授权</p>
         </div>
-        <div class="item flex" @click="zhengshu">
-          <img src="../../image/黄黑/认证.png" alt />
-          <p>授权证书</p>
-        </div>
-
-        <div class="item flex" @click="tap">
-          <img src="../../image/黄黑/zhongxin.png" alt />
-          <p>团队中心</p>
+        <div class="item flex" @click="huiyuan">
+          <img src="../../image/黄黑/yaoqing.png" alt />
+          <p>邀请会员</p>
         </div>
         <div class="item flex" @click="zhuan">
           <img src="../../image/黄黑/转换.png" alt />
@@ -150,13 +149,18 @@
           <img src="../../image/黄黑/订单 (1).png" alt />
           <p>下级订单</p>
         </div>
-        <div class="item flex" @click="$router.push('/shoukuan')">
-          <img src="../../image/黄黑/账户信息.png" alt />
-          <p>公司账户</p>
-        </div>
+
         <div class="item flex" @click="shangji">
           <img src="../../image/黄黑/账户2.png" alt />
           <p>上级账户</p>
+        </div>
+        <!-- <div class="item flex" @click="$router.push('/bonus')">
+          <img src="../../image/工作台/yusuanfenxi.png" alt />
+          <p>奖金明细</p>
+        </div>-->
+        <div class="item flex" @click="$router.push('/shoukuan')">
+          <img src="../../image/黄黑/账户信息.png" alt />
+          <p>公司账户</p>
         </div>
         <div class="item flex" @click="$router.push('/myaccount')">
           <img src="../../image/黄黑/账户信息 (1).png" alt />
@@ -176,7 +180,10 @@
           <img src="../../image/黄黑/xiaoxi.png" alt />
           <p>消息中心</p>
         </div>
-
+        <div class="item flex" @click="zhengshu">
+          <img src="../../image/黄黑/认证.png" alt />
+          <p>授权证书</p>
+        </div>
         <div class="item flex" @click="$router.push('/fake')">
           <img src="../../image/黄黑/fake.png" alt />
           <p>防伪查询</p>
@@ -357,7 +364,9 @@ export default {
       pending: {}, //各种待处理信息
       num: "", //全部待处理信息数量
       num1: "", //余额
-      show: false
+      show: false,
+      show1: false,
+      user: localStorage.getItem("user")
     };
   },
   components: {
@@ -563,6 +572,10 @@ export default {
     // 消息中心
     xiaoxi() {
       this.$router.push("/message");
+    },
+    // 多用户
+    oMore() {
+      this.show1 = true;
     }
   }
 };
@@ -571,6 +584,21 @@ export default {
 .worker {
   background: #f5f6f7;
   padding-bottom: 55px;
+  .oMore {
+    background: #00f;
+    width: 25px;
+    height: 25px;
+    opacity: 0.6;
+    border-radius: 50%;
+    position: fixed;
+    top: 5px;
+    left: 5px;
+  }
+  .van-icon-add:before {
+    position: fixed;
+    bottom: 50px;
+    left: 40%;
+  }
   i {
     color: #fff;
   }
@@ -581,7 +609,7 @@ export default {
     color: #fff;
     background: linear-gradient(to right, #801336, #c72c41);
     background-size: 100%;
-    height: 140px;
+    height: 160px;
     .Logo {
       margin: 10px 10px;
       font-size: 16px;
@@ -638,7 +666,7 @@ export default {
   .money {
     padding: 0 10px;
     position: relative;
-    top: -15px;
+    top: -20px;
     .tixian {
       background: #3c3c3b;
       padding: 10px 20px;
@@ -663,7 +691,7 @@ export default {
       font-size: 12px;
       color: #9f7045;
       background: #ffefc6;
-      padding: 2px 10px;
+      padding: 0px 10px;
       border-radius: 20px;
     }
     .jiangjin {
@@ -683,38 +711,6 @@ export default {
   .no_yuncang {
     position: relative;
     top: -10px;
-    .y_yuncang {
-      background-color: #fff;
-      margin: 12px 10px;
-      border-radius: 5px;
-      display: flex;
-      overflow-x: auto; /* 超出宽度滑动 */
-      .item {
-        width: 25%;
-        flex-direction: column;
-        height: 80px;
-        padding: 15px 0;
-        font-size: 12px;
-        flex-shrink: 0; //弹性盒布局，内容不收缩，1收缩，0不收缩
-        // border-right: 1px solid #f5f6f7;
-        // border-bottom: 1px solid #f5f6f7;
-        position: relative;
-        .yuan {
-          position: absolute;
-          right: 18px;
-          top: 6px;
-        }
-        &:nth-of-type(4n) {
-          border-right: none;
-        }
-
-        img {
-          width: 25px;
-          height: 25px;
-          margin-bottom: 5px;
-        }
-      }
-    }
     .items {
       background-color: #fff;
       margin: 12px 10px;

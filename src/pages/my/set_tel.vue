@@ -3,7 +3,7 @@
     <tabbar :title="type==1?'绑定手机号':'修改手机号'"></tabbar>
     <div class="con">
       <van-cell-group>
-        <van-field v-if="old_tel" v-model="old_tel" type="number" label="旧手机号" disabled required />
+        <van-field v-model="old_tel" type="number" label="旧手机号" disabled required />
         <van-field v-model="tel" type="number" label="新手机号" placeholder="请输入新的手机号" required />
         <van-field v-model="sms" type="number" center label="短信验证码" placeholder="请输入短信验证码" required>
           <van-button
@@ -109,6 +109,7 @@ export default {
             this.$toast("发送成功，请耐心等待~");
           })
           .catch(data => {
+            this.time = 0;
             console.log("哈哈哈哈", data, this.iscan);
             if (data == "已被占用" && this.iscan == 1) {
               Dialog.alert({

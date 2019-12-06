@@ -1,5 +1,6 @@
 <template>
   <div class="update">
+    <div class="null" v-if="list.length==0">暂无可升级等级</div>
     <!-- 头部公共搜索框 -->
     <tabbar title="我要升级" navbar_right_name="记录" navbar_right_link="/updateRecord"></tabbar>
     <div class="con">

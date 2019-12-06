@@ -120,6 +120,7 @@ input[type="text"] {
   align-items: center;
 }
 
+
 .flex_r {
   justify-content: flex-end;
   display: flex;

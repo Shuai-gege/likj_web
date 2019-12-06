@@ -169,7 +169,7 @@
                   <!-- 已取消 -->
                   <van-button
                     size="small"
-                    type="default"
+                    type="danger"
                     @click="orderDetail(item.shop_order_id)"
                   >查看详情</van-button>
                 </div>

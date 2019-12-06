@@ -18,6 +18,7 @@
     <!-- 我的上级。团队 -->
     <div class="my">
       <van-cell v-if="id" title="我的上级" is-link icon="manager-o" @click="mytop" />
+      <van-cell title="我的会员" is-link icon="friends-o" @click="myVip" />
       <!-- <van-cell title="我的团队" is-link icon="user-o" /> -->
       <!-- <van-cell title="下级充值记录" is-link icon="after-sale" @click="$router.push('/topuplist')" />
       <van-cell
@@ -56,6 +57,9 @@ export default {
   methods: {
     mytop() {
       this.$router.push("/mysuperior");
+    },
+    myVip() {
+      this.$router.push("/myVip");
     }
   }
 };
@@ -94,13 +98,14 @@ export default {
       font-size: 22px;
       margin-right: 5px;
     }
+
     .van-icon-user-o:before {
       color: #ce8a56;
       font-size: 22px;
       margin-right: 5px;
     }
     .van-icon-friends-o:before {
-      color: #ce8a56;
+      color: #0079ba;
       font-size: 22px;
       margin-right: 5px;
     }

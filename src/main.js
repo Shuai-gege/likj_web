@@ -10,14 +10,22 @@ import http from "@/common/js/axios";
 Vue.prototype.axios = http;
 
 // vuex
-import { store } from "./store/store.js";
+import {
+  store
+} from "./store/store.js";
 
 //webdemo.js
 import WebDemo from "@/common/js/webdemo.js";
 Vue.prototype.demo = new WebDemo();
 
+// Echarts
+import echarts from "echarts";
+Vue.prototype.echarts = echarts;
+
 // 图片压缩后将base64转换为file
-import { dataURLtoFile } from "./common/js/common.js";
+import {
+  dataURLtoFile
+} from "./common/js/common.js";
 Vue.prototype.upfile = dataURLtoFile;
 
 /*
@@ -30,6 +38,10 @@ Vue.use(VueAwesomeSwiper);
 // vant
 import Vant from "vant";
 import "vant/lib/index.css";
+
+// 智能地址填写
+import smartParse from 'vue-smart-parse';
+Vue.use(smartParse)
 
 Vue.use(Vant);
 // 图片压缩

@@ -202,17 +202,17 @@
                     size="small"
                     type="default"
                     @click="toWuliu(item.shop_order_id)"
-                  >查看物流</van-button>
+                  >查看物流</van-button>-->
                   <van-button
-                    v-if="item.order_status==2"
+                    v-if="item.order_status==2&&orderType!=2"
                     size="small"
                     type="danger"
                     @click="confirm(item.shop_order_id)"
-                  >确认收货</van-button>-->
+                  >确认收货</van-button>
                   <van-button
                     size="small"
                     type="danger"
-                    v-if="item.order_status==2"
+                    v-if="item.order_status==2&&orderType==2"
                     @click="orderDetail(item.shop_order_id)"
                   >查看详情</van-button>
                   <!-- 已完成 -->
@@ -267,14 +267,18 @@ export default {
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
     }
-    if (this.orderType == 2) {
-      if (this.tab < 2) {
-        this.state = Number(this.tab) + 1;
+  },
+  watch: {
+    tab(newVal) {
+      if (this.orderType == 2) {
+        if (this.tab < 2) {
+          this.state = Number(this.tab) + 1;
+        } else {
+          this.state = "";
+        }
       } else {
-        this.state = "";
+        this.state = Number(this.tab) + 1;
       }
-    } else {
-      this.state = Number(this.tab) + 1;
     }
   },
   methods: {
@@ -287,7 +291,7 @@ export default {
         .post("/api/goods_order/index", {
           page: page.num,
           order_status: this.state, //订单状态 1 待支付 2 待发货 3 待收货 不传全部
-          order_type: this.orderType //1 商城 2 云仓 3 提货
+          order_type: this.orderType == 1 ? 3 : this.orderType //1 商城 2 云仓 3 提货
         })
         .then(data => {
           data.forEach(item => {
@@ -490,7 +494,7 @@ export default {
         flex: 1;
         margin-left: 10px;
         .name {
-          font-size: 16px;
+          font-size: 14px;
           margin-bottom: 10px;
           color: #333;
         }

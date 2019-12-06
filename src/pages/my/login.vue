@@ -159,6 +159,9 @@ export default {
           })
           .then(data => {
             this.$toast("发送成功");
+          })
+          .catch(err => {
+            this.time = 0;
           });
       }
     },

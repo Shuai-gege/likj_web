@@ -1,7 +1,7 @@
 <template>
   <!-- 商品列表 -->
   <div class="list">
-    <div class="null" v-if="list.length==0" style="text-align:center;width:100%;">暂无商品</div>
+    <!-- <div class="null" v-if="list.length==0" style="text-align:center;width:100%;">暂无商品</div> -->
     <li class="flex_l" @click="godetail(item.goods_id)" v-for="(item,i) in list" :key="i">
       <van-image
         width="120"

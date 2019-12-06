@@ -12,8 +12,7 @@ import {
 import axios from "axios";
 import qs from "qs";
 // import { baseURL } from "@/common/js/common"; //域名引入
-axios.defaults.baseURL = "http://test.lojangcc.com";
-// axios.defaults.baseURL = localStorage.getItem("baseURL");
+axios.defaults.baseURL = localStorage.getItem("baseURL");
 axios.defaults.timeout = 10000; //超时毫秒 60s
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8"; //请求头

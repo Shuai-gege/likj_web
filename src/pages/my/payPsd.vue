@@ -3,7 +3,7 @@
     <tabbar title="设置支付密码"></tabbar>
     <div class="con">
       <van-cell-group>
-        <van-field v-model="tel" type="number" label="手机号" placeholder="请输入手机号" required />
+        <van-field v-model="tel" type="number" label="手机号" placeholder="请输入手机号" required disabled />
         <van-field v-model="sms" type="number" center label="短信验证码" placeholder="请输入短信验证码" required>
           <van-button
             color="#fc4c4c"
@@ -94,7 +94,10 @@ export default {
             mobile: this.tel,
             event: "resetpwd"
           })
-          .then(data => {});
+          .then(data => {})
+          .catch(err => {
+            this.time = 0;
+          });
       }
     },
     finished() {

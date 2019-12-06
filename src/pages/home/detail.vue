@@ -1,13 +1,16 @@
 <template>
   <div class="box">
     <!-- 头部 -->
-    <tabbar title="商品详情"></tabbar>
+    <!-- <tabbar title="商品详情"></tabbar> -->
     <!-- 中间部分 -->
+    <div class="out" @click="fanhui">
+      <van-icon name="arrow-left" size="20px" color="rgba(255,255,255)" />
+    </div>
     <van-row>
       <van-col span="24" v-if="initdata.lunbo">
-        <van-swipe @change="onChange" :height="240" :autoplay="3000">
+        <van-swipe @change="onChange" :height="300" :autoplay="3000">
           <van-swipe-item class="Show1" v-for="(item ,i) in initdata.lunbo" :key="i">
-            <van-image width="100%" height="270" fit="cover" :src="item" />
+            <van-image width="100%" height="300" fit="cover" :src="item" />
           </van-swipe-item>
           <div class="custom-indicator" slot="indicator">{{ current + 1 }}/{{initdata.lunbo.length}}</div>
         </van-swipe>
@@ -22,7 +25,13 @@
         </div>
       </van-col>
       <van-col span="22" offset="1">
-        <div class="article">{{initdata.name}}</div>
+        <div class="article flex">
+          <div class="oName erhang">{{initdata.name}}</div>
+          <div class="flex share">
+            <img src="../../image/detail/fenxiang.png" alt />
+            <p>分享</p>
+          </div>
+        </div>
       </van-col>
     </van-row>
 
@@ -246,6 +255,9 @@ export default {
     text(i) {
       this.show = true;
       this.button = i;
+    },
+    fanhui() {
+      this.$router.go(-1);
     }
   },
   mounted() {
@@ -262,8 +274,22 @@ export default {
 </script>
 <style lang="less" scoped>
 .box {
-  padding-top: 44px;
+  // padding-top: 44px;
   padding-bottom: 55px;
+  .out {
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    z-index: 999;
+    left: 5px;
+    top: 5px;
+    .van-icon-arrow-left:before {
+      line-height: 30px;
+      padding-left: 4px;
+    }
+  }
 }
 .van-goods-action {
   z-index: 2;
@@ -292,6 +318,23 @@ export default {
   color: #333;
   margin: 10px 0;
   font-weight: 700;
+  .oName {
+    width: 80%;
+  }
+  .share {
+    background: #e6e6e6;
+    padding: 4px 8px;
+    border-radius: 20px;
+    img {
+      width: 15px;
+      height: 15px;
+    }
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      color: #999;
+    }
+  }
 }
 .price {
   font-size: 20px;

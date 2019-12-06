@@ -1,9 +1,6 @@
 //请求的域名
 // export let baseURL = "http://test.tieqiao.shop";
-import {
-  Toast,
-  Dialog
-} from "vant"; //引入vant提示框
+import { Toast, Dialog } from "vant"; //引入vant提示框
 
 /*将base64转换为file*/
 export function dataURLtoFile(dataurl, filename) {
@@ -65,7 +62,7 @@ export function upload(base64, name) {
     });
     let img = new Image();
     img.src = base64;
-    img.onload = function () {
+    img.onload = function() {
       //图片加载完毕
       compressEvent(img, dataURL => {
         uploadImg(dataURL);
@@ -92,7 +89,7 @@ export function upload(base64, name) {
           data: formdata, // formdata直接赋值给data
           processData: false, //formdata已将数据序列化，无需在处理
           contentType: false, //formdata无需设置请求头
-          success: function (res) {
+          success: function(res) {
             console.log(222, res);
             Toast.clear();
             resolve(res.data);
@@ -130,7 +127,7 @@ export function upfile(e) {
       data: formdata, // formdata直接赋值给data
       processData: false, //formdata已将数据序列化，无需在处理
       contentType: false, //formdata无需设置请求头
-      success: function (res) {
+      success: function(res) {
         console.log(9999999999, res);
         Toast.clear();
         resolve(res.data);
@@ -145,12 +142,12 @@ function getFile(src) {
   return new Promise(resolve => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = "blob";
-    xhr.onprogress = function (e) {
+    xhr.onprogress = function(e) {
       console.log(
         "当前数据获取进度为" + ((e.loaded * 100) / e.total).toFixed(2) + "%"
       );
     };
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (this.readyState === 4) {
         resolve(this.response);
       }
@@ -160,9 +157,7 @@ function getFile(src) {
   });
 }
 // 下载文件到本地
-import {
-  saveAs
-} from "./FileSaver";
+import { saveAs } from "./FileSaver";
 export function downFile(src) {
   console.log(src);
   getFile(src).then(res => {
@@ -176,9 +171,9 @@ export function getTime(timestamp, type = 0) {
   var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
   var Y = date.getFullYear();
   var M =
-    date.getMonth() + 1 < 10 ?
-    "0" + (date.getMonth() + 1) :
-    date.getMonth() + 1;
+    date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1;
   var D = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
   var h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
   var m = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
@@ -216,19 +211,19 @@ export function scan() {
           signature: data.signature, // 必填，签名，见附录1
           jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         });
-        wx.ready(function () {
+        wx.ready(function() {
           // 9.1.2 扫描二维码并返回结果
           wx.scanQRCode({
             needResult: 1,
             desc: "scanQRCode desc",
-            success: function (res) {
+            success: function(res) {
               Toast.clear();
               resolve(res.resultStr.split(",")[1]);
             }
           });
         });
         //初始化jsapi接口 状态
-        wx.error(function (res) {
+        wx.error(function(res) {
           Toast.clear();
           alert("调用微信jsapi返回的状态:" + res.msg);
         });
@@ -259,7 +254,8 @@ export function initMeScroll(mescrollId, options) {
       // },
       noMoreSize: 10, // 如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
       // htmlNodata: '<p class="upwarp-nodata">-- 暂无更多数据 --</p>', // 无数据的布局
-      htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p ><p class="upwarp-tip">正在加载...</p >', // 上拉加载中的布局
+      htmlLoading:
+        '<p class="upwarp-progress mescroll-rotate"></p ><p class="upwarp-tip">正在加载...</p >', // 上拉加载中的布局
       lazyLoad: {
         use: true, // 是否开启懒加载,默认false
         attr: "imgurl", // html标签中,存放网络图片地址的属性名: <img src='占位图' imgurl='网络图'/>

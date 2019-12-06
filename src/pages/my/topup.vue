@@ -54,11 +54,24 @@ export default {
       num: "", //把actions变成数字，1为余额，2为货款, 3保证金
       num1: "", //把actions1变成数字，1为线下支付，2为微信，3为支付宝
       payImg: [], //支付凭证
-      hasShangji: false
+      hasShangji: false,
+      master_type: "" //支付类型:1=公众号支付,2=小程序支付,3=手机网站支付,4=app支付,5=企业付款
+      // wechat_status: "" //微信支付开关  1开启0关闭
     };
   },
   components: {
     navbar
+  },
+  mounted() {
+    // 微信支付开关
+    this.axios.post("/api/index/pay_status").then(data => {
+      // this.wechat_status = data.wechat_status;
+      if (data.wechat_status == 1) {
+        this.actions1 = [{ name: "线下付款" }, { name: "微信支付" }];
+      } else {
+        this.actions1 = [{ name: "线下付款" }];
+      }
+    });
   },
   watch: {
     type1(newVal) {
@@ -92,10 +105,8 @@ export default {
       //   this.$toast(item.name);
       if (item.name == "线下付款") {
         this.num1 = "1";
-      } else if (item.name == "微信") {
+      } else if (item.name == "微信支付") {
         this.num1 = "2";
-      } else {
-        this.num1 = "3";
       }
     },
     xuanze1() {
@@ -114,23 +125,84 @@ export default {
         this.$toast("请选择充值类型");
       } else if (!this.num1) {
         this.$toast("请选择充值方式");
-      } else if (!this.img1 && !this.img2 && !this.img3) {
+      } else if (this.num1 == 1 && !this.img1 && !this.img2 && !this.img3) {
         this.$toast("请上传支付凭证");
       } else {
-        this.axios
-          .post("/api/property_administer/sbRecharge", {
+        console.log(this.num1); //1为线下支付，2为微信支付
+        let query; //支付参数
+        if (this.num1 == 2) {
+          //微信 master_type 支付类型:1=公众号支付,2=小程序支付,3=手机网站支付,4=app支付,5=企业付款
+          //判断浏览器是否是微信浏览器
+          var ua = navigator.userAgent.toLowerCase();
+          if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            // alert("微信环境，走微信登录");
+            this.master_type = 1;
+          } else {
+            this.master_type = 3;
+          }
+          query = {
+            amount: this.money,
+            recharge_way: this.num,
+            recharge_type: this.num1,
+            master_type: this.master_type
+          };
+        } else if (this.num1 == 1) {
+          // 线下支付
+          query = {
             amount: this.money,
             recharge_way: this.num,
             recharge_type: this.num1,
             payment_voucher: this.payImg.join(",")
-          })
+          };
+        }
+        this.axios
+          .post("/api/property_administer/sbRecharge", query)
           .then(data => {
-            this.$toast("已提交申请，请等待审核");
+            // alert(data.is_type); //1为线下支付，2为微信支付, 3支付宝
+            if (data.is_type == 1) {
+              this.$toast("已提交申请，请等待审核");
+              setTimeout(() => {
+                this.$router.go(-1);
+              }, 1000);
+            } else if (data.is_type == 2) {
+              console.log(data.pay);
+              console.log(JSON.parse(data.pay)); //参数
+
+              // 判断是否是微信环境master_type 支付类型:1=公众号支付 3=手机网站支付
+              if (this.master_type == 1) {
+                this.onBridgeReady(JSON.parse(data.pay));
+              } else if (this.master_type == 3) {
+                this.$toast("现微信支付仅支持公众号内使用");
+              }
+            }
+          });
+      }
+    },
+    // 微信环境微信支付
+    onBridgeReady(pay) {
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: pay.appId, //公众号名称，由商户传入
+          timeStamp: pay.timeStamp, //时间戳，自1970年以来的秒数
+          nonceStr: pay.nonceStr, //随机串
+          package: pay.package,
+          signType: pay.signType, //微信签名方式
+          paySign: pay.paySign //微信签名
+        },
+        res => {
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            // 使用以上方式判断前端返回,微信团队郑重提示：
+            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            this.$toast("充值成功");
             setTimeout(() => {
               this.$router.go(-1);
             }, 1000);
-          });
-      }
+          } else {
+            this.$toast("支付失败，请重新支付");
+          }
+        }
+      );
     },
     afterRead1() {
       upload(this.pay1[0].content, this.pay1[0].file.name).then(data => {

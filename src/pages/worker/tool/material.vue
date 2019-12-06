@@ -1,8 +1,12 @@
 <template>
-  <div class="material">
-    <tabbar title="素材中心" navbar_right_name="我的素材" navbar_right_link="/mysucai"></tabbar>
-    <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
-      <van-tabs v-model="active" @click="onClick" sticky :offset-top="44" :swipe-threshold="4">
+  <div class="ceshi">
+    <!-- <tabbar title="素材中心" navbar_right_name="我的素材" navbar_right_link="/mysucai"></tabbar> -->
+    <div class="fanhui" @click="goBack">
+      <van-icon name="arrow-left" size="20" color="#fff" />
+    </div>
+
+    <van-tabs v-model="active" @click="onClick" sticky>
+      <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
         <van-tab v-for="(cat_item,index) in cat" :key="index" :title="cat_item.text">
           <div class="item" v-for="(item, i1) in list" :key="i1">
             <div class="content flex_l">
@@ -40,11 +44,11 @@
             </div>
           </div>
         </van-tab>
-      </van-tabs>
-      <div class="upload">
-        <van-icon name="plus" size="30" color="#fff" @click="toup" />
-      </div>
-    </mescroll-vue>
+        <div class="upload">
+          <van-icon name="plus" size="30" color="#fff" @click="toup" />
+        </div>
+      </mescroll-vue>
+    </van-tabs>
   </div>
 </template>
 <script>
@@ -155,25 +159,40 @@ export default {
           cat: this.cat
         }
       });
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.material {
+.ceshi {
   font-size: 14px;
   min-height: 100vh;
   background: #f5f5f5;
-  padding-top: 44px;
+  .fanhui {
+    width: 40px;
+    height: 44px;
+    background-image: linear-gradient(to bottom, #fc4c4c, rgba(188, 38, 38, 1));
+    position: fixed;
+    z-index: 999;
+    .van-icon-arrow-left:before {
+      line-height: 40px;
+      margin-left: 8px;
+    }
+  }
   .mescroll {
     position: fixed;
     top: 44px;
     bottom: 0;
     height: auto;
   }
+
   //背景色
   /deep/.van-tabs__nav {
+    padding-left: 40px;
     background-image: linear-gradient(
       to bottom,
       #fc4c4c,
@@ -181,7 +200,7 @@ export default {
     );
     //tab字体
     /deep/.van-tab {
-      color: #fff;
+      color: #000;
       font-size: 14px;
     }
     //选中的字体

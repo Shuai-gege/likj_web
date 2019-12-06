@@ -7,11 +7,10 @@
     <!-- <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit"> -->
     <div class="content">
       <!-- 轮播图 -->
-      <van-swipe :autoplay="3000" indicator-color="white" :height="160" class="Lunbo">
+      <van-swipe :autoplay="3000" indicator-color="white" class="Lunbo">
         <van-swipe-item class="lun" v-for="(item,i) in home_banner" :key="i">
           <van-image
             width="100%"
-            height="160"
             fit="cover"
             :src="item.image"
             @click="pageJump(item.jump_type,item.goods_id,item.brand_id,item.url,item.nav)"
@@ -42,20 +41,18 @@
       </div>
 
       <!-- 一张图 -->
-      <div
+      <!-- <div
         v-if="initdata.one_image_status=='on'"
         class="one"
         @click="pageJump(one_image.jump_type,one_image.goods_id,one_image.brand_id,one_image.url,one_image.nav)"
       >
         <van-image width="100%" height="120" fit="cover" :src="one_image.image" />
-      </div>
+      </div>-->
 
       <!-- 三张图 -->
-      <div class="three flex" v-if="initdata.three_image_status=='on'">
+      <div class="three" v-if="initdata.three_image_status=='on'">
         <van-image
-          width="33.33%"
-          height="120"
-          fit="cover"
+          width="100%"
           :src="item.image"
           v-for="(item,i) in three_image"
           :key="i"
@@ -63,11 +60,11 @@
         />
       </div>
       <!-- 精选商品 -->
-      <div class="title" style="margin:10px 0 15px;">
+      <!-- <div class="title" style="margin:10px 0 15px;">
         <img src="../../image/title.png" alt />
-      </div>
-      <list1 v-if="initdata.goods_type==2" :list="list"></list1>
-      <list2 v-else :list="list"></list2>
+      </div>-->
+      <list1 v-if="initdata.goods_type==2&&initdata.goods_status=='on'" :list="list"></list1>
+      <list2 v-if="initdata.goods_type==1&&initdata.goods_status=='on'" :list="list"></list2>
     </div>
     <!-- </mescroll-vue> -->
   </div>
@@ -328,16 +325,20 @@ export default {
     },
     // 首页装修接口,没有list列表
     init() {
-      this.axios.post("/api/index/home").then(data => {
-        this.initdata = data;
-        this.home_banner = data.home_banner;
-        this.nine_nav = data.nine_nav; //九宫格
-        this.notice = data.notice; //公告
-        this.one_image = data.one_image; //一张广告图
-        this.three_image = data.three_image; //三张广告图
-        this.init1();
-        this.init2();
-      });
+      this.axios
+        .post("/api/index/home", {
+          type: 2
+        })
+        .then(data => {
+          this.initdata = data;
+          this.home_banner = data.home_banner;
+          this.nine_nav = data.nine_nav; //九宫格
+          this.notice = data.notice; //公告
+          this.one_image = data.one_image; //一张广告图
+          this.three_image = data.three_image; //三张广告图
+          this.init1();
+          this.init2();
+        });
     },
     // 首页列表接口
     init1() {

@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <van-tabbar v-model="active" active-color="#f8442d" :route="true">
+    <van-tabbar v-model="active" active-color="#FF6159" :route="true">
       <van-tabbar-item to="/">
         <span>首页</span>
         <img
@@ -117,7 +117,7 @@ footer {
   }
   #solo {
     &.active {
-      height: 45px;
+      height: 30px;
     }
   }
 }

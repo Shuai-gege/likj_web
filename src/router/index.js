@@ -38,7 +38,13 @@ const updateRecord = () => import("@/pages/worker/updateRecord"); // 升级记�
 const updateDetail = () => import("@/pages/worker/updateDetail"); // 升级详情
 const Certification = () => import("@/pages/worker/Certification"); // 实名认证
 const dailichaxun = () => import("@/pages/worker/dailichaxun"); // 代理查询
+
+
 const hot = () => import("@/pages/hot/hot"); // 热卖商品
+const echart = () => import("@/pages/hot/echart"); // 试一试echart
+
+const ceshi = () => import("@/pages/worker/ceshi"); // 测试看看
+const ceshi1 = () => import("@/pages/worker/ceshi1"); // 测试看看
 
 // 购物车
 const car = () => import("@/pages/car/car"); // 购物车
@@ -47,9 +53,10 @@ const offline = () => import("@/pages/car/offline"); // 线下支付
 
 // 我的
 const my = () => import("@/pages/my/my"); // 我的
-const newmy = () => import("@/pages/my/newmy"); // 我的
+const newmy = () => import("@/pages/my/newmy"); // 信我的
 const myteam = () => import("@/pages/my/myteam"); // 我的团队
 const mysuperior = () => import("@/pages/my/mysuperior"); // 我的上级
+const myVip = () => import("@/pages/my/myVip"); // 我的会员
 const mypurse = () => import("@/pages/my/mypurse"); // 我的钱包
 const topup = () => import("@/pages/my/topup"); // 充值
 const mydetail = () => import("@/pages/my/mydetail"); // 可提现余额明细
@@ -100,6 +107,8 @@ const upsucai = () => import("../pages/worker/tool/upsucai"); // 上传素材
 const mysucai = () => import("../pages/worker/tool/mysucai"); // 上传素材
 const fake = () => import("../pages/worker/tool/fake"); // 防伪查询
 const school = () => import("../pages/worker/tool/school"); // 商学院
+const rank = () => import("../pages/worker/tool/rank"); // 商学院
+
 // const coursecontent = () => import("../pages/worker/coursecontent"); // 商学院
 const live_detail = () => import("../pages/worker/tool/live_detail"); // 直播详情
 const touwen_detail = () => import("../pages/worker/tool/touwen_detail"); // 图文详情
@@ -108,8 +117,7 @@ const up_area_agent = () => import("../pages/worker/tool/up_area_agent"); // 升
 const courseup = () => import("../pages/worker/courseup"); // 课程上传
 
 let router = new Router({
-  routes: [
-    {
+  routes: [{
       path: "/", //APP首页
       name: "home",
       component: home,
@@ -161,6 +169,22 @@ let router = new Router({
       }
     },
     {
+      path: "/ceshi", //测试看看
+      name: "ceshi",
+      component: ceshi,
+      meta: {
+        title: "测试看看"
+      }
+    },
+    {
+      path: "/ceshi1", //测试看看
+      name: "ceshi1",
+      component: ceshi1,
+      meta: {
+        title: "测试看看"
+      }
+    },
+    {
       path: "/mysucai", //我的素材
       name: "mysucai",
       component: mysucai,
@@ -206,7 +230,7 @@ let router = new Router({
       name: "inviteagent",
       component: inviteagent,
       meta: {
-        title: "邀请代理"
+        title: "邀请"
       }
     },
     {
@@ -398,6 +422,15 @@ let router = new Router({
       }
     },
     {
+      path: "/echart", //试试echart
+      name: "echart",
+      component: echart,
+      meta: {
+        // ifShow_Footbar: true,
+        title: "试试echart"
+      }
+    },
+    {
       path: "/car", //购物车
       name: "car",
       component: car,
@@ -515,6 +548,15 @@ let router = new Router({
       meta: {
         // ifShow_Footbar: true,
         title: "我的上级"
+      }
+    },
+    {
+      path: "/myVip", //我的会员
+      name: "myVip",
+      component: myVip,
+      meta: {
+        // ifShow_Footbar: true,
+        title: "我的会员"
       }
     },
     {
@@ -814,6 +856,14 @@ let router = new Router({
       meta: {
         title: "商学院",
         ifShow_Footbar: true
+      }
+    },
+    {
+      path: "/rank", //排行榜
+      name: "rank",
+      component: rank,
+      meta: {
+        title: "排行榜"
       }
     },
     {

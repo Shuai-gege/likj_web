@@ -3,8 +3,8 @@
     <!-- 头部公共搜索框 -->
     <!-- <tabbar title="商学院"></tabbar> -->
     <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
-      <div class="con">
-        <van-swipe :autoplay="3000">
+      <div class="con" v-if="banner.length>0||zhiding.id||list.length>0">
+        <van-swipe :autoplay="3000" v-if="banner.length>0">
           <van-swipe-item
             v-for="(item,i) in banner"
             :key="i"
@@ -13,7 +13,7 @@
             <img :src="item.banner" />
           </van-swipe-item>
         </van-swipe>
-        <div class="tab flex">
+        <div class="tab flex" v-if="banner.length>0||zhiding.id||list.length>0">
           <div :class="{'item':true,'active':type==1}" @click="changeTab(1)">
             <span>团队课程</span>
           </div>
@@ -24,7 +24,7 @@
             <span>平台规则</span>
           </div>
         </div>
-        <div class="top" @click="toDetail(zhiding.id)">
+        <div class="top" @click="toDetail(zhiding.id)" v-if="zhiding.id">
           <div class="title">
             <span class="solo">置顶</span>
             {{zhiding.course_title}}
@@ -43,12 +43,12 @@
             </p>
           </div>
         </div>
-        <div class="list">
+        <div class="list" v-if="list.length>0">
           <div class="item flex_l" v-for="(item,i) in list" :key="i" @click="toDetail(item.id)">
             <img :src="item.course_img" alt />
             <div class="pro">
               <div class="title erhang">
-                <span class="solo">置顶</span>
+                <!-- <span class="solo">置顶</span> -->
                 {{type==3?item.pcourse_title:item.course_title}}
               </div>
               <div class="time flex">
@@ -66,6 +66,7 @@
           </div>
         </div>
       </div>
+      <div class="null" v-else>暂未开放</div>
     </mescroll-vue>
   </div>
 </template>

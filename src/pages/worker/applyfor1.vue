@@ -216,46 +216,8 @@ export default {
         }
       });
     }
-    // if (this.$route.query.token) {
-    //   localStorage.clear();
-    // }
-    // if (this.$route.query.sign_id) {
-    //   alert(111);
-    //   localStorage.setItem("sign_id", this.$route.query.sign_id);
-    //   localStorage.setItem(
-    //     "baseURL",
-    //     location.protocol + "//" + location.hostname
-    //   );
-    // }
-    // if (
-    //   !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-    //   !this.$route.query.token &&
-    //   !localStorage.getItem("token_tel")
-    // ) {
-    //   alert(33333333);
-    //   location.href =
-    //     localStorage.getItem("baseURL") +
-    //     "/api/user/wxlogin?sign_id=" +
-    //     localStorage.getItem("sign_id");
-    // } else
-    // if (
-    //   !localStorage.getItem("token" + localStorage.getItem("sign_id")) &&
-    //   this.$route.query.token
-    // ) {
-    //   alert(11111111111);
-    //   // alert(this.$route.query.token);
-    //   localStorage.setItem(
-    //     "token" + localStorage.getItem("sign_id"),
-    //     this.$route.query.token
-    //   );
-    //   this.init();
-    // } else if (
-    //   localStorage.getItem("token" + localStorage.getItem("sign_id")) ||
-    //   localStorage.getItem("token_tel")
-    // ) {
-    //   alert(666);
+
     this.init();
-    // }
   },
   methods: {
     init() {

@@ -1,9 +1,12 @@
 <template>
   <div class="invite">
     <!-- 头部公共搜索框 -->
-    <tabbar title="邀请代理" v-if="level_id"></tabbar>
-    <tabbar title="邀请会员" v-else></tabbar>
+    <!-- <tabbar title="邀请代理" v-if="level_id"></tabbar>
+    <tabbar title="邀请会员" v-else></tabbar> -->
+    
     <div class="share">
+      <!-- 返回 -->
+    <van-icon name="https://s2.ax1x.com/2019/12/05/Q8WEwV.png" size="30" color="#9824C8" @click="out"/>
       <img :src="img" alt v-if="img" style="width:375px;height:100%;" />
       <div class="con">
         <img class="userimg" :src="init.wx_avatar" alt />
@@ -57,6 +60,9 @@ export default {
     });
   },
   methods: {
+    out(){
+      this.$router.go(-1)
+    },
     toImg() {
       // html2canvas(document.getElementById("con"), {
       //   allowTaint: true, //允许污染
@@ -76,7 +82,7 @@ export default {
 
 <style lang="less" scoped>
 .invite {
-  padding-top: 44px;
+  // padding-top: 44px;
   color: rgb(241, 65, 65);
   height: 100vh;
   color: #999;
@@ -85,14 +91,20 @@ export default {
     width: 100%;
     height: 100%;
     background: linear-gradient(to top, #7f7fd5, #86a8e7, #91eae4);
+    // background: url("../../image/邀请代理图/hb(1).png") no-repeat;
+    // background-size: 100%;
     // padding: 40px 0;
     padding-top: 1px;
+    .van-image{
+      margin: 5px;
+    }
   }
   .con {
+
     background-color: #fff;
     width: 80%;
     height: 70vh;
-    margin: 40px auto;
+    margin: 30px auto 40px;
     border-radius: 10px;
     padding: 20px;
     text-align: center;

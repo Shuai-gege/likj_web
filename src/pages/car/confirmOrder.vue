@@ -53,7 +53,7 @@
       <van-cell
         style="margin-top:10px;border-radius: 5px 5px 0 0;"
         title="订单总额"
-      >￥{{Number(price)-Number(freight_money)}}</van-cell>
+      >￥{{Number(order_money)}}</van-cell>
       <van-cell
         v-if="type==1||type==0"
         style="margin-top:-4px;border-radius:0 0 5px 5px;color:#fc4c4c"
@@ -85,12 +85,13 @@ export default {
   data() {
     return {
       query: "", //立即购买或购物车提交过来的参数
-      type: null, //列表类型 0 商城列表  1 云库提货不付钱  2 放入云仓不填地址
+      type: null, //列表类型 0 非云仓  1 云库提货不付钱  2 放入云仓不填地址
       showpay: false,
 
       price: "", //总价
       address: {}, //地址
       freight_money: "", //运费
+      order_money: "", //订单总额
       goods_list: [], //商品列表
       order_id: "", //订单提交后生成的订单id
       session_goods: "" //后台要的
@@ -114,10 +115,11 @@ export default {
       this.axios
         .post("/api/goods_order/confirmOrder", {
           cart_ids: this.query.cart_ids,
-          type: this.type == 1 ? 3 : ""
+          type: this.type == 2 ? 2 : 3
         })
         .then(data => {
           this.session_goods = data.session_goods;
+          this.order_money = data.order_money;
           if (this.$route.query.address_id) {
             this.axios
               .post("/api/Address/edit", {
@@ -131,6 +133,7 @@ export default {
           }
           this.price = parseFloat(data.goods_money);
           this.freight_money = data.freight_money;
+          this.order_money = data.order_money;
           data.goods_list.forEach(item => {
             // 有三种箱盒个
             if (item.one_name) {
@@ -205,7 +208,7 @@ export default {
       if (type == 0) {
         querys = {
           address_id: this.address.address_id,
-          type: 1, //1=商城,2=云仓,3=提货
+          type: 3, //3=非云仓,2=云仓,3=提货
           session_goods: this.session_goods
         };
       } else if (type == 2) {
@@ -216,7 +219,7 @@ export default {
       } else {
         querys = {
           address_id: this.address.address_id,
-          type: 3, //1=商城,2=云仓,3=提货
+          type: 3, //,2=云仓,3=提货
           session_goods: this.session_goods
         };
       }
